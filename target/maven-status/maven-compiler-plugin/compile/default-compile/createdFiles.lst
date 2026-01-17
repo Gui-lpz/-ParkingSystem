@@ -1,0 +1,12 @@
+model\data\VehicleData.class
+controller\ParkingLotController.class
+model\data\ParkingLotData.class
+model\entities\ParkingLot.class
+model\data\CustomerData.class
+model\entities\Space.class
+controller\VehicleController.class
+controller\CustomerController.class
+model\entities\VehicleType.class
+model\entities\Vehicle.class
+model\entities\Customer.class
+view\RegistrationWindow.class
