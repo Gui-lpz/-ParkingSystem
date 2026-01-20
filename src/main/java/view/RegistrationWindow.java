@@ -43,44 +43,54 @@ public class RegistrationWindow {
     }
 
     static void showMainMenu() {
-
         int choice = 1;
         while (choice != 0) {
-            choice = Integer.parseInt(JOptionPane.showInputDialog("Ingrese 0 para terminar el programa\n 1 para añadir un nuevo cliente\n 2 para mostrar todos los clientes\n"
-                    + " 3 actualizar los datos de un cliente\n 4 para eliminar a un cliente\n 5 para parquear un vehículo\n 6 para enseñar todos los vehículos"
-                    + " 7 para aministrar los parqueos"));
+
+            choice = Integer.parseInt(JOptionPane.showInputDialog("Ingrese 0 para terminar el programa\n 1 para añadir nuevo cliente\n 2 para mostrar todos los clientes\n 3 para parquear un vehículo\n 4 para mostrar todos los vehículos del parqueo\n 5 para administrar parqueos\n 6 actualizar un cliente\n 7 para eliminar un cliente\n 8 para retirar vehículo\n 9 para ver clientes con vehículos en parqueo  "));
 
             switch (choice) {
                 case 0 -> {
-                    JOptionPane.showMessageDialog(null, "Gracias por utilizar el sistema. !Hasta pronto¡");
+
+                    JOptionPane.showMessageDialog(null, "Hasta pronto!");
                 }
                 case 1 -> {
-                    getDataFromCustomer();
+
+                    insertCustomer();
                 }
+
                 case 2 -> {
                     showAllCustomers();
                 }
                 case 3 -> {
-                    updateCustomer();
+                    insertVehicle();
                 }
                 case 4 -> {
-                    deleteCustomer();
-                }
-                case 5 -> {
-                    getDataFromVehicle();
-                }
-                case 6 -> {
                     showAllVehicles();
                 }
-                case 7 -> {
+                case 5 -> {
                     insertParkingLot();
+                }
+
+                case 6 -> { //tarea
+                    updateCustomer();
+                }
+
+                case 7 -> { //tarea
+                    deleteCustomer();
+                }
+                case 8 -> { //tarea2
+                    exitVehicle();
+                }
+                case 9 -> {
+                    showCurrentParkedCustomers();
                 }
                 default -> {
                 }
-            }
-        }
-    }
 
+            }//switch
+        }//while
+
+    }
     private static void getDataFromCustomer() {
 
         String id = JOptionPane.showInputDialog("Ingrese el número de cédula del cliente");
