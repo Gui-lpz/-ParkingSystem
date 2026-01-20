@@ -55,14 +55,14 @@ public class RegistrationWindow {
                 }
                 case 1 -> {
 
-                    insertCustomer();
+                    //insertCustomer();
                 }
 
                 case 2 -> {
                     showAllCustomers();
                 }
                 case 3 -> {
-                    insertVehicle();
+                   // insertVehicle();
                 }
                 case 4 -> {
                     showAllVehicles();
@@ -79,10 +79,10 @@ public class RegistrationWindow {
                     deleteCustomer();
                 }
                 case 8 -> { //tarea2
-                    exitVehicle();
+                    //exitVehicle();
                 }
                 case 9 -> {
-                    showCurrentParkedCustomers();
+                    //showCurrentParkedCustomers();
                 }
                 default -> {
                 }
