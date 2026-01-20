@@ -42,7 +42,6 @@ public class RegistrationWindow {
         JOptionPane.showMessageDialog(null, parkingLotController.getAllParkingLots().toString());
     }
 
-
     static void showMainMenu() {
         int choice = 1;
         while (choice != 0) {
@@ -92,7 +91,6 @@ public class RegistrationWindow {
         }//while
 
     }
-
     private static void getDataFromCustomer() {
 
         String id = JOptionPane.showInputDialog("Ingrese el número de cédula del cliente");
