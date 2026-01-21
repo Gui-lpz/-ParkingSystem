@@ -1,0 +1,117 @@
+Index: src/main/java/model/entities/Vehicle.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/*\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template\r\n */\r\npackage model.entities;\r\n\r\n/**\r\n *\r\n * @author Lab 5 Guiselle López \r\n */\r\npublic class Vehicle  {\r\n    private String plate;\r\n    private String color;\r\n    private String brand;\r\n    private String model;\r\n    private Customer customer; //*******\r\n    private VehicleType vehicleType;\r\n\r\n    public Vehicle() {\r\n    }\r\n\r\n    public Vehicle(String placa, String color, String brand, String model, Customer customer, VehicleType vehicleType) {\r\n        this.plate = placa;\r\n        this.color = color;\r\n        this.brand = brand;\r\n        this.model = model;\r\n        this.customer = customer;\r\n        this.vehicleType = vehicleType;\r\n    }\r\n\r\n    public String getPlate() {\r\n        return plate;\r\n    }\r\n\r\n    public void setPlate(String placa) {\r\n        this.plate = placa;\r\n    }\r\n\r\n    public String getColor() {\r\n        return color;\r\n    }\r\n\r\n    public void setColor(String color) {\r\n        this.color = color;\r\n    }\r\n\r\n    public String getBrand() {\r\n        return brand;\r\n    }\r\n\r\n    public void setBrand(String brand) {\r\n        this.brand = brand;\r\n    }\r\n\r\n    public String getModel() {\r\n        return model;\r\n    }\r\n\r\n    public void setModel(String model) {\r\n        this.model = model;\r\n    }\r\n\r\n    public Customer getCustomer() {\r\n        return customer;\r\n    }\r\n\r\n    public void setCustomer(Customer customer) {\r\n        this.customer = customer;\r\n    }\r\n\r\n    public VehicleType getVehicleType() {\r\n        return vehicleType;\r\n    }\r\n\r\n    public void setVehicleType(VehicleType vehicleType) {\r\n        this.vehicleType = vehicleType;\r\n    }\r\n\r\n    @Override\r\n    public String toString() {\r\n        return \"Vehicle{\" + \"placa=\" + plate + \", color=\" + color + \", brand=\" + brand + \", model=\" + model + \", customer=\" + customer + \", vehicleType=\" + vehicleType + '}' + '\\n';\r\n    }\r\n\r\n   \r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/model/entities/Vehicle.java b/src/main/java/model/entities/Vehicle.java
+--- a/src/main/java/model/entities/Vehicle.java	(revision f9082998295fae28e0fd260a7e0c1591dc822181)
++++ b/src/main/java/model/entities/Vehicle.java	(date 1768976792542)
+@@ -4,36 +4,55 @@
+  */
+ package model.entities;
+ 
+-/**
+- *
+- * @author Lab 5 Guiselle López 
+- */
+-public class Vehicle  {
++
++import java.util.ArrayList;
++
++public class Vehicle {
++    // CAMBIO: Ahora es una lista de clientes
++    private ArrayList<Customer> customers;
+     private String plate;
+     private String color;
+     private String brand;
+     private String model;
+-    private Customer customer; //*******
+     private VehicleType vehicleType;
++    private Space assignedSpace;
+ 
+-    public Vehicle() {
+-    }
+-
+-    public Vehicle(String placa, String color, String brand, String model, Customer customer, VehicleType vehicleType) {
+-        this.plate = placa;
++    public Vehicle(String plate, String color, String brand, String model, ArrayList<Customer> customers, VehicleType vehicleType) {
++        this.customers = customers;
++        this.plate = plate;
+         this.color = color;
+         this.brand = brand;
+         this.model = model;
+-        this.customer = customer;
+         this.vehicleType = vehicleType;
+     }
+ 
++    public Vehicle() {
++        this.customers = new ArrayList<>(); // Inicializar para evitar NullPointerException
++    }
++    public Space getAssignedSpace() {
++        return assignedSpace;
++    }
++
++    // Método para obtener el primer cliente (para compatibilidad con tu lógica de discapacidad)
++    public Customer getPrimaryCustomer() {
++        return (customers != null && !customers.isEmpty()) ? customers.get(0) : null;
++    }
++
++    public ArrayList<Customer> getCustomers() {
++        return customers;
++    }
++
++    public void setCustomers(ArrayList<Customer> customers) {
++        this.customers = customers;
++    }
++
++
+     public String getPlate() {
+         return plate;
+     }
+ 
+-    public void setPlate(String placa) {
+-        this.plate = placa;
++    public void setPlate(String plate) {
++        this.plate = plate;
+     }
+ 
+     public String getColor() {
+@@ -60,13 +79,7 @@
+         this.model = model;
+     }
+ 
+-    public Customer getCustomer() {
+-        return customer;
+-    }
+ 
+-    public void setCustomer(Customer customer) {
+-        this.customer = customer;
+-    }
+ 
+     public VehicleType getVehicleType() {
+         return vehicleType;
+@@ -75,11 +88,20 @@
+     public void setVehicleType(VehicleType vehicleType) {
+         this.vehicleType = vehicleType;
+     }
++    public void setAssignedSpace(Space assignedSpace) {
++        this.assignedSpace = assignedSpace;
++    }
+ 
+     @Override
+     public String toString() {
+-        return "Vehicle{" + "placa=" + plate + ", color=" + color + ", brand=" + brand + ", model=" + model + ", customer=" + customer + ", vehicleType=" + vehicleType + '}' + '\n';
++        return "Vehicle{" +
++                "Placa='" + plate + '\'' +
++                ", Marca='" + brand + '\'' +
++                ", Clientes=" + customers + '\''+
++                ", Tipo=" + vehicleType.getDescription()+'\'' +
++                " Posición asignada: " + (assignedSpace != null ? assignedSpace.getId() : "N/A");
+     }
+ 
+-   
++
+ }
++
