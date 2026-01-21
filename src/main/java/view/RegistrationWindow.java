@@ -71,14 +71,14 @@ public class RegistrationWindow {
                     insertParkingLot();
                 }
 
-                case 6 -> { //tarea
+                case 6 -> { 
                     updateCustomer();
                 }
 
-                case 7 -> { //tarea
+                case 7 -> {
                     deleteCustomer();
                 }
-                case 8 -> { //tarea2
+                case 8 -> {
                     exitVehicle();
                 }
                 case 9 -> {
