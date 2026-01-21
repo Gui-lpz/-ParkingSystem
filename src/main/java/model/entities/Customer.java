@@ -6,7 +6,7 @@ package model.entities;
 
 /**
  *
- * @author adrie
+ * @author Guiselle
  */
 public class Customer {
 
@@ -22,6 +22,8 @@ public class Customer {
 
     public Customer() {
     }
+
+
 
     public String getId() {
         return id;
@@ -49,8 +51,9 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Id= " + id + ", Name= "  + name + ", Disability presented= "+ disabilityPresented + '\n';
+        return "Customer{" + "id=" + id + ", name=" + name + ", disabilityPresented=" + disabilityPresented + '}'+"\n";
     }
+
 
 }
 

@@ -1,18 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controller;
 
 import java.util.ArrayList;
-import model.data.ParkingLotData;
 import model.entities.ParkingLot;
+import model.data.ParkingLotData;
 import model.entities.Space;
 import model.entities.Vehicle;
 
 /**
  *
- * @author adrie
+ * @author Lenovo
  */
 public class ParkingLotController {
 
@@ -40,8 +36,6 @@ public class ParkingLotController {
     }
 
     public ArrayList<ParkingLot> getAllParkingLots() {
-
         return parkingLotData.getAllParkingLots();
     }
-
 }

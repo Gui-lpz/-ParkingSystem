@@ -6,10 +6,6 @@ package model.entities;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author adrie
- */
 public class ParkingLot {
 
     private int id;
@@ -17,10 +13,6 @@ public class ParkingLot {
     private int numberOfSpaces;
     private ArrayList<Vehicle> vehicles;
     private Space[] spaces;
-
-    public ParkingLot() {
-
-    }
 
     public ParkingLot(int id, String name, int numberOfSpaces, ArrayList<Vehicle> vehicles, Space[] spaces) {
         this.id = id;
@@ -30,42 +22,77 @@ public class ParkingLot {
         this.spaces = spaces;
     }
 
+    public ParkingLot() {
+    }
+
+
+
+    /**
+     * @return the id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * @param id the id to set
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @param name the name to set
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * @return the numberOfSpaces
+     */
     public int getNumberOfSpaces() {
         return numberOfSpaces;
     }
 
+    /**
+     * @param numberOfSpaces the numberOfSpaces to set
+     */
     public void setNumberOfSpaces(int numberOfSpaces) {
         this.numberOfSpaces = numberOfSpaces;
     }
 
+    /**
+     * @return the vehicles
+     */
     public ArrayList<Vehicle> getVehicles() {
         return vehicles;
     }
 
+    /**
+     * @param vehicles the vehicles to set
+     */
     public void setVehicles(ArrayList<Vehicle> vehicles) {
         this.vehicles = vehicles;
     }
 
+    /**
+     * @return the spaces
+     */
     public Space[] getSpaces() {
         return spaces;
     }
 
+    /**
+     * @param spaces the spaces to set
+     */
     public void setSpaces(Space[] spaces) {
         this.spaces = spaces;
     }
@@ -75,6 +102,6 @@ public class ParkingLot {
         return "ParkingLot{" + "id=" + id + ", name=" + name + ", numberOfSpaces=" + numberOfSpaces + ", vehicles=" + vehicles + ", spaces=" + spaces + '}';
     }
 
-    
-    
+
 }
+

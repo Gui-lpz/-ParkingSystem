@@ -1,20 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controller;
 
 import java.util.ArrayList;
-import model.data.VehicleData;
 import model.entities.Customer;
 import model.entities.Vehicle;
-
-/**
- *
- * @author adrie
- */
+import model.data.VehicleData;
 public class VehicleController {
-    
     private VehicleData vehicleData = new VehicleData();
 
     public void insertVehicle(Vehicle vehicle) {
@@ -25,28 +15,65 @@ public class VehicleController {
         return vehicleData.getAllVehicles();
     }
 
-    public Vehicle findVehicle(Customer customer) {
-        return vehicleData.findVehicle(customer);
+
+    public String deleteVehicle(String plate){
+        if(vehicleData.findVehicleByPlate(plate)!=null){
+            vehicleData.deleteVehicle(plate);
+            return "Vehiculo eliminado exitosamente";
+
+        }else{ return "El vehiculo marcado no existe";}
+
+
     }
-    
-}
-    
 
-       /* String result = "";
-
-        //Reglas de negocio:
-        //Un cliente no puede tener más de un vehículo
-        //Varios clientes no pueden tener un vehículo con la misma placa
-        Vehicle vehicleByCustomer = vehicleData.findVehicle(vehicle.getCustomer());
-
-        if (vehicleByCustomer != null) {
-
-            result = "El cliente ya tiene un vehículo registrado.";
+    public String updateVehicle(String plate, Vehicle vehicle) {
+        if (vehicleData.findVehicleByPlate(plate) != null) {
+            vehicleData.updateVehicle(vehicle);
+            return "Vehiculo actualizado con éxito.";
         } else {
-
-            vehicleData.insertVehicle(vehicle);
-            result = "Vehículo insertado con éxito.";
+            return "Error: El cliente no existe, no se puede actualizar.";
         }
-        return result;
-    }*/
+    }
+}
 
+
+
+
+
+
+ /*public ArrayList<Vehicle> getAllVehicles() {
+
+        return vehicleData.getAllVehicles();
+    }
+
+ public Customer searchCustomer(String id){
+     Customer customerToReturn=null;
+
+      for (Customer customer : customers) {
+
+          if (customer.getId().equals(id)){
+
+              customerToReturn= customer;
+             break;
+          }
+
+  }
+      if(customerToReturn==null){
+          JOptionPane.showMessageDialog(null, "NO EXISTE ESE CLIENTE");
+      }
+
+     return customerToReturn;
+
+ }
+
+ /*public static void imprimirCustomers(){
+
+    JOptionPane.showMessageDialog(null, customerController.getAllCustomers().toString());
+
+ }
+
+    public static void main(String[] args) {
+        Customer dario=new Customer("123","DARIO",false);
+        customerController.insertCustomer(dario);
+        imprimirCustomers();
+    }*/

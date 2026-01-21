@@ -3,17 +3,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package model.entities;
-
+import model.entities.VehicleType;
 /**
  *
  * @author EstebanAntonioSanabr
  */
+
+
+
 public class Space {
 
-    private int id;
     private boolean disabilityAdaptation;
     private boolean spaceTaken;
     private VehicleType vehicleType;
+    private int id;
 
     public Space(int id, boolean disabilityAdaptation, boolean spaceTaken, VehicleType vehicleType) {
         this.id = id;
@@ -23,7 +26,7 @@ public class Space {
     }
 
     public Space() {
-   
+
     }
 
     /**
@@ -81,10 +84,8 @@ public class Space {
     public void setVehicleType(VehicleType vehicleType) {
         this.vehicleType = vehicleType;
     }
-
-    @Override
-    public String toString() {
-        return "Space{" + "id=" + id + ", disabilityAdaptation=" + disabilityAdaptation + ", spaceTaken=" + spaceTaken + ", vehicleType=" + vehicleType + '}';
-    }
-  
 }
+
+
+
+

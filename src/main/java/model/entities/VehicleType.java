@@ -1,24 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model.entities;
 
-/**
- *
- * @author Lab05 Guiselle lópez
- */
 public class VehicleType {
     private int id;
     private String description;
-    private int numberOfTires;
+    private byte numberOfTires;
     private float fee;
- 
 
     public VehicleType() {
     }
 
-    public VehicleType(int id, String description, int numberOfTires, float fee) {
+    public VehicleType(int id, String description, byte numberOfTires, float fee) {
         this.id = id;
         this.description = description;
         this.numberOfTires = numberOfTires;
@@ -41,11 +32,11 @@ public class VehicleType {
         this.description = description;
     }
 
-    public int getNumberOfTires() {
+    public byte getNumberOfTires() {
         return numberOfTires;
     }
 
-    public void setNumberOfTires(int numberOfTires) {
+    public void setNumberOfTires(byte numberOfTires) {
         this.numberOfTires = numberOfTires;
     }
 
@@ -59,7 +50,9 @@ public class VehicleType {
 
     @Override
     public String toString() {
-        return "VehicleType{" + "id=" + id + ", description=" + description + ", numberOfTires=" + numberOfTires + ", fee=" + fee + '}' + '\n';
+        return "VehicleType{" + "id=" + id + ", description=" + description + ", numberOfTires=" + numberOfTires + ", fee=" + fee + '}';
     }
+
+
 }
 
