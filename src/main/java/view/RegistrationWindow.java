@@ -16,7 +16,7 @@ import model.entities.VehicleType;
 
 /**
  *
- * @author adrie
+ * @author Guiselle
  */
 public class RegistrationWindow {
 
