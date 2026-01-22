@@ -21,8 +21,8 @@ public class RegistrationWindow {
 
         showMainMenu();
     }
+//HOLA MUNDO
 
-//AJSHJHSVAJGFSKHGFKGHASCGVJKHKFGSH
     static void showMainMenu() {
         int choice = 1;
         while (choice != 0) {
