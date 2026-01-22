@@ -21,8 +21,8 @@ public class RegistrationWindow {
 
         showMainMenu();
     }
+//view actualizada
 
-//AJSHJHSVAJGFSKHGFKGHASCGVJKHKFGSH
     static void showMainMenu() {
         int choice = 1;
         while (choice != 0) {
@@ -78,8 +78,7 @@ public class RegistrationWindow {
 
             }
         }
-        //Este comentario deberia aparecer si el comit se hizo de forma correcta, si no dario nos debe un café
-        //Este comentario deberia aparecer si el comit se hizo de forma correcta, si no dario nos debe un café
+      
 
     }
 
