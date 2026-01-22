@@ -1,5 +1,7 @@
 package model.entities;
 
+package model.entities;
+
 public class VehicleType {
     private int id;
     private String description;
@@ -55,4 +57,5 @@ public class VehicleType {
 
 
 }
+
 

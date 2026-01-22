@@ -1,7 +1,7 @@
 package model.data;
 
 import java.util.ArrayList;
-import model.entities.Customer;
+import model.data.Customer;
 
 public class CustomerData {
 
@@ -54,4 +54,3 @@ public class CustomerData {
     }
 
 }
-
