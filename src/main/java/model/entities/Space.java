@@ -1,6 +1,5 @@
 package model.entities;
 
-import model.entities.VehicleType;
 
 public class Space {
 
@@ -76,7 +75,6 @@ public class Space {
         this.vehicleType = vehicleType;
     }
 
-//////////////////////
 
 
 }

@@ -5,7 +5,7 @@ import model.entities.Customer;
 
 import java.util.ArrayList;
 
-//////////////////////////////////////////////////////////////// version
+
 public class CustomerController {
 
     CustomerData customerData = new CustomerData();
