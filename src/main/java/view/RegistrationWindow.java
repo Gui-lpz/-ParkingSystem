@@ -11,10 +11,6 @@ import model.entities.Space;
 import model.entities.Vehicle;
 import model.entities.VehicleType;
 
-/**
- *
- * @author Guiselle
- */
 public class RegistrationWindow {
 
     static CustomerController customerController
@@ -28,7 +24,8 @@ public class RegistrationWindow {
         // newManu();
     }
 
-
+//AJSHJHSVAJGFSKHGFKGHASCGVJKHKFGSH
+    
     static void showMainMenu() {
         int choice = 1;
         while (choice != 0) {
