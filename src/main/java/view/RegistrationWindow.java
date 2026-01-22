@@ -21,14 +21,14 @@ public class RegistrationWindow {
 
         showMainMenu();
     }
+//view actualizada
 
-//AJSHJHSVAJGFSKHGFKGHASCGVJKHKFGSH
     static void showMainMenu() {
         int choice = 1;
         while (choice != 0) {
 
-            choice = Integer.parseInt(JOptionPane.showInputDialog("Ingrese\n0  terminar el programa\n1añadir nuevo cliente\n2 mostrar todos los clientes\n3  para parquear un nuevo vehiculo"
-                    + "\n4 para mostrar los vehiculos\n5 Configurar parqueo\n6 para mostrar parqueo\n7  eliminar vehiculo\n8 para actualizar vehiculo" + "\n0 para salir del programa"));
+            choice = Integer.parseInt(JOptionPane.showInputDialog("Ingrese\n0  terminar el programa\nañadir nuevo cliente\n2 mostrar todos los clientes\n3  parquear un nuevo vehiculo"
+                    + "\n4 mostrar los vehiculos\n5 Configurar parqueo\n6 mostrar parqueos\n7  eliminar vehiculo\n8 actualizar vehiculo\n9 actualizar cliente\n10 eliminar cliente" + "\n0 para salir del programa"));
 
             switch (choice) {
                 case 0 -> {
@@ -78,8 +78,7 @@ public class RegistrationWindow {
 
             }
         }
-        //Este comentario deberia aparecer si el comit se hizo de forma correcta, si no dario nos debe un café
-        //Este comentario deberia aparecer si el comit se hizo de forma correcta, si no dario nos debe un café
+      
 
     }
 
