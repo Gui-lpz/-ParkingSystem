@@ -11,10 +11,6 @@ import model.entities.Space;
 import model.entities.Vehicle;
 import model.entities.VehicleType;
 
-/**
- *
- * @author Guiselle
- */
 public class RegistrationWindow {
 
     static CustomerController customerController
@@ -25,7 +21,7 @@ public class RegistrationWindow {
     public static void main(String[] args) {
 
         showMainMenu();
-        // newManu();
+        
     }
 
 
@@ -33,8 +29,8 @@ public class RegistrationWindow {
         int choice = 1;
         while (choice != 0) {
 
-            choice = Integer.parseInt(JOptionPane.showInputDialog("Ingrese\n0 para terminar el programa\n1 para añadir nuevo cliente\n2 para mostrar todos los clientes\n3  para parquear un nuevo vehiculo"
-                    + "\n4 para mostrar los vehiculos\n5 Configurar parqueo\n6 para mostrar parqueo\n7 para eliminar vehiculo\n8 para actualizar vehiculo" + "\n0 para salir"));
+            choice = Integer.parseInt(JOptionPane.showInputDialog("Ingrese\n0  terminar el programa\n1añadir nuevo cliente\n2 mostrar todos los clientes\n3  para parquear un nuevo vehiculo"
+                    + "\n4 para mostrar los vehiculos\n5 Configurar parqueo\n6 para mostrar parqueo\n7  eliminar vehiculo\n8 para actualizar vehiculo" + "\n0 para salir del programa"));
 
             switch (choice) {
                 case 0 -> {
@@ -73,9 +69,9 @@ public class RegistrationWindow {
 
 
                 default -> {
-                } //Switch
+                } 
 
-            }//While
+            }
         }
     }
 
@@ -350,100 +346,5 @@ public class RegistrationWindow {
         JOptionPane.showMessageDialog(null, report.toString());
     }
 
-       /* public static void newManu(){
-    int firstChoice = 1;
-        while (firstChoice != 0) {
-            JOptionPane.showMessageDialog(null, "BIENVENIDO AL NUEVO MENÚ");
-            firstChoice = Integer.parseInt(JOptionPane.showInputDialog("Ingrese\n0 para terminar el programa\n1 Acceder a las funciones de los clientes\n2 Acceder a las funciones de los vehiculos\n3 Acceder a las funciones de parqueo"));
-
-            switch (firstChoice) {
-
-                case 0 -> {
-
-                    JOptionPane.showMessageDialog(null, "Hasta pronto!");
-                }
-                case 1 -> {
-
-                   int secondChoice=1;
-                   secondChoice = Integer.parseInt(JOptionPane.showInputDialog("Ingrese\n0 para volver al menú principal\n1 Insertar cliente\n2 Mostrar clientes"
-                           + "\n3 editar cliente\n4 eliminar cliente"));
-                   while (secondChoice!=0){
-
-                       switch (secondChoice) {
-                           case 1 -> {
-                               insertCustomer();
-                           }
-                           case 2 -> {
-                               showAllCustomers();
-                           }
-                           case 3 -> {
-                               updateCustomer();
-                           }
-                           case 4 -> {
-                               deleteCustomer();
-                           }
-                           default ->{
-                               JOptionPane.showMessageDialog(null, "Por favor digite una opción válida");
-                           }
-                       }
-                   }
-
-                }
-
-                case 2 -> {
-                   int secondChoice=1;
-                   secondChoice = Integer.parseInt(JOptionPane.showInputDialog("Ingrese\n0 para volver al menú principal\n1 Insertar cliente\n2 Mostrar clientes"
-                           + "\n3 editar cliente\n4 eliminar cliente"));
-                   while (secondChoice!=0){
-
-                       switch (secondChoice) {
-                           case 1 -> {
-                               insertCustomer();
-                           }
-                           case 2 -> {
-                               showAllCustomers();
-                           }
-                           case 3 -> {
-                               updateCustomer();
-                           }
-                           case 4 -> {
-                               deleteCustomer();
-                           }
-                           default ->{
-                               JOptionPane.showMessageDialog(null, "Por favor digite una opción válida");
-                           }
-                       }
-                   }
-
-                }
-                case 3 -> {
-                    insertVehicle();
-                }
-                case 4 -> {
-                    showAllVehicles();
-                }
-
-                case 5 -> {
-                    insertParkingLot();
-                }
-
-                case 6 ->{ showCustomersInParkingLot();
-                }
-
-                case 7 ->{ deleteVehicle();}
-
-                case 8 ->{ updateVehicle();}
-
-                case 9 ->{ updateCustomer();}
-
-                case 10 ->{ deleteCustomer();}
-
-
-
-                default -> {
-                } //Switch
-
-            }//While
-        }
-}*/
+      
 }
