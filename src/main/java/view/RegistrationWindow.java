@@ -77,6 +77,7 @@ public class RegistrationWindow {
 
             }//While
         }
+        //Este comentario deberia aparecer si el comit se hizo de forma correcta, si no dario nos debe un café
     }
 
     private static Customer insertCustomer() {
