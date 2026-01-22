@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="16e3cf21-42b6-4be3-8c34-673b64b24d54" name="Changes" comment="Actualización view" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Gui-lpz&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Gui-lpz/-ParkingSystem.git&quot;,
+    &quot;accountId&quot;: &quot;8ce22a01-14c2-402e-99ac-662443a35163&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="38N3Lqabsb0pzgDvg1KEvniL0nA" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.RegistrationWindow.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "Guiselle",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/UCR 2026/Desarrollo de Software II/-ParkingSystem",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="RegistrationWindow" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="view.RegistrationWindow" />
+      <module name="ParkingSystem" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="view.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.RegistrationWindow" />
+        <item itemvalue="Application.RegistrationWindow" />
+        <item itemvalue="Application.RegistrationWindow" />
+        <item itemvalue="Application.RegistrationWindow" />
+        <item itemvalue="Application.RegistrationWindow" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.20224.419" />
+        <option value="bundled-js-predefined-d6986cc7102b-410509235cf1-JavaScript-IU-242.20224.419" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="16e3cf21-42b6-4be3-8c34-673b64b24d54" name="Changes" comment="" />
+      <created>1768626148714</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1768626148714</updated>
+      <workItem from="1768626151038" duration="2101000" />
+      <workItem from="1768794159315" duration="1920000" />
+      <workItem from="1768877675631" duration="957000" />
+      <workItem from="1768878653554" duration="20000" />
+      <workItem from="1768879050945" duration="5726000" />
+      <workItem from="1768958368465" duration="1757000" />
+      <workItem from="1768973742446" duration="2060000" />
+      <workItem from="1768975847569" duration="6000" />
+      <workItem from="1768975860446" duration="273000" />
+      <workItem from="1768976148961" duration="24000" />
+      <workItem from="1768976179723" duration="304000" />
+      <workItem from="1768976487911" duration="403000" />
+      <workItem from="1768976920951" duration="13000" />
+      <workItem from="1768976964286" duration="510000" />
+    </task>
+    <task id="LOCAL-00001" summary="Primer commit">
+      <option name="closed" value="true" />
+      <created>1768628226708</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1768628226708</updated>
+    </task>
+    <task id="LOCAL-00002" summary="cambios en la venta de registro(menú).">
+      <option name="closed" value="true" />
+      <created>1768880588729</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1768880588729</updated>
+    </task>
+    <task id="LOCAL-00003" summary="cambios en la venta de registro(menú).">
+      <option name="closed" value="true" />
+      <created>1768880756915</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1768880756915</updated>
+    </task>
+    <task id="LOCAL-00004" summary="cambios en la venta de registro(menú).">
+      <option name="closed" value="true" />
+      <created>1768880924006</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1768880924006</updated>
+    </task>
+    <task id="LOCAL-00005" summary="cambios en la venta de registro(menú).">
+      <option name="closed" value="true" />
+      <created>1768882081269</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1768882081269</updated>
+    </task>
+    <task id="LOCAL-00006" summary="cambios en la venta de registro(menú).">
+      <option name="closed" value="true" />
+      <created>1768882532483</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1768882532483</updated>
+    </task>
+    <task id="LOCAL-00007" summary="cambios en la venta de registro(menú).">
+      <option name="closed" value="true" />
+      <created>1768959781991</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1768959781991</updated>
+    </task>
+    <task id="LOCAL-00008" summary="cambios en la venta de registro(menú).">
+      <option name="closed" value="true" />
+      <created>1768960100411</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1768960100411</updated>
+    </task>
+    <task id="LOCAL-00009" summary="cambios en RegistrationWindow.java actualización de clase">
+      <option name="closed" value="true" />
+      <created>1768974152634</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1768974152634</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Actualización de clases">
+      <option name="closed" value="true" />
+      <created>1768975016414</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1768975016414</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Actualización de clases">
+      <option name="closed" value="true" />
+      <created>1768975085865</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1768975085865</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Primer commit" />
+    <MESSAGE value="cambios en la venta de registro(menú)." />
+    <MESSAGE value="cambios en RegistrationWindow.java actualización de clase" />
+    <MESSAGE value="Actualización de clases" />
+    <option name="LAST_COMMIT_MESSAGE" value="Actualización de clases" />
+  </component>
+</project>

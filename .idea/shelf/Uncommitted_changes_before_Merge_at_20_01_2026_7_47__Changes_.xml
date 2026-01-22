@@ -1,0 +1,54 @@
+<changelist name="Uncommitted_changes_before_Merge_at_20_01_2026_7_47_[Changes]" date="1768960065848" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_20_01_2026_7_47_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Merge at 20/01/2026 7:47 [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/controller/VehicleController.class" />
+    <option name="AFTER_PATH" value="target/classes/controller/VehicleController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_20_01_2026_7_47_[Changes]/VehicleController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/controller/CustomerController.class" />
+    <option name="AFTER_PATH" value="target/classes/controller/CustomerController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_20_01_2026_7_47_[Changes]/CustomerController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/controller/ParkingLotController.class" />
+    <option name="AFTER_PATH" value="target/classes/controller/ParkingLotController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_20_01_2026_7_47_[Changes]/ParkingLotController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/entities/ParkingLot.class" />
+    <option name="AFTER_PATH" value="target/classes/model/entities/ParkingLot.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_20_01_2026_7_47_[Changes]/ParkingLot.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/data/CustomerData.class" />
+    <option name="AFTER_PATH" value="target/classes/model/data/CustomerData.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_20_01_2026_7_47_[Changes]/CustomerData.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/data/VehicleData.class" />
+    <option name="AFTER_PATH" value="target/classes/model/data/VehicleData.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_20_01_2026_7_47_[Changes]/VehicleData.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/entities/Customer.class" />
+    <option name="AFTER_PATH" value="target/classes/model/entities/Customer.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_20_01_2026_7_47_[Changes]/Customer.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/entities/Space.class" />
+    <option name="AFTER_PATH" value="target/classes/model/entities/Space.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_20_01_2026_7_47_[Changes]/Space.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/entities/Vehicle.class" />
+    <option name="AFTER_PATH" value="target/classes/model/entities/Vehicle.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_20_01_2026_7_47_[Changes]/Vehicle.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/data/ParkingLotData.class" />
+    <option name="AFTER_PATH" value="target/classes/model/data/ParkingLotData.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_20_01_2026_7_47_[Changes]/ParkingLotData.class" />
+  </binary>
+</changelist>

@@ -1,0 +1,54 @@
+<changelist name="Uncommitted_changes_before_rebase_[Changes]4" date="1768882878966" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]4/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before rebase [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/controller/VehicleController.class" />
+    <option name="AFTER_PATH" value="target/classes/controller/VehicleController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]4/VehicleController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/controller/CustomerController.class" />
+    <option name="AFTER_PATH" value="target/classes/controller/CustomerController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]4/CustomerController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/controller/ParkingLotController.class" />
+    <option name="AFTER_PATH" value="target/classes/controller/ParkingLotController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]4/ParkingLotController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/entities/ParkingLot.class" />
+    <option name="AFTER_PATH" value="target/classes/model/entities/ParkingLot.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]4/ParkingLot.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/data/CustomerData.class" />
+    <option name="AFTER_PATH" value="target/classes/model/data/CustomerData.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]4/CustomerData.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/data/VehicleData.class" />
+    <option name="AFTER_PATH" value="target/classes/model/data/VehicleData.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]4/VehicleData.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/entities/Customer.class" />
+    <option name="AFTER_PATH" value="target/classes/model/entities/Customer.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]4/Customer.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/entities/Space.class" />
+    <option name="AFTER_PATH" value="target/classes/model/entities/Space.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]4/Space.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/entities/Vehicle.class" />
+    <option name="AFTER_PATH" value="target/classes/model/entities/Vehicle.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]4/Vehicle.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/model/data/ParkingLotData.class" />
+    <option name="AFTER_PATH" value="target/classes/model/data/ParkingLotData.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]4/ParkingLotData.class" />
+  </binary>
+</changelist>

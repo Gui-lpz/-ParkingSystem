@@ -1,0 +1,1590 @@
+Index: src/main/java/view/RegistrationWindow.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/*\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license\r\n */\r\npackage view;\r\n\r\nimport controller.CustomerController;\r\nimport controller.ParkingLotController;\r\nimport controller.VehicleController;\r\nimport java.util.ArrayList;\r\nimport javax.swing.JOptionPane;\r\nimport model.entities.Customer;\r\nimport model.entities.ParkingLot;\r\nimport model.entities.Space;\r\nimport model.entities.Vehicle;\r\nimport model.entities.VehicleType;\r\n\r\n/**\r\n *\r\n * @author adrie\r\n */\r\npublic class RegistrationWindow {\r\n\r\n    static VehicleController vehicleController = new VehicleController();\r\n    static CustomerController customerController = new CustomerController();\r\n    static ParkingLotController parkingLotController = new ParkingLotController();\r\n\r\n    public static void main(String[] args) {\r\n\r\n        showMainMenu();\r\n    }\r\n\r\n    static void showAllCustomers() {\r\n\r\n        JOptionPane.showMessageDialog(null, customerController.getAllCustomers().toString());\r\n    }\r\n\r\n    static void showAllVehicles() {\r\n        JOptionPane.showMessageDialog(null, vehicleController.getAllVehicles().toString());\r\n    }\r\n\r\n    static void showAllParkingLots() {\r\n        JOptionPane.showMessageDialog(null, parkingLotController.getAllParkingLots().toString());\r\n    }\r\n\r\n    static void showMainMenu() {\r\n        int choice = 1;\r\n        while (choice != 0) {\r\n\r\n            choice = Integer.parseInt(JOptionPane.showInputDialog(\"Ingrese 0 para terminar el programa\\n 1 para añadir nuevo cliente\\n 2 para mostrar todos los clientes\\n 3 para parquear un vehículo\\n 4 para mostrar todos los vehículos del parqueo\\n 5 para administrar parqueos\\n 6 actualizar un cliente\\n 7 para eliminar un cliente\\n 8 para retirar vehículo\\n 9 para ver clientes con vehículos en parqueo  \"));\r\n\r\n            switch (choice) {\r\n                case 0 -> {\r\n\r\n                    JOptionPane.showMessageDialog(null, \"Hasta pronto!\");\r\n                }\r\n                case 1 -> {\r\n\r\n                    insertCustomer();\r\n                }\r\n\r\n                case 2 -> {\r\n                    showAllCustomers();\r\n                }\r\n                case 3 -> {\r\n                    insertVehicle();\r\n                }\r\n                case 4 -> {\r\n                    showAllVehicles();\r\n                }\r\n                case 5 -> {\r\n                    insertParkingLot();\r\n                }\r\n\r\n                case 6 -> { \r\n                    updateCustomer();\r\n                }\r\n\r\n                case 7 -> {\r\n                    deleteCustomer();\r\n                }\r\n                case 8 -> {\r\n                    exitVehicle();\r\n                }\r\n                case 9 -> {\r\n                    showCurrentParkedCustomers();\r\n                }\r\n                default -> {\r\n                }\r\n\r\n            }//switch\r\n        }//while\r\n\r\n    }\r\n    private static void getDataFromCustomer() {\r\n\r\n        String id = JOptionPane.showInputDialog(\"Ingrese el número de cédula del cliente\");\r\n        String name = JOptionPane.showInputDialog(\"Ingrese el nombre del cliente\");\r\n\r\n        int option = JOptionPane.showConfirmDialog(\r\n                null,\r\n                \"¿El cliente tiene discapacidad?\",\r\n                \"Discapacidad\",\r\n                JOptionPane.YES_NO_OPTION\r\n        );\r\n\r\n        boolean disabilityPresented = (option == JOptionPane.YES_OPTION);\r\n\r\n        Customer customerToInsert = new Customer(id, name, disabilityPresented);\r\n\r\n        JOptionPane.showMessageDialog(\r\n                null,\r\n                customerController.insertCustomer(customerToInsert)\r\n        );\r\n    }\r\n\r\n    static void getDataFromVehicle() {\r\n\r\n        String plate = JOptionPane.showInputDialog(\"Ingrese la placa del vehículo\");\r\n        String color = JOptionPane.showInputDialog(\"Ingrese el color del vehículo\");\r\n        String brand = JOptionPane.showInputDialog(\"Ingrese la marca del vehículo\");\r\n        String model = JOptionPane.showInputDialog(\"Ingrese el modelo del vehículo\");\r\n\r\n        VehicleType vehicleType = selectVehicleType();\r\n\r\n        if (vehicleType == null) {\r\n            return;\r\n        }\r\n        Customer customer = getExistingCustomer();\r\n\r\n        if (customer == null) {\r\n            return;\r\n        }\r\n\r\n        Vehicle vehicle = new Vehicle(plate, color, brand, model, customer, vehicleType);\r\n\r\n        vehicleController.insertVehicle(vehicle);\r\n\r\n        ParkingLot parkingLot = selectParkingLot();\r\n        int spaceAssigned = parkingLotController.registerVehicleInParkingLot(vehicle, parkingLot);\r\n\r\n        JOptionPane.showMessageDialog(null, \"El vehículo de: \" + customer.getName() + \" con placa: \" + vehicle.getPlate() + \" fue ingresado en el parqueo: \" + parkingLot.getName());\r\n        JOptionPane.showMessageDialog(null, \"El espacio asignado en el parqueo es: \" + spaceAssigned);\r\n    }\r\n\r\n    private static void insertParkingLot() {\r\n\r\n        String name = JOptionPane.showInputDialog(\"Ingrese el nombre del parqueo\");\r\n        int numberOfSpaces = Integer.parseInt(JOptionPane.showInputDialog(\"Ingrese el número de espacios que tiene el parqueo\"));\r\n        int numberOfSpacesWithDisabiltyAdaptation = Integer.parseInt(JOptionPane.showInputDialog(\"Ingrese el número de espacios designados para personas con discapacidad\"));\r\n\r\n        Space[] spaces = new Space[numberOfSpaces];\r\n        spaces = configureSpaces(spaces, numberOfSpacesWithDisabiltyAdaptation);\r\n\r\n        ParkingLot parkingLot = parkingLotController.registerParkingLot(name, spaces);\r\n        parkingLot.setNumberOfSpaces(numberOfSpaces);\r\n        parkingLot.setVehicles(new ArrayList<Vehicle>());\r\n\r\n    }\r\n\r\n    public static Customer getExistingCustomer() {\r\n\r\n        String id = JOptionPane.showInputDialog(\"Ingrese el número de cédula del cliente\");\r\n\r\n        Customer customer = customerController.findCustomerById(id);\r\n\r\n        if (customer == null) {\r\n            JOptionPane.showMessageDialog(null, \"El cliente no existe. Debe registrarlo primero.\");\r\n            return null;\r\n        }\r\n\r\n        return customer;\r\n    }\r\n\r\n    private static Space[] configureSpaces(Space[] spaces, int numberOfSpacesWithDisabilityAdaptation) {\r\n\r\n        if (numberOfSpacesWithDisabilityAdaptation <= spaces.length) {\r\n            for (int i = 0; i < numberOfSpacesWithDisabilityAdaptation; i++) {\r\n                Space space = new Space();\r\n\r\n                space.setId(i);\r\n                space.setDisabilityAdaptation(true);\r\n                space.setVehicleType(configureVehicleTypeOfSpaces(i, true));\r\n\r\n                spaces[i] = space;\r\n            }\r\n\r\n            for (int i = numberOfSpacesWithDisabilityAdaptation; i < spaces.length; i++) {\r\n                Space space = new Space();\r\n\r\n                space.setId(i);\r\n                space.setDisabilityAdaptation(false);\r\n                space.setVehicleType(configureVehicleTypeOfSpaces(i, false));\r\n\r\n                spaces[i] = space;\r\n            }\r\n\r\n        } else {\r\n\r\n            JOptionPane.showMessageDialog(null, \"El número de espacios seleccionados sobrepasa el máximo configurado para este parqueo\");\r\n        }\r\n\r\n        return spaces;\r\n    }\r\n\r\n    private static ParkingLot selectParkingLot() {\r\n\r\n        String parkingLotsInformation = \"Lista de parqueos en el sistema\\n\\n\";\r\n        for (ParkingLot parkingLot : parkingLotController.getAllParkingLots()) {\r\n\r\n            parkingLotsInformation += \"Número de parqueo: \" + parkingLot.getId() + \" Nombre del parqueo: \" + parkingLot.getName() + \"\\n\";\r\n\r\n        }\r\n        int option;\r\n        ParkingLot parkingLot;\r\n        do {\r\n\r\n            option = Integer.parseInt(JOptionPane.showInputDialog(parkingLotsInformation + \"\\n Ingrese el número de parqueo que desea consultar\\n o en el que desea ingresar un vehículo\"));\r\n            parkingLot = parkingLotController.findParkingLotById(option);\r\n\r\n        } while (parkingLot == null);\r\n\r\n        return parkingLot;\r\n    }\r\n\r\n    private static VehicleType configureVehicleTypeOfSpaces(int position, boolean disabilityPresented) {\r\n\r\n        String[] types = {\"Tipos de vehículo\", \"1)moto\", \"2)liviano\", \"3)pesado\", \"4)bicicleta\", \"5)otro\"};\r\n        byte[] tires = {0, 2, 4, 8, 12, -1};\r\n\r\n        String allTypes = \"\";\r\n        for (String type : types) {\r\n\r\n            allTypes += type + \"\\n\";\r\n        }\r\n        VehicleType vehicleType = new VehicleType();\r\n\r\n        byte typeNumber;\r\n        typeNumber = Byte.parseByte(JOptionPane.showInputDialog(allTypes + \"\\n\" + \"Ingrese el número del tipo de vehículo del espacio # \" + position + \" \"\r\n                + \"                                                                                      ¿Discapacidad?=\" + (disabilityPresented ? \"Sí\" : \"No\")));\r\n        vehicleType.setId(typeNumber);                                                                                                                                                                                                                           //Operador ternario.\r\n        vehicleType.setDescription(types[typeNumber]);\r\n        vehicleType.setNumberOfTires(tires[typeNumber]);\r\n\r\n        return vehicleType;\r\n    }\r\n\r\n    //Tarea\r\n    private static void updateCustomer() {\r\n\r\n        String id = JOptionPane.showInputDialog(\"Ingrese el número de cédula del cliente\");\r\n        String name = JOptionPane.showInputDialog(\"Ingrese el nombre del cliente\");\r\n\r\n        int option = JOptionPane.showConfirmDialog(\r\n                null,\r\n                \"¿El cliente tiene discapacidad?\",\r\n                \"Discapacidad\",\r\n                JOptionPane.YES_NO_OPTION\r\n        );\r\n\r\n        boolean disabilityPresented = (option == JOptionPane.YES_OPTION);\r\n\r\n        Customer updatedCustomer = new Customer(id, name, disabilityPresented);\r\n\r\n        JOptionPane.showMessageDialog(\r\n                null,\r\n                customerController.updateCustomer(updatedCustomer)\r\n        );\r\n    }\r\n\r\n    //Tarea\r\n    private static void deleteCustomer() {\r\n        String id = JOptionPane.showInputDialog(\"Ingrese el número de cédula del cliente que desea eliminar\");\r\n        String name = JOptionPane.showInputDialog(\"Ingrese el nombre del cliente que desea eliminar\");\r\n\r\n        Customer customerDelete = new Customer();//***\r\n        customerDelete.setId(id);\r\n\r\n        JOptionPane.showMessageDialog(null, customerController.deleteCustomer(customerDelete));\r\n    }\r\n\r\n    private static VehicleType selectVehicleType() {\r\n\r\n        String menu\r\n                = \"Seleccione el tipo de vehículo:\\n\"\r\n                + \"1. Moto\\n\"\r\n                + \"2. Liviano\\n\"\r\n                + \"3. Pesado\\n\"\r\n                + \"4. Bicicleta\";\r\n\r\n        int option = Integer.parseInt(JOptionPane.showInputDialog(menu));\r\n\r\n        float fee = Float.parseFloat(\r\n                JOptionPane.showInputDialog(\"Ingrese el precio por hora para este tipo de vehículo\")\r\n        );\r\n\r\n        VehicleType vehicleType = new VehicleType();\r\n        vehicleType.setId(option);\r\n        vehicleType.setFee(fee);\r\n\r\n        switch (option) {\r\n            case 1 -> {\r\n                vehicleType.setDescription(\"Moto\");\r\n                vehicleType.setNumberOfTires(2);\r\n            }\r\n            case 2 -> {\r\n                vehicleType.setDescription(\"Liviano\");\r\n                vehicleType.setNumberOfTires(4);\r\n            }\r\n            case 3 -> {\r\n                vehicleType.setDescription(\"Pesado\");\r\n                vehicleType.setNumberOfTires(8);\r\n            }\r\n            case 4 -> {\r\n                vehicleType.setDescription(\"Bicicleta\");\r\n                vehicleType.setNumberOfTires(2);\r\n            }\r\n            default -> {\r\n                JOptionPane.showMessageDialog(null, \"Tipo inválido\");\r\n                return null;\r\n            }\r\n        }\r\n\r\n        return vehicleType;\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/view/RegistrationWindow.java b/src/main/java/view/RegistrationWindow.java
+--- a/src/main/java/view/RegistrationWindow.java	(revision 6ce7be22935350fb3f503824bfc3691430d932dd)
++++ b/src/main/java/view/RegistrationWindow.java	(date 1768974817506)
+@@ -1,6 +1,3 @@
+-/*
+- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+- */
+ package view;
+ 
+ import controller.CustomerController;
+@@ -14,39 +11,26 @@
+ import model.entities.Vehicle;
+ import model.entities.VehicleType;
+ 
+-/**
+- *
+- * @author adrie
+- */
+ public class RegistrationWindow {
+ 
++    static CustomerController customerController
++            = new CustomerController();
+     static VehicleController vehicleController = new VehicleController();
+-    static CustomerController customerController = new CustomerController();
+-    static ParkingLotController parkingLotController = new ParkingLotController();
++    static ParkingLotController parkingLotController= new ParkingLotController();
+ 
+     public static void main(String[] args) {
+ 
+         showMainMenu();
+-    }
+-
+-    static void showAllCustomers() {
+-
+-        JOptionPane.showMessageDialog(null, customerController.getAllCustomers().toString());
+-    }
+-
+-    static void showAllVehicles() {
+-        JOptionPane.showMessageDialog(null, vehicleController.getAllVehicles().toString());
++        // newManu();
+     }
+ 
+-    static void showAllParkingLots() {
+-        JOptionPane.showMessageDialog(null, parkingLotController.getAllParkingLots().toString());
+-    }
+ 
+     static void showMainMenu() {
+         int choice = 1;
+         while (choice != 0) {
+ 
+-            choice = Integer.parseInt(JOptionPane.showInputDialog("Ingrese 0 para terminar el programa\n 1 para añadir nuevo cliente\n 2 para mostrar todos los clientes\n 3 para parquear un vehículo\n 4 para mostrar todos los vehículos del parqueo\n 5 para administrar parqueos\n 6 actualizar un cliente\n 7 para eliminar un cliente\n 8 para retirar vehículo\n 9 para ver clientes con vehículos en parqueo  "));
++            choice = Integer.parseInt(JOptionPane.showInputDialog("Ingrese\n0 para terminar el programa\n1 para añadir nuevo cliente\n2 para mostrar todos los clientes\n3  para parquear un nuevo vehiculo"
++                    + "\n4 para mostrar los vehiculos\n5 Configurar parqueo\n6 para mostrar parqueo\n7 para eliminar vehiculo\n8 para actualizar vehiculo" + "\n0 para salir"));
+ 
+             switch (choice) {
+                 case 0 -> {
+@@ -57,7 +41,6 @@
+ 
+                     insertCustomer();
+                 }
+-
+                 case 2 -> {
+                     showAllCustomers();
+                 }
+@@ -67,83 +50,169 @@
+                 case 4 -> {
+                     showAllVehicles();
+                 }
++
+                 case 5 -> {
+                     insertParkingLot();
+                 }
+ 
+-                case 6 -> { 
+-                    updateCustomer();
++                case 6 ->{ showCustomersInParkingLot();
+                 }
+ 
+-                case 7 -> {
+-                    deleteCustomer();
+-                }
+-                case 8 -> {
+-                    exitVehicle();
+-                }
+-                case 9 -> {
+-                    showCurrentParkedCustomers();
+-                }
++                case 7 ->{ deleteVehicle();}
++
++                case 8 ->{ updateVehicle();}
++
++                case 9 ->{ updateCustomer();}
++
++                case 10 ->{ deleteCustomer();}
++
++
++
+                 default -> {
+-                }
++                } //Switch
+ 
+-            }//switch
+-        }//while
+-
++            }//While
++        }
+     }
+-    private static void getDataFromCustomer() {
+ 
++    private static Customer insertCustomer() {
+         String id = JOptionPane.showInputDialog("Ingrese el número de cédula del cliente");
++
+         String name = JOptionPane.showInputDialog("Ingrese el nombre del cliente");
+ 
+-        int option = JOptionPane.showConfirmDialog(
+-                null,
+-                "¿El cliente tiene discapacidad?",
+-                "Discapacidad",
+-                JOptionPane.YES_NO_OPTION
+-        );
+-
+-        boolean disabilityPresented = (option == JOptionPane.YES_OPTION);
++        String answerDisability=JOptionPane.showInputDialog("Cuenta o transporta alguna persona con discapacidad? si/no");
++        boolean disabilityPresented;
++        if(answerDisability.equals("si")){
++            disabilityPresented=true;
++        }else{
++            disabilityPresented=false;
++        }
+ 
+         Customer customerToInsert = new Customer(id, name, disabilityPresented);
+ 
+-        JOptionPane.showMessageDialog(
+-                null,
+-                customerController.insertCustomer(customerToInsert)
+-        );
++        JOptionPane.showMessageDialog(null, customerController.
++                insertCustomer(customerToInsert));
++        return customerToInsert;
+     }
++
++    private static void updateCustomer() {
++        String id = JOptionPane.showInputDialog("Ingrese el número de cédula del cliente que desea actualizar");
++        String name = JOptionPane.showInputDialog("Ingrese el nuevo nombre del cliente");
++        String answerDisability=JOptionPane.showInputDialog("Cuenta o transporta alguna persona con discapacidad? si/no");
++        boolean disabilityPresented;
++        if(answerDisability.equals("si")){
++            disabilityPresented=true;
++        }else{
++            disabilityPresented=false;
++        }
+ 
+-    static void getDataFromVehicle() {
++        Customer updatedCustomer = new Customer(id, name, disabilityPresented);
+ 
+-        String plate = JOptionPane.showInputDialog("Ingrese la placa del vehículo");
+-        String color = JOptionPane.showInputDialog("Ingrese el color del vehículo");
+-        String brand = JOptionPane.showInputDialog("Ingrese la marca del vehículo");
+-        String model = JOptionPane.showInputDialog("Ingrese el modelo del vehículo");
++        JOptionPane.showMessageDialog(null, customerController.updateCustomer(updatedCustomer));
++    }
++    private static void deleteCustomer() {
++        String id = JOptionPane.showInputDialog("Ingrese el número de cédula del cliente que desea eliminar");
+ 
+-        VehicleType vehicleType = selectVehicleType();
++        Customer customerDelete = new Customer();
++        customerDelete.setId(id);
+ 
+-        if (vehicleType == null) {
+-            return;
+-        }
+-        Customer customer = getExistingCustomer();
++        JOptionPane.showMessageDialog(null, customerController.deleteCustomer(customerDelete));
++    }
++
++
++
++    private static void insertVehicle() {
++
++        String plate = JOptionPane.showInputDialog("Ingrese el número de placa");
++        String brand = JOptionPane.showInputDialog("Ingrese la marca");
++        String model = JOptionPane.showInputDialog("Ingrese el modelo");
++        String color = JOptionPane.showInputDialog("Ingrese el color");
+ 
+-        if (customer == null) {
+-            return;
++        ArrayList<Customer> vehicleCustomers = new ArrayList<>();
++        int numOwners = Integer.parseInt(JOptionPane.showInputDialog("¿Cuántos dueños tiene este vehículo?"));
++
++        for(int i = 0; i < numOwners; i++) {
++            JOptionPane.showMessageDialog(null, "Datos del dueño #" + (i+1));
++            vehicleCustomers.add(insertCustomer());
+         }
+ 
+-        Vehicle vehicle = new Vehicle(plate, color, brand, model, customer, vehicleType);
++        Customer customerVehicle=vehicleCustomers.get(0);
++        VehicleType type = configureVehicleTypeOfSpaces(0, customerVehicle.isDisabilityPresented());
+ 
++        Vehicle vehicle = new Vehicle(plate, color, brand, model, vehicleCustomers, type);
+         vehicleController.insertVehicle(vehicle);
+ 
+         ParkingLot parkingLot = selectParkingLot();
+         int spaceAssigned = parkingLotController.registerVehicleInParkingLot(vehicle, parkingLot);
+ 
+-        JOptionPane.showMessageDialog(null, "El vehículo de: " + customer.getName() + " con placa: " + vehicle.getPlate() + " fue ingresado en el parqueo: " + parkingLot.getName());
+         JOptionPane.showMessageDialog(null, "El espacio asignado en el parqueo es: " + spaceAssigned);
++
++    }
++
++    private static void deleteVehicle() {
++        String plate = JOptionPane.showInputDialog("Ingrese el número de placa del vehiculo que desea eliminar");
++
++        JOptionPane.showMessageDialog(null, vehicleController.deleteVehicle(plate));
++    }
++
++    private static void updateVehicle() {
++        String plate = JOptionPane.showInputDialog("Ingrese el número de placa del carro que desea actualizar");
++        String brand = JOptionPane.showInputDialog("Ingrese la nueva marca");
++        String model = JOptionPane.showInputDialog("Ingrese el nuevo modelo");
++        String color = JOptionPane.showInputDialog("Ingrese el nuevo color");
++
++        ArrayList<Customer> vehicleCustomers = new ArrayList<>();
++        int numOwners = Integer.parseInt(JOptionPane.showInputDialog("¿Cuántos dueños tiene este vehículo ahora?"));
++
++        for(int i = 0; i < numOwners; i++) {
++            JOptionPane.showMessageDialog(null, "Datos del dueño #" + (i+1));
++            vehicleCustomers.add(insertCustomerToUpdateCar());
++        }
++
++        Customer customerVehicle=vehicleCustomers.get(0);
++        VehicleType type = configureVehicleTypeOfSpaces(0, customerVehicle.isDisabilityPresented());
++
++        Vehicle updatedVehicle = new Vehicle(plate, color, brand, model, vehicleCustomers, type);
++
++        JOptionPane.showMessageDialog(null, vehicleController.updateVehicle(plate, updatedVehicle));
++
++    }
++
++    private static Customer insertCustomerToUpdateCar() {
++        String id = JOptionPane.showInputDialog("Ingrese el número de cédula del cliente");
++
++        String name = JOptionPane.showInputDialog("Ingrese el nombre del cliente");
++
++        String answerDisability=JOptionPane.showInputDialog("Cuenta o transporta alguna persona con discapacidad? si/no");
++        boolean disabilityPresented;
++        if(answerDisability.equals("si")){
++            disabilityPresented=true;
++        }else{
++            disabilityPresented=false;
++        }
++
++        Customer customerToUpdate = new Customer(id, name, disabilityPresented);
++
++        JOptionPane.showMessageDialog(null, customerController.updateCustomer(customerToUpdate)); //diferencia con el metodo insertCustomer
++        return customerToUpdate;
++    }
++
++
++    static void showAllCustomers() {
++
++        JOptionPane.showMessageDialog(null, customerController.getAllCustomers().toString());
++
++    }
++
++    static void showAllVehicles() {
++
++        JOptionPane.showMessageDialog(null, vehicleController.getAllVehicles().toString());
++
+     }
+ 
+     private static void insertParkingLot() {
+ 
++        int parkingLotId = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el número del parqueo"));
+         String name = JOptionPane.showInputDialog("Ingrese el nombre del parqueo");
+         int numberOfSpaces = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el número de espacios que tiene el parqueo"));
+         int numberOfSpacesWithDisabiltyAdaptation = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el número de espacios designados para personas con discapacidad"));
+@@ -157,19 +226,6 @@
+ 
+     }
+ 
+-    public static Customer getExistingCustomer() {
+-
+-        String id = JOptionPane.showInputDialog("Ingrese el número de cédula del cliente");
+-
+-        Customer customer = customerController.findCustomerById(id);
+-
+-        if (customer == null) {
+-            JOptionPane.showMessageDialog(null, "El cliente no existe. Debe registrarlo primero.");
+-            return null;
+-        }
+-
+-        return customer;
+-    }
+ 
+     private static Space[] configureSpaces(Space[] spaces, int numberOfSpacesWithDisabilityAdaptation) {
+ 
+@@ -202,25 +258,8 @@
+         return spaces;
+     }
+ 
+-    private static ParkingLot selectParkingLot() {
+-
+-        String parkingLotsInformation = "Lista de parqueos en el sistema\n\n";
+-        for (ParkingLot parkingLot : parkingLotController.getAllParkingLots()) {
+-
+-            parkingLotsInformation += "Número de parqueo: " + parkingLot.getId() + " Nombre del parqueo: " + parkingLot.getName() + "\n";
+-
+-        }
+-        int option;
+-        ParkingLot parkingLot;
+-        do {
+ 
+-            option = Integer.parseInt(JOptionPane.showInputDialog(parkingLotsInformation + "\n Ingrese el número de parqueo que desea consultar\n o en el que desea ingresar un vehículo"));
+-            parkingLot = parkingLotController.findParkingLotById(option);
+ 
+-        } while (parkingLot == null);
+-
+-        return parkingLot;
+-    }
+ 
+     private static VehicleType configureVehicleTypeOfSpaces(int position, boolean disabilityPresented) {
+ 
+@@ -235,92 +274,172 @@
+         VehicleType vehicleType = new VehicleType();
+ 
+         byte typeNumber;
+-        typeNumber = Byte.parseByte(JOptionPane.showInputDialog(allTypes + "\n" + "Ingrese el número del tipo de vehículo del espacio # " + position + " "
+-                + "                                                                                      ¿Discapacidad?=" + (disabilityPresented ? "Sí" : "No")));
+-        vehicleType.setId(typeNumber);                                                                                                                                                                                                                           //Operador ternario.
++        typeNumber = Byte.parseByte(JOptionPane.showInputDialog(allTypes + "\n" + "Ingrese el número del tipo de vehículo del espacio # " + position + " ¿Discapacidad?=" + (disabilityPresented ? "Sí" : "No")));
++        vehicleType.setId(typeNumber);
+         vehicleType.setDescription(types[typeNumber]);
+         vehicleType.setNumberOfTires(tires[typeNumber]);
+ 
+         return vehicleType;
+     }
+ 
+-    //Tarea
+-    private static void updateCustomer() {
++    private static ParkingLot selectParkingLot() {
++
++        String parkingLotsInformation = "Lista de parqueos en el sistema\n\n";
++        for (ParkingLot parkingLot : parkingLotController.getAllParkingLots()) {
++
++            parkingLotsInformation += "Número de parqueo: " + parkingLot.getId() + " Nombre del parqueo: " + parkingLot.getName() + "\n";
++
++        }
++        int option;
++        ParkingLot parkingLot;
++        do {
++
++            option = Integer.parseInt(JOptionPane.showInputDialog(parkingLotsInformation + "\n Ingrese el número de parqueo que desea consultar\n o en el que desea ingresar un vehículo"));
++            parkingLot = parkingLotController.findParkingLotById(option);
++
++        } while (parkingLot == null);
++
+ 
+-        String id = JOptionPane.showInputDialog("Ingrese el número de cédula del cliente");
+-        String name = JOptionPane.showInputDialog("Ingrese el nombre del cliente");
+ 
+-        int option = JOptionPane.showConfirmDialog(
+-                null,
+-                "¿El cliente tiene discapacidad?",
+-                "Discapacidad",
+-                JOptionPane.YES_NO_OPTION
+-        );
++        return parkingLot;
++    }
+ 
+-        boolean disabilityPresented = (option == JOptionPane.YES_OPTION);
+ 
+-        Customer updatedCustomer = new Customer(id, name, disabilityPresented);
++    private static void showCustomersInParkingLot() {
++        StringBuilder report = new StringBuilder(" CLIENTES CON VEHÍCULOS EN PARQUEO \n\n");
++        ArrayList<ParkingLot> allLots = parkingLotController.getAllParkingLots();
+ 
+-        JOptionPane.showMessageDialog(
+-                null,
+-                customerController.updateCustomer(updatedCustomer)
+-        );
+-    }
++        if (allLots.isEmpty()) {
++            JOptionPane.showMessageDialog(null, "No hay parqueos configurados.");
++            return;
++        }
+ 
+-    //Tarea
+-    private static void deleteCustomer() {
+-        String id = JOptionPane.showInputDialog("Ingrese el número de cédula del cliente que desea eliminar");
+-        String name = JOptionPane.showInputDialog("Ingrese el nombre del cliente que desea eliminar");
++        for (ParkingLot lot : allLots) {
++            report.append("Parqueo: ").append(lot.getName()).append("\n");
++            ArrayList<Vehicle> vehicles = lot.getVehicles();
++
++            if (vehicles.isEmpty()) {
++                report.append("  (No hay vehículos en este parqueo)\n");
++            } else {
++                for (Vehicle v : vehicles) {
++                    report.append("  > Vehículo [").append(v.getPlate()).append("]: ");
++
++                    // Agrupa los clientes en una sola línea separados por comas
++                    ArrayList<String> ownerNames = new ArrayList<>();
++                    for (Customer c : v.getCustomers()) {
++                        ownerNames.add(c.getName() + (c.isDisabilityPresented() ? " (D)" : ""));
++                    }
+ 
+-        Customer customerDelete = new Customer();//***
+-        customerDelete.setId(id);
++                    // Une la lista con comas para que se vea: Juan, María, Pedro
++                    report.append(String.join(", ", ownerNames));
++
++                    // Muestra el espacio
++                    if (v.getAssignedSpace() != null) {
++                        report.append(" | Espacio: ").append(v.getAssignedSpace().getId());
++                    }
++                    report.append("\n");
++                }
++            }
++            report.append("--------------------------------------\n");
++        }
+ 
+-        JOptionPane.showMessageDialog(null, customerController.deleteCustomer(customerDelete));
++        JOptionPane.showMessageDialog(null, report.toString());
+     }
+ 
+-    private static VehicleType selectVehicleType() {
++       /* public static void newManu(){
++    int firstChoice = 1;
++        while (firstChoice != 0) {
++            JOptionPane.showMessageDialog(null, "BIENVENIDO AL NUEVO MENÚ");
++            firstChoice = Integer.parseInt(JOptionPane.showInputDialog("Ingrese\n0 para terminar el programa\n1 Acceder a las funciones de los clientes\n2 Acceder a las funciones de los vehiculos\n3 Acceder a las funciones de parqueo"));
++
++            switch (firstChoice) {
+ 
+-        String menu
+-                = "Seleccione el tipo de vehículo:\n"
+-                + "1. Moto\n"
+-                + "2. Liviano\n"
+-                + "3. Pesado\n"
+-                + "4. Bicicleta";
++                case 0 -> {
+ 
+-        int option = Integer.parseInt(JOptionPane.showInputDialog(menu));
++                    JOptionPane.showMessageDialog(null, "Hasta pronto!");
++                }
++                case 1 -> {
++
++                   int secondChoice=1;
++                   secondChoice = Integer.parseInt(JOptionPane.showInputDialog("Ingrese\n0 para volver al menú principal\n1 Insertar cliente\n2 Mostrar clientes"
++                           + "\n3 editar cliente\n4 eliminar cliente"));
++                   while (secondChoice!=0){
++
++                       switch (secondChoice) {
++                           case 1 -> {
++                               insertCustomer();
++                           }
++                           case 2 -> {
++                               showAllCustomers();
++                           }
++                           case 3 -> {
++                               updateCustomer();
++                           }
++                           case 4 -> {
++                               deleteCustomer();
++                           }
++                           default ->{
++                               JOptionPane.showMessageDialog(null, "Por favor digite una opción válida");
++                           }
++                       }
++                   }
+ 
+-        float fee = Float.parseFloat(
+-                JOptionPane.showInputDialog("Ingrese el precio por hora para este tipo de vehículo")
+-        );
++                }
+ 
+-        VehicleType vehicleType = new VehicleType();
+-        vehicleType.setId(option);
+-        vehicleType.setFee(fee);
++                case 2 -> {
++                   int secondChoice=1;
++                   secondChoice = Integer.parseInt(JOptionPane.showInputDialog("Ingrese\n0 para volver al menú principal\n1 Insertar cliente\n2 Mostrar clientes"
++                           + "\n3 editar cliente\n4 eliminar cliente"));
++                   while (secondChoice!=0){
+ 
+-        switch (option) {
+-            case 1 -> {
+-                vehicleType.setDescription("Moto");
+-                vehicleType.setNumberOfTires(2);
+-            }
+-            case 2 -> {
+-                vehicleType.setDescription("Liviano");
+-                vehicleType.setNumberOfTires(4);
+-            }
+-            case 3 -> {
+-                vehicleType.setDescription("Pesado");
+-                vehicleType.setNumberOfTires(8);
+-            }
+-            case 4 -> {
+-                vehicleType.setDescription("Bicicleta");
+-                vehicleType.setNumberOfTires(2);
+-            }
+-            default -> {
+-                JOptionPane.showMessageDialog(null, "Tipo inválido");
+-                return null;
+-            }
+-        }
++                       switch (secondChoice) {
++                           case 1 -> {
++                               insertCustomer();
++                           }
++                           case 2 -> {
++                               showAllCustomers();
++                           }
++                           case 3 -> {
++                               updateCustomer();
++                           }
++                           case 4 -> {
++                               deleteCustomer();
++                           }
++                           default ->{
++                               JOptionPane.showMessageDialog(null, "Por favor digite una opción válida");
++                           }
++                       }
++                   }
++
++                }
++                case 3 -> {
++                    insertVehicle();
++                }
++                case 4 -> {
++                    showAllVehicles();
++                }
++
++                case 5 -> {
++                    insertParkingLot();
++                }
+ 
+-        return vehicleType;
+-    }
++                case 6 ->{ showCustomersInParkingLot();
++                }
+ 
++                case 7 ->{ deleteVehicle();}
++
++                case 8 ->{ updateVehicle();}
++
++                case 9 ->{ updateCustomer();}
++
++                case 10 ->{ deleteCustomer();}
++
++
++
++                default -> {
++                } //Switch
++
++            }//While
++        }
++}*/
+ }
+Index: src/main/java/controller/VehicleController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/*\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template\r\n */\r\npackage controller;\r\n\r\nimport java.util.ArrayList;\r\nimport model.data.VehicleData;\r\nimport model.entities.Customer;\r\nimport model.entities.Vehicle;\r\n\r\n/**\r\n *\r\n * @author adrie\r\n */\r\npublic class VehicleController {\r\n    \r\n    private VehicleData vehicleData = new VehicleData();\r\n\r\n    public void insertVehicle(Vehicle vehicle) {\r\n        vehicleData.insertVehicle(vehicle);\r\n    }\r\n\r\n    public ArrayList<Vehicle> getAllVehicles() {\r\n        return vehicleData.getAllVehicles();\r\n    }\r\n\r\n    public Vehicle findVehicle(Customer customer) {\r\n        return vehicleData.findVehicle(customer);\r\n    }\r\n    \r\n}\r\n    \r\n\r\n       /* String result = \"\";\r\n\r\n        //Reglas de negocio:\r\n        //Un cliente no puede tener más de un vehículo\r\n        //Varios clientes no pueden tener un vehículo con la misma placa\r\n        Vehicle vehicleByCustomer = vehicleData.findVehicle(vehicle.getCustomer());\r\n\r\n        if (vehicleByCustomer != null) {\r\n\r\n            result = \"El cliente ya tiene un vehículo registrado.\";\r\n        } else {\r\n\r\n            vehicleData.insertVehicle(vehicle);\r\n            result = \"Vehículo insertado con éxito.\";\r\n        }\r\n        return result;\r\n    }*/\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/controller/VehicleController.java b/src/main/java/controller/VehicleController.java
+--- a/src/main/java/controller/VehicleController.java	(revision 6ce7be22935350fb3f503824bfc3691430d932dd)
++++ b/src/main/java/controller/VehicleController.java	(date 1768974723922)
+@@ -1,20 +1,10 @@
+-/*
+- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+- */
+ package controller;
+ 
+ import java.util.ArrayList;
+-import model.data.VehicleData;
+ import model.entities.Customer;
+ import model.entities.Vehicle;
+-
+-/**
+- *
+- * @author adrie
+- */
++import model.data.VehicleData;
+ public class VehicleController {
+-    
+     private VehicleData vehicleData = new VehicleData();
+ 
+     public void insertVehicle(Vehicle vehicle) {
+@@ -25,28 +15,65 @@
+         return vehicleData.getAllVehicles();
+     }
+ 
+-    public Vehicle findVehicle(Customer customer) {
+-        return vehicleData.findVehicle(customer);
+-    }
+-    
+-}
+-    
++
++    public String deleteVehicle(String plate){
++        if(vehicleData.findVehicleByPlate(plate)!=null){
++            vehicleData.deleteVehicle(plate);
++            return "Vehiculo eliminado exitosamente";
+ 
+-       /* String result = "";
++        }else{ return "El vehiculo marcado no existe";}
+ 
+-        //Reglas de negocio:
+-        //Un cliente no puede tener más de un vehículo
+-        //Varios clientes no pueden tener un vehículo con la misma placa
+-        Vehicle vehicleByCustomer = vehicleData.findVehicle(vehicle.getCustomer());
+ 
+-        if (vehicleByCustomer != null) {
++    }
+ 
+-            result = "El cliente ya tiene un vehículo registrado.";
++    public String updateVehicle(String plate, Vehicle vehicle) {
++        if (vehicleData.findVehicleByPlate(plate) != null) {
++            vehicleData.updateVehicle(vehicle);
++            return "Vehiculo actualizado con éxito.";
+         } else {
++            return "Error: El cliente no existe, no se puede actualizar.";
++        }
++    }
++}
+ 
+-            vehicleData.insertVehicle(vehicle);
+-            result = "Vehículo insertado con éxito.";
+-        }
+-        return result;
+-    }*/
++
++
++
++
++
++ /*public ArrayList<Vehicle> getAllVehicles() {
++
++        return vehicleData.getAllVehicles();
++    }
++
++ public Customer searchCustomer(String id){
++     Customer customerToReturn=null;
++
++      for (Customer customer : customers) {
++
++          if (customer.getId().equals(id)){
++
++              customerToReturn= customer;
++             break;
++          }
+ 
++  }
++      if(customerToReturn==null){
++          JOptionPane.showMessageDialog(null, "NO EXISTE ESE CLIENTE");
++      }
++
++     return customerToReturn;
++
++ }
++
++ /*public static void imprimirCustomers(){
++
++    JOptionPane.showMessageDialog(null, customerController.getAllCustomers().toString());
++
++ }
++
++    public static void main(String[] args) {
++        Customer dario=new Customer("123","DARIO",false);
++        customerController.insertCustomer(dario);
++        imprimirCustomers();
++    }*/
+Index: src/main/java/controller/ParkingLotController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/*\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template\r\n */\r\npackage controller;\r\n\r\nimport java.util.ArrayList;\r\nimport model.data.ParkingLotData;\r\nimport model.entities.ParkingLot;\r\nimport model.entities.Space;\r\nimport model.entities.Vehicle;\r\n\r\n/**\r\n *\r\n * @author adrie\r\n */\r\npublic class ParkingLotController {\r\n\r\n    private ParkingLotData parkingLotData = new ParkingLotData();\r\n\r\n    public ParkingLot registerParkingLot(String name, Space spaces[]) {\r\n\r\n        return parkingLotData.registerParkingLot(name, spaces);\r\n    }\r\n\r\n    public int registerVehicleInParkingLot(Vehicle vehicle, ParkingLot parkingLot) {\r\n\r\n        return parkingLotData.registerVehicleInParkingLot(vehicle, parkingLot);\r\n\r\n    }\r\n\r\n    public void removeVehicleFromParkingLot(Vehicle vehicle, ParkingLot parkingLot) {\r\n\r\n        parkingLotData.removeVehicleFromParkingLot(vehicle, parkingLot);\r\n    }\r\n\r\n    public ParkingLot findParkingLotById(int id) {\r\n\r\n        return parkingLotData.findParkingLotById(id);\r\n    }\r\n\r\n    public ArrayList<ParkingLot> getAllParkingLots() {\r\n\r\n        return parkingLotData.getAllParkingLots();\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/controller/ParkingLotController.java b/src/main/java/controller/ParkingLotController.java
+--- a/src/main/java/controller/ParkingLotController.java	(revision 6ce7be22935350fb3f503824bfc3691430d932dd)
++++ b/src/main/java/controller/ParkingLotController.java	(date 1768974706585)
+@@ -1,18 +1,14 @@
+-/*
+- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+- */
+ package controller;
+ 
+ import java.util.ArrayList;
+-import model.data.ParkingLotData;
+ import model.entities.ParkingLot;
++import model.data.ParkingLotData;
+ import model.entities.Space;
+ import model.entities.Vehicle;
+ 
+ /**
+  *
+- * @author adrie
++ * @author Lenovo
+  */
+ public class ParkingLotController {
+ 
+@@ -40,8 +36,6 @@
+     }
+ 
+     public ArrayList<ParkingLot> getAllParkingLots() {
+-
+         return parkingLotData.getAllParkingLots();
+     }
+-
+ }
+\ No newline at end of file
+Index: src/main/java/controller/CustomerController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/*\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template\r\n */\r\npackage controller;\r\n\r\nimport java.util.ArrayList;\r\nimport model.data.CustomerData;\r\nimport model.entities.Customer;\r\n\r\n/**\r\n *\r\n * @author adrie\r\n */\r\npublic class CustomerController {\r\n\r\n    CustomerData customerData = new CustomerData(); //como es clase() no objeto\r\n    //intermediario entre Vista y modelo\r\n    //va a llamar el método en Data para no acceder directamenta a la vista \r\n\r\n    public String insertCustomer(Customer customer) {\r\n        String result = \" \";\r\n        // si hay reglas de negocio, se aplican acá\r\n        //antes de insertar cliente en Data\r\n        if (customerData.findCustomerById(customer.getId()) == null) {\r\n             customerData.insertCustomer(customer);\r\n            result = \"Cliente insertado con èxito\";\r\n            \r\n        } else {\r\n            result = \"No se insertò el cliente porque este ya existe en la base de datos\";\r\n        }\r\n        return result;\r\n       \r\n    }\r\n    \r\n    public Customer findCustomerById(String id) {\r\n        return customerData.findCustomerById(id);\r\n    }\r\n\r\n    public ArrayList<Customer> getAllCustomers() {\r\n        return customerData.getAllCustomers();\r\n\r\n    }\r\n\r\n    public String updateCustomer(Customer customer) {\r\n    if (customerData.findCustomerById(customer.getId()) != null) {\r\n        customerData.updateCustomer(customer);\r\n        return \"Cliente actualizado con éxito.\";\r\n    } else {\r\n        return \"Error: El cliente no existe, no se puede actualizar.\";\r\n    }\r\n}\r\n\r\n    //tarea\r\n    public String deleteCustomer(Customer customer) {\r\n        if (customerData.findCustomerById(customer.getId()) != null) {\r\n            customerData.deleteCustomer(customer.getId());\r\n            return \"Cliente eliminado con éxito.\";\r\n        } else {\r\n            return \"Error: El cliente no existe, no se puede eliminar.\";\r\n        }\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/controller/CustomerController.java b/src/main/java/controller/CustomerController.java
+--- a/src/main/java/controller/CustomerController.java	(revision 6ce7be22935350fb3f503824bfc3691430d932dd)
++++ b/src/main/java/controller/CustomerController.java	(date 1768974687735)
+@@ -1,57 +1,40 @@
+-/*
+- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+- */
+ package controller;
+ 
+ import java.util.ArrayList;
+-import model.data.CustomerData;
+ import model.entities.Customer;
++import model.data.CustomerData;
+ 
+-/**
+- *
+- * @author adrie
+- */
+ public class CustomerController {
+ 
+-    CustomerData customerData = new CustomerData(); //como es clase() no objeto
+-    //intermediario entre Vista y modelo
+-    //va a llamar el método en Data para no acceder directamenta a la vista 
++    CustomerData customerData = new CustomerData();
+ 
+     public String insertCustomer(Customer customer) {
+-        String result = " ";
+-        // si hay reglas de negocio, se aplican acá
+-        //antes de insertar cliente en Data
+-        if (customerData.findCustomerById(customer.getId()) == null) {
+-             customerData.insertCustomer(customer);
+-            result = "Cliente insertado con èxito";
+-            
+-        } else {
+-            result = "No se insertò el cliente porque este ya existe en la base de datos";
++        String result;
++
++        if(customerData.findCustomerById(customer.getId())==null){
++            customerData.insertCustomer(customer);
++            result="Cliente insertado con éxito";
++
++        }
++        else{
++            result="No se insertó cliente porque este ya existe";
+         }
++
++        //Si hay reglas de negocio, se aplican acá
++        //anter de insertar cliente en Data
++
+         return result;
+-       
+-    }
+-    
+-    public Customer findCustomerById(String id) {
+-        return customerData.findCustomerById(id);
+-    }
+-
+-    public ArrayList<Customer> getAllCustomers() {
+-        return customerData.getAllCustomers();
+-
+     }
+ 
+     public String updateCustomer(Customer customer) {
+-    if (customerData.findCustomerById(customer.getId()) != null) {
+-        customerData.updateCustomer(customer);
+-        return "Cliente actualizado con éxito.";
+-    } else {
+-        return "Error: El cliente no existe, no se puede actualizar.";
+-    }
+-}
++        if (customerData.findCustomerById(customer.getId()) != null) {
++            customerData.updateCustomer(customer);
++            return "Cliente actualizado con éxito.";
++        } else {
++            return "Error: El cliente no existe, no se puede actualizar.";
++        }
++    }
+ 
+-    //tarea
+     public String deleteCustomer(Customer customer) {
+         if (customerData.findCustomerById(customer.getId()) != null) {
+             customerData.deleteCustomer(customer.getId());
+@@ -61,4 +44,10 @@
+         }
+     }
+ 
++    public ArrayList<Customer> getAllCustomers() {
++
++        return customerData.getAllCustomers();
++    }
++
++
+ }
+Index: src/main/java/model/entities/Space.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/*\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template\r\n */\r\npackage model.entities;\r\n\r\n/**\r\n *\r\n * @author EstebanAntonioSanabr\r\n */\r\npublic class Space {\r\n\r\n    private int id;\r\n    private boolean disabilityAdaptation;\r\n    private boolean spaceTaken;\r\n    private VehicleType vehicleType;\r\n\r\n    public Space(int id, boolean disabilityAdaptation, boolean spaceTaken, VehicleType vehicleType) {\r\n        this.id = id;\r\n        this.disabilityAdaptation = disabilityAdaptation;\r\n        this.spaceTaken = spaceTaken;\r\n        this.vehicleType = vehicleType;\r\n    }\r\n\r\n    public Space() {\r\n   \r\n    }\r\n\r\n    /**\r\n     * @return the id\r\n     */\r\n    public int getId() {\r\n        return id;\r\n    }\r\n\r\n    /**\r\n     * @param id the id to set\r\n     */\r\n    public void setId(int id) {\r\n        this.id = id;\r\n    }\r\n\r\n    /**\r\n     * @return the disabilityAdaptation\r\n     */\r\n    public boolean isDisabilityAdaptation() {\r\n        return disabilityAdaptation;\r\n    }\r\n\r\n    /**\r\n     * @param disabilityAdaptation the disabilityAdaptation to set\r\n     */\r\n    public void setDisabilityAdaptation(boolean disabilityAdaptation) {\r\n        this.disabilityAdaptation = disabilityAdaptation;\r\n    }\r\n\r\n    /**\r\n     * @return the spaceTaken\r\n     */\r\n    public boolean isSpaceTaken() {\r\n        return spaceTaken;\r\n    }\r\n\r\n    /**\r\n     * @param spaceTaken the spaceTaken to set\r\n     */\r\n    public void setSpaceTaken(boolean spaceTaken) {\r\n        this.spaceTaken = spaceTaken;\r\n    }\r\n\r\n    /**\r\n     * @return the vehicleType\r\n     */\r\n    public VehicleType getVehicleType() {\r\n        return vehicleType;\r\n    }\r\n\r\n    /**\r\n     * @param vehicleType the vehicleType to set\r\n     */\r\n    public void setVehicleType(VehicleType vehicleType) {\r\n        this.vehicleType = vehicleType;\r\n    }\r\n\r\n    @Override\r\n    public String toString() {\r\n        return \"Space{\" + \"id=\" + id + \", disabilityAdaptation=\" + disabilityAdaptation + \", spaceTaken=\" + spaceTaken + \", vehicleType=\" + vehicleType + '}';\r\n    }\r\n  \r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/model/entities/Space.java b/src/main/java/model/entities/Space.java
+--- a/src/main/java/model/entities/Space.java	(revision 6ce7be22935350fb3f503824bfc3691430d932dd)
++++ b/src/main/java/model/entities/Space.java	(date 1768974740841)
+@@ -3,17 +3,20 @@
+  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+  */
+ package model.entities;
+-
++import model.entities.VehicleType;
+ /**
+  *
+  * @author EstebanAntonioSanabr
+  */
++
++
++
+ public class Space {
+ 
+-    private int id;
+     private boolean disabilityAdaptation;
+     private boolean spaceTaken;
+     private VehicleType vehicleType;
++    private int id;
+ 
+     public Space(int id, boolean disabilityAdaptation, boolean spaceTaken, VehicleType vehicleType) {
+         this.id = id;
+@@ -23,7 +26,7 @@
+     }
+ 
+     public Space() {
+-   
++
+     }
+ 
+     /**
+@@ -81,10 +84,8 @@
+     public void setVehicleType(VehicleType vehicleType) {
+         this.vehicleType = vehicleType;
+     }
++}
+ 
+-    @Override
+-    public String toString() {
+-        return "Space{" + "id=" + id + ", disabilityAdaptation=" + disabilityAdaptation + ", spaceTaken=" + spaceTaken + ", vehicleType=" + vehicleType + '}';
+-    }
+-  
+-}
++
++
++
+Index: src/main/java/model/data/CustomerData.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/*\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template\r\n */\r\npackage model.data;\r\n\r\nimport java.util.ArrayList;\r\nimport model.entities.Customer;\r\n\r\n/**\r\n *\r\n * @author adrie\r\n */\r\npublic class CustomerData {\r\n\r\n    //este arreglo dinámico gurdara a todos los clientes del parqueo \r\n    //simulando una base de datos.\r\n    ArrayList<Customer> customers = new ArrayList<>(); //intanciación  \r\n\r\n    public void insertCustomer(Customer customer) {\r\n        customers.add(customer);\r\n    }\r\n\r\n    public ArrayList<Customer> getAllCustomers() {\r\n     return customers;\r\n    }\r\n\r\n    public Customer findCustomerById(String id) {\r\n        \r\n        Customer customerToReturn = null;\r\n        for (Customer customer : customers) { // para cada cliente que se encuentre en la lista haga...  .length para estaticos  .size();\r\n            if (customer.getId().equals(id)) {\r\n                customerToReturn = customer;\r\n            }\r\n        }\r\n        return customerToReturn;\r\n    }\r\n    //tarea\r\n    public void updateCustomer(Customer updatedCustomer) {\r\n    for (Customer customer : customers) {\r\n        if (customer.getId().equals(updatedCustomer.getId())) {\r\n\r\n            customer.setName(updatedCustomer.getName());\r\n            customer.setDisabilityPresented(updatedCustomer.isDisabilityPresented());\r\n\r\n            return;\r\n        }\r\n    }\r\n}\r\n    //tarea\r\n    public void deleteCustomer(String id) {\r\n        Customer customer = findCustomerById(id);\r\n        if (customer != null) {\r\n            customers.remove(customer);\r\n        }\r\n    }\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/model/data/CustomerData.java b/src/main/java/model/data/CustomerData.java
+--- a/src/main/java/model/data/CustomerData.java	(revision 6ce7be22935350fb3f503824bfc3691430d932dd)
++++ b/src/main/java/model/data/CustomerData.java	(date 1768974668050)
+@@ -1,58 +1,57 @@
+-/*
+- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+- */
+ package model.data;
+ 
+ import java.util.ArrayList;
+ import model.entities.Customer;
+ 
+-/**
+- *
+- * @author adrie
+- */
+ public class CustomerData {
+ 
+-    //este arreglo dinámico gurdara a todos los clientes del parqueo 
+-    //simulando una base de datos.
+-    ArrayList<Customer> customers = new ArrayList<>(); //intanciación  
++    //Este arrelgo guardará a todos los clientes
++    //Simulando una base de dato
++    ArrayList<Customer> customers = new ArrayList<>();
+ 
+-    public void insertCustomer(Customer customer) {
++    public void insertCustomer(Customer customer){
++
+         customers.add(customer);
++
+     }
+ 
+-    public ArrayList<Customer> getAllCustomers() {
+-     return customers;
++    public ArrayList<Customer> getAllCustomers(){
++
++
++        return customers;
+     }
+ 
+-    public Customer findCustomerById(String id) {
+-        
++
++    public Customer findCustomerById(String id){
+         Customer customerToReturn = null;
+-        for (Customer customer : customers) { // para cada cliente que se encuentre en la lista haga...  .length para estaticos  .size();
+-            if (customer.getId().equals(id)) {
+-                customerToReturn = customer;
++
++        for (Customer customer : customers) {
++
++            if (customer.getId().equals(id)){
++
++                customerToReturn= customer;
+             }
++
+         }
++
+         return customerToReturn;
+     }
+-    //tarea
+     public void updateCustomer(Customer updatedCustomer) {
+-    for (Customer customer : customers) {
+-        if (customer.getId().equals(updatedCustomer.getId())) {
+-
+-            customer.setName(updatedCustomer.getName());
+-            customer.setDisabilityPresented(updatedCustomer.isDisabilityPresented());
+-
+-            return;
+-        }
+-    }
+-}
+-    //tarea
++        for (int i = 0; i < customers.size(); i++) {
++            // Buscamos la posición donde el ID coincida
++            if (customers.get(i).getId().equals(updatedCustomer.getId())) {
++                customers.set(i, updatedCustomer);
++                return;
++            }
++        }
++    }
++
+     public void deleteCustomer(String id) {
+         Customer customer = findCustomerById(id);
+         if (customer != null) {
+             customers.remove(customer);
+         }
+     }
++
+ }
+ 
+Index: src/main/java/model/entities/ParkingLot.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/*\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template\r\n */\r\npackage model.entities;\r\n\r\nimport java.util.ArrayList;\r\n\r\n/**\r\n *\r\n * @author adrie\r\n */\r\npublic class ParkingLot {\r\n\r\n    private int id;\r\n    private String name;\r\n    private int numberOfSpaces;\r\n    private ArrayList<Vehicle> vehicles;\r\n    private Space[] spaces;\r\n\r\n    public ParkingLot() {\r\n\r\n    }\r\n\r\n    public ParkingLot(int id, String name, int numberOfSpaces, ArrayList<Vehicle> vehicles, Space[] spaces) {\r\n        this.id = id;\r\n        this.name = name;\r\n        this.numberOfSpaces = numberOfSpaces;\r\n        this.vehicles = vehicles;\r\n        this.spaces = spaces;\r\n    }\r\n\r\n    public int getId() {\r\n        return id;\r\n    }\r\n\r\n    public void setId(int id) {\r\n        this.id = id;\r\n    }\r\n\r\n    public String getName() {\r\n        return name;\r\n    }\r\n\r\n    public void setName(String name) {\r\n        this.name = name;\r\n    }\r\n\r\n    public int getNumberOfSpaces() {\r\n        return numberOfSpaces;\r\n    }\r\n\r\n    public void setNumberOfSpaces(int numberOfSpaces) {\r\n        this.numberOfSpaces = numberOfSpaces;\r\n    }\r\n\r\n    public ArrayList<Vehicle> getVehicles() {\r\n        return vehicles;\r\n    }\r\n\r\n    public void setVehicles(ArrayList<Vehicle> vehicles) {\r\n        this.vehicles = vehicles;\r\n    }\r\n\r\n    public Space[] getSpaces() {\r\n        return spaces;\r\n    }\r\n\r\n    public void setSpaces(Space[] spaces) {\r\n        this.spaces = spaces;\r\n    }\r\n\r\n    @Override\r\n    public String toString() {\r\n        return \"ParkingLot{\" + \"id=\" + id + \", name=\" + name + \", numberOfSpaces=\" + numberOfSpaces + \", vehicles=\" + vehicles + \", spaces=\" + spaces + '}';\r\n    }\r\n\r\n    \r\n    \r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/model/entities/ParkingLot.java b/src/main/java/model/entities/ParkingLot.java
+--- a/src/main/java/model/entities/ParkingLot.java	(revision 6ce7be22935350fb3f503824bfc3691430d932dd)
++++ b/src/main/java/model/entities/ParkingLot.java	(date 1768974512220)
+@@ -6,10 +6,6 @@
+ 
+ import java.util.ArrayList;
+ 
+-/**
+- *
+- * @author adrie
+- */
+ public class ParkingLot {
+ 
+     private int id;
+@@ -18,10 +14,6 @@
+     private ArrayList<Vehicle> vehicles;
+     private Space[] spaces;
+ 
+-    public ParkingLot() {
+-
+-    }
+-
+     public ParkingLot(int id, String name, int numberOfSpaces, ArrayList<Vehicle> vehicles, Space[] spaces) {
+         this.id = id;
+         this.name = name;
+@@ -30,42 +22,77 @@
+         this.spaces = spaces;
+     }
+ 
++    public ParkingLot() {
++    }
++
++
++
++    /**
++     * @return the id
++     */
+     public int getId() {
+         return id;
+     }
+ 
++    /**
++     * @param id the id to set
++     */
+     public void setId(int id) {
+         this.id = id;
+     }
+ 
++    /**
++     * @return the name
++     */
+     public String getName() {
+         return name;
+     }
+ 
++    /**
++     * @param name the name to set
++     */
+     public void setName(String name) {
+         this.name = name;
+     }
+ 
++    /**
++     * @return the numberOfSpaces
++     */
+     public int getNumberOfSpaces() {
+         return numberOfSpaces;
+     }
+ 
++    /**
++     * @param numberOfSpaces the numberOfSpaces to set
++     */
+     public void setNumberOfSpaces(int numberOfSpaces) {
+         this.numberOfSpaces = numberOfSpaces;
+     }
+ 
++    /**
++     * @return the vehicles
++     */
+     public ArrayList<Vehicle> getVehicles() {
+         return vehicles;
+     }
+ 
++    /**
++     * @param vehicles the vehicles to set
++     */
+     public void setVehicles(ArrayList<Vehicle> vehicles) {
+         this.vehicles = vehicles;
+     }
+ 
++    /**
++     * @return the spaces
++     */
+     public Space[] getSpaces() {
+         return spaces;
+     }
+ 
++    /**
++     * @param spaces the spaces to set
++     */
+     public void setSpaces(Space[] spaces) {
+         this.spaces = spaces;
+     }
+@@ -75,6 +102,6 @@
+         return "ParkingLot{" + "id=" + id + ", name=" + name + ", numberOfSpaces=" + numberOfSpaces + ", vehicles=" + vehicles + ", spaces=" + spaces + '}';
+     }
+ 
+-    
+-    
++
+ }
++
+Index: src/main/java/model/entities/Vehicle.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/*\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template\r\n */\r\npackage model.entities;\r\n\r\n/**\r\n *\r\n * @author Lab 5 Guiselle López \r\n */\r\npublic class Vehicle  {\r\n    private String plate;\r\n    private String color;\r\n    private String brand;\r\n    private String model;\r\n    private Customer customer; //*******\r\n    private VehicleType vehicleType;\r\n\r\n    public Vehicle() {\r\n    }\r\n\r\n    public Vehicle(String placa, String color, String brand, String model, Customer customer, VehicleType vehicleType) {\r\n        this.plate = placa;\r\n        this.color = color;\r\n        this.brand = brand;\r\n        this.model = model;\r\n        this.customer = customer;\r\n        this.vehicleType = vehicleType;\r\n    }\r\n\r\n    public String getPlate() {\r\n        return plate;\r\n    }\r\n\r\n    public void setPlate(String placa) {\r\n        this.plate = placa;\r\n    }\r\n\r\n    public String getColor() {\r\n        return color;\r\n    }\r\n\r\n    public void setColor(String color) {\r\n        this.color = color;\r\n    }\r\n\r\n    public String getBrand() {\r\n        return brand;\r\n    }\r\n\r\n    public void setBrand(String brand) {\r\n        this.brand = brand;\r\n    }\r\n\r\n    public String getModel() {\r\n        return model;\r\n    }\r\n\r\n    public void setModel(String model) {\r\n        this.model = model;\r\n    }\r\n\r\n    public Customer getCustomer() {\r\n        return customer;\r\n    }\r\n\r\n    public void setCustomer(Customer customer) {\r\n        this.customer = customer;\r\n    }\r\n\r\n    public VehicleType getVehicleType() {\r\n        return vehicleType;\r\n    }\r\n\r\n    public void setVehicleType(VehicleType vehicleType) {\r\n        this.vehicleType = vehicleType;\r\n    }\r\n\r\n    @Override\r\n    public String toString() {\r\n        return \"Vehicle{\" + \"placa=\" + plate + \", color=\" + color + \", brand=\" + brand + \", model=\" + model + \", customer=\" + customer + \", vehicleType=\" + vehicleType + '}' + '\\n';\r\n    }\r\n\r\n   \r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/model/entities/Vehicle.java b/src/main/java/model/entities/Vehicle.java
+--- a/src/main/java/model/entities/Vehicle.java	(revision 6ce7be22935350fb3f503824bfc3691430d932dd)
++++ b/src/main/java/model/entities/Vehicle.java	(date 1768974414333)
+@@ -3,37 +3,60 @@
+  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+  */
+ package model.entities;
+-
++import java.util.ArrayList;
+ /**
+  *
+  * @author Lab 5 Guiselle López 
+  */
+-public class Vehicle  {
++
++
++
++public class Vehicle {
++    // CAMBIO: Ahora es una lista de clientes
++    private ArrayList<Customer> customers;
+     private String plate;
+     private String color;
+     private String brand;
+     private String model;
+-    private Customer customer; //*******
+     private VehicleType vehicleType;
++    private Space assignedSpace;
+ 
+-    public Vehicle() {
+-    }
+-
+-    public Vehicle(String placa, String color, String brand, String model, Customer customer, VehicleType vehicleType) {
+-        this.plate = placa;
++    public Vehicle(String plate, String color, String brand, String model, ArrayList<Customer> customers, VehicleType vehicleType) {
++        this.customers = customers;
++        this.plate = plate;
+         this.color = color;
+         this.brand = brand;
+         this.model = model;
+-        this.customer = customer;
+         this.vehicleType = vehicleType;
+     }
+ 
++    public Vehicle() {
++        this.customers = new ArrayList<>(); // Inicializar para evitar NullPointerException
++    }
++    public Space getAssignedSpace() {
++        return assignedSpace;
++    }
++
++    // Método para obtener el primer cliente (para compatibilidad con tu lógica de discapacidad)
++    public Customer getPrimaryCustomer() {
++        return (customers != null && !customers.isEmpty()) ? customers.get(0) : null;
++    }
++
++    public ArrayList<Customer> getCustomers() {
++        return customers;
++    }
++
++    public void setCustomers(ArrayList<Customer> customers) {
++        this.customers = customers;
++    }
++
++
+     public String getPlate() {
+         return plate;
+     }
+ 
+-    public void setPlate(String placa) {
+-        this.plate = placa;
++    public void setPlate(String plate) {
++        this.plate = plate;
+     }
+ 
+     public String getColor() {
+@@ -60,13 +83,7 @@
+         this.model = model;
+     }
+ 
+-    public Customer getCustomer() {
+-        return customer;
+-    }
+ 
+-    public void setCustomer(Customer customer) {
+-        this.customer = customer;
+-    }
+ 
+     public VehicleType getVehicleType() {
+         return vehicleType;
+@@ -75,11 +92,19 @@
+     public void setVehicleType(VehicleType vehicleType) {
+         this.vehicleType = vehicleType;
+     }
++    public void setAssignedSpace(Space assignedSpace) {
++        this.assignedSpace = assignedSpace;
++    }
+ 
+     @Override
+     public String toString() {
+-        return "Vehicle{" + "placa=" + plate + ", color=" + color + ", brand=" + brand + ", model=" + model + ", customer=" + customer + ", vehicleType=" + vehicleType + '}' + '\n';
++        return "Vehicle{" +
++                "Placa='" + plate + '\'' +
++                ", Marca='" + brand + '\'' +
++                ", Clientes=" + customers + '\''+
++                ", Tipo=" + vehicleType.getDescription()+'\'' +
++                " Posición asignada: " + (assignedSpace != null ? assignedSpace.getId() : "N/A");
+     }
+ 
+-   
++
+ }
+Index: src/main/java/model/entities/VehicleType.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/*\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template\r\n */\r\npackage model.entities;\r\n\r\n/**\r\n *\r\n * @author Lab05 Guiselle lópez\r\n */\r\npublic class VehicleType {\r\n    private int id;\r\n    private String description;\r\n    private int numberOfTires;\r\n    private float fee;\r\n \r\n\r\n    public VehicleType() {\r\n    }\r\n\r\n    public VehicleType(int id, String description, int numberOfTires, float fee) {\r\n        this.id = id;\r\n        this.description = description;\r\n        this.numberOfTires = numberOfTires;\r\n        this.fee = fee;\r\n    }\r\n\r\n    public int getId() {\r\n        return id;\r\n    }\r\n\r\n    public void setId(int id) {\r\n        this.id = id;\r\n    }\r\n\r\n    public String getDescription() {\r\n        return description;\r\n    }\r\n\r\n    public void setDescription(String description) {\r\n        this.description = description;\r\n    }\r\n\r\n    public int getNumberOfTires() {\r\n        return numberOfTires;\r\n    }\r\n\r\n    public void setNumberOfTires(int numberOfTires) {\r\n        this.numberOfTires = numberOfTires;\r\n    }\r\n\r\n    public float getFee() {\r\n        return fee;\r\n    }\r\n\r\n    public void setFee(float fee) {\r\n        this.fee = fee;\r\n    }\r\n\r\n    @Override\r\n    public String toString() {\r\n        return \"VehicleType{\" + \"id=\" + id + \", description=\" + description + \", numberOfTires=\" + numberOfTires + \", fee=\" + fee + '}' + '\\n';\r\n    }\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/model/entities/VehicleType.java b/src/main/java/model/entities/VehicleType.java
+--- a/src/main/java/model/entities/VehicleType.java	(revision 6ce7be22935350fb3f503824bfc3691430d932dd)
++++ b/src/main/java/model/entities/VehicleType.java	(date 1768974604423)
+@@ -1,24 +1,15 @@
+-/*
+- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+- */
+ package model.entities;
+ 
+-/**
+- *
+- * @author Lab05 Guiselle lópez
+- */
+ public class VehicleType {
+     private int id;
+     private String description;
+-    private int numberOfTires;
++    private byte numberOfTires;
+     private float fee;
+- 
+ 
+     public VehicleType() {
+     }
+ 
+-    public VehicleType(int id, String description, int numberOfTires, float fee) {
++    public VehicleType(int id, String description, byte numberOfTires, float fee) {
+         this.id = id;
+         this.description = description;
+         this.numberOfTires = numberOfTires;
+@@ -41,11 +32,11 @@
+         this.description = description;
+     }
+ 
+-    public int getNumberOfTires() {
++    public byte getNumberOfTires() {
+         return numberOfTires;
+     }
+ 
+-    public void setNumberOfTires(int numberOfTires) {
++    public void setNumberOfTires(byte numberOfTires) {
+         this.numberOfTires = numberOfTires;
+     }
+ 
+@@ -59,7 +50,9 @@
+ 
+     @Override
+     public String toString() {
+-        return "VehicleType{" + "id=" + id + ", description=" + description + ", numberOfTires=" + numberOfTires + ", fee=" + fee + '}' + '\n';
++        return "VehicleType{" + "id=" + id + ", description=" + description + ", numberOfTires=" + numberOfTires + ", fee=" + fee + '}';
+     }
++
++
+ }
+ 
+Index: src/main/java/model/entities/Customer.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/*\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template\r\n */\r\npackage model.entities;\r\n\r\n/**\r\n *\r\n * @author adrie\r\n */\r\npublic class Customer {\r\n\r\n    private String id;\r\n    private String name;\r\n    private boolean disabilityPresented;\r\n\r\n    public Customer(String id, String name, boolean disabilityPresented) {\r\n        this.id = id;\r\n        this.name = name;\r\n        this.disabilityPresented = disabilityPresented;\r\n    }\r\n\r\n    public Customer() {\r\n    }\r\n\r\n    public String getId() {\r\n        return id;\r\n    }\r\n\r\n    public void setId(String id) {\r\n        this.id = id;\r\n    }\r\n\r\n    public String getName() {\r\n        return name;\r\n    }\r\n\r\n    public void setName(String name) {\r\n        this.name = name;\r\n    }\r\n\r\n    public boolean isDisabilityPresented() {\r\n        return disabilityPresented;\r\n    }\r\n\r\n    public void setDisabilityPresented(boolean disabilityPresented) {\r\n        this.disabilityPresented = disabilityPresented;\r\n    }\r\n\r\n    @Override\r\n    public String toString() {\r\n        return \"Id= \" + id + \", Name= \"  + name + \", Disability presented= \"+ disabilityPresented + '\\n';\r\n    }\r\n\r\n}\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/model/entities/Customer.java b/src/main/java/model/entities/Customer.java
+--- a/src/main/java/model/entities/Customer.java	(revision 6ce7be22935350fb3f503824bfc3691430d932dd)
++++ b/src/main/java/model/entities/Customer.java	(date 1768974574763)
+@@ -6,7 +6,7 @@
+ 
+ /**
+  *
+- * @author adrie
++ * @author Guiselle
+  */
+ public class Customer {
+ 
+@@ -23,6 +23,8 @@
+     public Customer() {
+     }
+ 
++
++
+     public String getId() {
+         return id;
+     }
+@@ -49,8 +51,9 @@
+ 
+     @Override
+     public String toString() {
+-        return "Id= " + id + ", Name= "  + name + ", Disability presented= "+ disabilityPresented + '\n';
++        return "Customer{" + "id=" + id + ", name=" + name + ", disabilityPresented=" + disabilityPresented + '}'+"\n";
+     }
++
+ 
+ }
+ 
+Index: src/main/java/model/data/VehicleData.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/*\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template\r\n */\r\npackage model.data;\r\n\r\nimport java.util.ArrayList;\r\nimport model.entities.Customer;\r\nimport model.entities.Vehicle;\r\n\r\n/**\r\n *\r\n * @author adrie\r\n */\r\npublic class VehicleData {\r\n    private ArrayList<Vehicle> vehicles = new ArrayList<>();\r\n\r\n    public void insertVehicle(Vehicle vehicle) {\r\n        vehicles.add(vehicle);\r\n    }\r\n\r\n    public ArrayList<Vehicle> getAllVehicles() {\r\n        return vehicles;\r\n    }\r\n\r\n    public Vehicle findVehicle(Customer customer) {\r\n        for (Vehicle vehicle : vehicles) {\r\n            if (vehicle.getCustomer().getId().equals(customer.getId())) {\r\n                return vehicle;\r\n            }\r\n        }\r\n        return new Vehicle();\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/model/data/VehicleData.java b/src/main/java/model/data/VehicleData.java
+--- a/src/main/java/model/data/VehicleData.java	(revision 6ce7be22935350fb3f503824bfc3691430d932dd)
++++ b/src/main/java/model/data/VehicleData.java	(date 1768974626357)
+@@ -1,35 +1,76 @@
+-/*
+- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+- */
+ package model.data;
+ 
+ import java.util.ArrayList;
+ import model.entities.Customer;
+ import model.entities.Vehicle;
+ 
+-/**
+- *
+- * @author adrie
+- */
++
+ public class VehicleData {
+-    private ArrayList<Vehicle> vehicles = new ArrayList<>();
++
++    ArrayList<Vehicle> vehicles= new ArrayList();
++    ArrayList<Customer> customers;
++
+ 
+-    public void insertVehicle(Vehicle vehicle) {
++    public void insertVehicle(Vehicle vehicle){
++
++
+         vehicles.add(vehicle);
+     }
+ 
+-    public ArrayList<Vehicle> getAllVehicles() {
++    public void insertCustomer(Customer customer){
++
++
++        customers.add(customer);
++    }
++
++    public ArrayList<Vehicle> getAllVehicles(){
++
++
+         return vehicles;
+     }
+ 
+-    public Vehicle findVehicle(Customer customer) {
++    public Vehicle findVehicleByCurstomer(Customer customer) {
++        Vehicle vehicleToReturn = null;
++
+         for (Vehicle vehicle : vehicles) {
+-            if (vehicle.getCustomer().getId().equals(customer.getId())) {
+-                return vehicle;
++            for (Customer c : vehicle.getCustomers()) {
++                if (c.getId().equals(customer.getId())) {
++                    vehicleToReturn = vehicle;
++                    return vehicleToReturn;
++                }
+             }
+         }
+-        return new Vehicle();
++        return vehicleToReturn;
+     }
++
++    public void deleteVehicle(String plate){
++        Vehicle vehicleToDelete = findVehicleByPlate(plate);
++        if(vehicleToDelete!=null){
++            vehicles.remove(vehicleToDelete);
++        }
++
++    }
++
++    public Vehicle findVehicleByPlate(String plate) {
++        Vehicle vehicleToReturn = null;
++
++        for (Vehicle vehicle : vehicles) {
++            if (vehicle.getPlate().equals(plate)) {
++                vehicleToReturn = vehicle;
++                return vehicleToReturn;
++            }
+ 
++        }
++        return vehicleToReturn;
++    }
++    public void updateVehicle(Vehicle updatedVehicle) {
++        for (int i = 0; i < vehicles.size(); i++) {
++            if (vehicles.get(i).getPlate().equals(updatedVehicle.getPlate())) {
++                vehicles.set(i, updatedVehicle);
++                return;
++            }
++        }
++    }
++
+ }
++
+Index: src/main/java/model/data/ParkingLotData.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/*\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license\r\n * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template\r\n */\r\npackage model.data;\r\n\r\nimport java.util.ArrayList;\r\nimport model.entities.ParkingLot;\r\nimport model.entities.Space;\r\nimport model.entities.Vehicle;\r\n\r\n/**\r\n *\r\n * @author adrie\r\n */\r\npublic class ParkingLotData {\r\n\r\n    public ArrayList<ParkingLot> parkingLots;\r\n    static int parkingLotId = 0;\r\n\r\n    public ParkingLotData() {\r\n        parkingLots = new ArrayList<>();\r\n    }\r\n\r\n    public ParkingLot registerParkingLot(String name, Space spaces[]) {\r\n\r\n        ParkingLot parkingLot = new ParkingLot();\r\n        parkingLotId++;\r\n        parkingLot.setId(parkingLotId);\r\n        parkingLot.setName(name);\r\n        parkingLot.setSpaces(spaces);\r\n        parkingLots.add(parkingLot);\r\n\r\n        return parkingLot;\r\n    }\r\n\r\n    \r\n     public int registerVehicleInParkingLot(Vehicle vehicle, ParkingLot parkingLot) {\r\n\r\n        ArrayList<Vehicle> vehiclesInParkingLot = parkingLot.getVehicles();\r\n        Space spaces[] = parkingLot.getSpaces();\r\n        int spaceId = 0;\r\n        //recorre la lista de vehículos para ver en qué posición\r\n        //podemos ingresar al vehículo actual\r\n        for (Space space : spaces) {\r\n            if (!space.isSpaceTaken()) {\r\n                //preguntamos si el cliente presenta una capacidad particular\r\n                //y requiere de un espacio adaptado\r\n                if (vehicle.getCustomer().isDisabilityPresented()) {\r\n                    if (space.isDisabilityAdaptation()) {\r\n                        //compara el tipo de vehículo del espacio y del vehículo que se va a \r\n                        //estacionar (tipos: moto, automóvil, bus, etc)\r\n                        if (space.getVehicleType().getId() == vehicle.getVehicleType().getId()) {\r\n                            vehiclesInParkingLot.add(vehicle);\r\n                            space.setSpaceTaken(true);\r\n                            //este es el número del espacio que se va a retornar\r\n                            spaceId = space.getId();\r\n                            break;\r\n                        }\r\n                    }\r\n                } else {\r\n                    if (!space.isDisabilityAdaptation()) {\r\n                        //compara el tipo de vehículo del espacio y del vehículo que se va a \r\n                        //estacionar (tipos: moto, automóvil, bus, etc)\r\n                        if (space.getVehicleType().getId() == vehicle.getVehicleType().getId()) {\r\n                            vehiclesInParkingLot.add(vehicle);\r\n                            space.setSpaceTaken(true);\r\n                            //este es el número del espacio que se va a retornar\r\n                            spaceId = space.getId();\r\n                            break;\r\n                        }\r\n                    }\r\n                }\r\n            }\r\n        }\r\n\r\n        //*************actualizamos los espacios tomados\r\n        //y los vehículos registrados en el parqueo\r\n        parkingLot.setSpaces(spaces);//maybe not needed                                ****tarea debugear\r\n        parkingLot.setVehicles(vehiclesInParkingLot);//maybe not needed\r\n\r\n        return spaceId;\r\n    }\r\n     \r\n      public void removeVehicleFromParkingLot(Vehicle vehicle, ParkingLot parkingLot) {\r\n\r\n        ArrayList<Vehicle> vehiclesInParkingLot = parkingLot.getVehicles();\r\n        Space spaces[] = parkingLot.getSpaces();\r\n        //recorre la lista de vehículos para ver en qué posición\r\n        //debemos retirar al vehículo actual\r\n        for (int i = 0; i < vehiclesInParkingLot.size(); i++) {\r\n\r\n            if (vehiclesInParkingLot.get(i) == vehicle) {\r\n\r\n                vehiclesInParkingLot.remove(vehicle);\r\n                spaces[i].setSpaceTaken(false);\r\n                break;\r\n            }\r\n\r\n        }\r\n        //*************actualizamos los espacios liberados\r\n        //y los vehículos registrados en el parqueo\r\n\r\n        parkingLot.setSpaces(spaces);\r\n        parkingLot.setVehicles(vehiclesInParkingLot);\r\n\r\n    }\r\n      \r\n       public ParkingLot findParkingLotById(int id) {\r\n\r\n        ParkingLot parkingLotToBeReturned = null;\r\n\r\n        for (ParkingLot parkingLot : parkingLots) {\r\n\r\n            if (parkingLot.getId() == id) {\r\n\r\n                parkingLotToBeReturned = parkingLot;\r\n                break;\r\n            }\r\n        }\r\n        return parkingLotToBeReturned;\r\n    }\r\n       \r\n        public ArrayList<ParkingLot> getAllParkingLots() {\r\n\r\n        return parkingLots;\r\n\r\n    }\r\n        \r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/model/data/ParkingLotData.java b/src/main/java/model/data/ParkingLotData.java
+--- a/src/main/java/model/data/ParkingLotData.java	(revision 6ce7be22935350fb3f503824bfc3691430d932dd)
++++ b/src/main/java/model/data/ParkingLotData.java	(date 1768974646966)
+@@ -1,18 +1,11 @@
+-/*
+- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+- */
+ package model.data;
+ 
+ import java.util.ArrayList;
++import model.entities.Customer;
+ import model.entities.ParkingLot;
+ import model.entities.Space;
+ import model.entities.Vehicle;
+ 
+-/**
+- *
+- * @author adrie
+- */
+ public class ParkingLotData {
+ 
+     public ArrayList<ParkingLot> parkingLots;
+@@ -32,81 +25,62 @@
+         parkingLots.add(parkingLot);
+ 
+         return parkingLot;
+-    }
+ 
+-    
+-     public int registerVehicleInParkingLot(Vehicle vehicle, ParkingLot parkingLot) {
+-
++    }
++
++    public int registerVehicleInParkingLot(Vehicle vehicle, ParkingLot parkingLot) {
+         ArrayList<Vehicle> vehiclesInParkingLot = parkingLot.getVehicles();
+-        Space spaces[] = parkingLot.getSpaces();
++        Space[] spaces = parkingLot.getSpaces();
+         int spaceId = 0;
+-        //recorre la lista de vehículos para ver en qué posición
+-        //podemos ingresar al vehículo actual
++
++        // 1. DETERMINAR SI EL VEHÍCULO REQUIERE ESPACIO DE DISCAPACIDAD
++        // Revisamos la lista de clientes; si uno solo tiene discapacidad, el vehículo califica.
++        boolean needsDisabilitySpace = false;
++        for (Customer c : vehicle.getCustomers()) {
++            if (c.isDisabilityPresented()) {
++                needsDisabilitySpace = true;
++                break;
++            }
++        }
++
++        // 2. RECORRER LOS ESPACIOS PARA ENCONTRAR UNO APTO
+         for (Space space : spaces) {
++            // ¿El espacio está libre?
+             if (!space.isSpaceTaken()) {
+-                //preguntamos si el cliente presenta una capacidad particular
+-                //y requiere de un espacio adaptado
+-                if (vehicle.getCustomer().isDisabilityPresented()) {
+-                    if (space.isDisabilityAdaptation()) {
+-                        //compara el tipo de vehículo del espacio y del vehículo que se va a 
+-                        //estacionar (tipos: moto, automóvil, bus, etc)
+-                        if (space.getVehicleType().getId() == vehicle.getVehicleType().getId()) {
+-                            vehiclesInParkingLot.add(vehicle);
+-                            space.setSpaceTaken(true);
+-                            //este es el número del espacio que se va a retornar
+-                            spaceId = space.getId();
+-                            break;
+-                        }
+-                    }
+-                } else {
+-                    if (!space.isDisabilityAdaptation()) {
+-                        //compara el tipo de vehículo del espacio y del vehículo que se va a 
+-                        //estacionar (tipos: moto, automóvil, bus, etc)
+-                        if (space.getVehicleType().getId() == vehicle.getVehicleType().getId()) {
+-                            vehiclesInParkingLot.add(vehicle);
+-                            space.setSpaceTaken(true);
+-                            //este es el número del espacio que se va a retornar
+-                            spaceId = space.getId();
+-                            break;
+-                        }
++
++                // ¿El espacio coincide con la necesidad de discapacidad del vehículo?
++                if (space.isDisabilityAdaptation() == needsDisabilitySpace) {
++
++                    // ¿El tipo de vehículo del espacio coincide con el del vehículo?
++                    if (space.getVehicleType().getId() == vehicle.getVehicleType().getId()) {
++
++                        // VINCULACIÓN DOBLE:
++                        space.setSpaceTaken(true);          // El espacio queda ocupado
++                        vehicle.setAssignedSpace(space);    // El vehículo guarda su espacio
++
++                        vehiclesInParkingLot.add(vehicle);
++                        return space.getId();
+                     }
+                 }
+             }
+         }
+-
+-        //*************actualizamos los espacios tomados
+-        //y los vehículos registrados en el parqueo
+-        parkingLot.setSpaces(spaces);//maybe not needed                                ****tarea debugear
+-        parkingLot.setVehicles(vehiclesInParkingLot);//maybe not needed
+-
+-        return spaceId;
+-    }
+-     
+-      public void removeVehicleFromParkingLot(Vehicle vehicle, ParkingLot parkingLot) {
+-
+-        ArrayList<Vehicle> vehiclesInParkingLot = parkingLot.getVehicles();
+-        Space spaces[] = parkingLot.getSpaces();
+-        //recorre la lista de vehículos para ver en qué posición
+-        //debemos retirar al vehículo actual
+-        for (int i = 0; i < vehiclesInParkingLot.size(); i++) {
+-
+-            if (vehiclesInParkingLot.get(i) == vehicle) {
+-
+-                vehiclesInParkingLot.remove(vehicle);
+-                spaces[i].setSpaceTaken(false);
+-                break;
+-            }
+-
+-        }
+-        //*************actualizamos los espacios liberados
+-        //y los vehículos registrados en el parqueo
+ 
+         parkingLot.setSpaces(spaces);
+         parkingLot.setVehicles(vehiclesInParkingLot);
+ 
++        return spaceId; // Retornará 0 si no encontró espacio disponible
++    }
++    public void removeVehicleFromParkingLot(Vehicle vehicle, ParkingLot parkingLot) {
++        if (vehicle.getAssignedSpace() != null) {
++            vehicle.getAssignedSpace().setSpaceTaken(false);
++
++            parkingLot.getVehicles().remove(vehicle);
++
++            vehicle.setAssignedSpace(null);
++        }
+     }
+-      
+-       public ParkingLot findParkingLotById(int id) {
++
++    public ParkingLot findParkingLotById(int id) {
+ 
+         ParkingLot parkingLotToBeReturned = null;
+ 
+@@ -120,11 +94,11 @@
+         }
+         return parkingLotToBeReturned;
+     }
+-       
+-        public ArrayList<ParkingLot> getAllParkingLots() {
++
++    public ArrayList<ParkingLot> getAllParkingLots() {
+ 
+         return parkingLots;
+ 
+     }
+-        
++
+ }
