@@ -1,8 +1,10 @@
 package controller;
 
-import java.util.ArrayList;
-import model.entities.Customer;
 import model.data.CustomerData;
+import model.entities.Customer;
+
+import java.util.ArrayList;
+
 //////////////////////////////////////////////////////////////// version
 public class CustomerController {
 
