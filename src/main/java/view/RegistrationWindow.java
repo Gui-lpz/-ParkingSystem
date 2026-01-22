@@ -13,19 +13,16 @@ import model.entities.VehicleType;
 
 public class RegistrationWindow {
 
-    static CustomerController customerController
-            = new CustomerController();
+    static CustomerController customerController = new CustomerController();
     static VehicleController vehicleController = new VehicleController();
-    static ParkingLotController parkingLotController= new ParkingLotController();
+    static ParkingLotController parkingLotController = new ParkingLotController();
 
     public static void main(String[] args) {
 
         showMainMenu();
-        
     }
 
 //AJSHJHSVAJGFSKHGFKGHASCGVJKHKFGSH
-    
     static void showMainMenu() {
         int choice = 1;
         while (choice != 0) {
@@ -56,27 +53,34 @@ public class RegistrationWindow {
                     insertParkingLot();
                 }
 
-                case 6 ->{ showCustomersInParkingLot();
+                case 6 -> {
+                    showCustomersInParkingLot();
                 }
 
-                case 7 ->{ deleteVehicle();}
+                case 7 -> {
+                    deleteVehicle();
+                }
 
-                case 8 ->{ updateVehicle();}
+                case 8 -> {
+                    updateVehicle();
+                }
 
-                case 9 ->{ updateCustomer();}
+                case 9 -> {
+                    updateCustomer();
+                }
 
-                case 10 ->{ deleteCustomer();}
-
-
+                case 10 -> {
+                    deleteCustomer();
+                }
 
                 default -> {
-                } 
+                }
 
             }
         }
         //Este comentario deberia aparecer si el comit se hizo de forma correcta, si no dario nos debe un café
-          //Este comentario deberia aparecer si el comit se hizo de forma correcta, si no dario nos debe un café
-          
+        //Este comentario deberia aparecer si el comit se hizo de forma correcta, si no dario nos debe un café
+
     }
 
     private static Customer insertCustomer() {
@@ -84,12 +88,12 @@ public class RegistrationWindow {
 
         String name = JOptionPane.showInputDialog("Ingrese el nombre del cliente");
 
-        String answerDisability=JOptionPane.showInputDialog("Cuenta o transporta alguna persona con discapacidad? si/no");
+        String answerDisability = JOptionPane.showInputDialog("Cuenta o transporta alguna persona con discapacidad? si/no");
         boolean disabilityPresented;
-        if(answerDisability.equals("si")){
-            disabilityPresented=true;
-        }else{
-            disabilityPresented=false;
+        if (answerDisability.equals("si")) {
+            disabilityPresented = true;
+        } else {
+            disabilityPresented = false;
         }
 
         Customer customerToInsert = new Customer(id, name, disabilityPresented);
@@ -102,18 +106,19 @@ public class RegistrationWindow {
     private static void updateCustomer() {
         String id = JOptionPane.showInputDialog("Ingrese el número de cédula del cliente que desea actualizar");
         String name = JOptionPane.showInputDialog("Ingrese el nuevo nombre del cliente");
-        String answerDisability=JOptionPane.showInputDialog("Cuenta o transporta alguna persona con discapacidad? si/no");
+        String answerDisability = JOptionPane.showInputDialog("Cuenta o transporta alguna persona con discapacidad? si/no");
         boolean disabilityPresented;
-        if(answerDisability.equals("si")){
-            disabilityPresented=true;
-        }else{
-            disabilityPresented=false;
+        if (answerDisability.equals("si")) {
+            disabilityPresented = true;
+        } else {
+            disabilityPresented = false;
         }
 
         Customer updatedCustomer = new Customer(id, name, disabilityPresented);
 
         JOptionPane.showMessageDialog(null, customerController.updateCustomer(updatedCustomer));
     }
+
     private static void deleteCustomer() {
         String id = JOptionPane.showInputDialog("Ingrese el número de cédula del cliente que desea eliminar");
 
@@ -122,8 +127,6 @@ public class RegistrationWindow {
 
         JOptionPane.showMessageDialog(null, customerController.deleteCustomer(customerDelete));
     }
-
-
 
     private static void insertVehicle() {
 
@@ -135,12 +138,12 @@ public class RegistrationWindow {
         ArrayList<Customer> vehicleCustomers = new ArrayList<>();
         int numOwners = Integer.parseInt(JOptionPane.showInputDialog("¿Cuántos dueños tiene este vehículo?"));
 
-        for(int i = 0; i < numOwners; i++) {
-            JOptionPane.showMessageDialog(null, "Datos del dueño #" + (i+1));
+        for (int i = 0; i < numOwners; i++) {
+            JOptionPane.showMessageDialog(null, "Datos del dueño #" + (i + 1));
             vehicleCustomers.add(insertCustomer());
         }
 
-        Customer customerVehicle=vehicleCustomers.get(0);
+        Customer customerVehicle = vehicleCustomers.get(0);
         VehicleType type = configureVehicleTypeOfSpaces(0, customerVehicle.isDisabilityPresented());
 
         Vehicle vehicle = new Vehicle(plate, color, brand, model, vehicleCustomers, type);
@@ -168,12 +171,12 @@ public class RegistrationWindow {
         ArrayList<Customer> vehicleCustomers = new ArrayList<>();
         int numOwners = Integer.parseInt(JOptionPane.showInputDialog("¿Cuántos dueños tiene este vehículo ahora?"));
 
-        for(int i = 0; i < numOwners; i++) {
-            JOptionPane.showMessageDialog(null, "Datos del dueño #" + (i+1));
+        for (int i = 0; i < numOwners; i++) {
+            JOptionPane.showMessageDialog(null, "Datos del dueño #" + (i + 1));
             vehicleCustomers.add(insertCustomerToUpdateCar());
         }
 
-        Customer customerVehicle=vehicleCustomers.get(0);
+        Customer customerVehicle = vehicleCustomers.get(0);
         VehicleType type = configureVehicleTypeOfSpaces(0, customerVehicle.isDisabilityPresented());
 
         Vehicle updatedVehicle = new Vehicle(plate, color, brand, model, vehicleCustomers, type);
@@ -187,12 +190,12 @@ public class RegistrationWindow {
 
         String name = JOptionPane.showInputDialog("Ingrese el nombre del cliente");
 
-        String answerDisability=JOptionPane.showInputDialog("Cuenta o transporta alguna persona con discapacidad? si/no");
+        String answerDisability = JOptionPane.showInputDialog("Cuenta o transporta alguna persona con discapacidad? si/no");
         boolean disabilityPresented;
-        if(answerDisability.equals("si")){
-            disabilityPresented=true;
-        }else{
-            disabilityPresented=false;
+        if (answerDisability.equals("si")) {
+            disabilityPresented = true;
+        } else {
+            disabilityPresented = false;
         }
 
         Customer customerToUpdate = new Customer(id, name, disabilityPresented);
@@ -200,7 +203,6 @@ public class RegistrationWindow {
         JOptionPane.showMessageDialog(null, customerController.updateCustomer(customerToUpdate)); //diferencia con el metodo insertCustomer
         return customerToUpdate;
     }
-
 
     static void showAllCustomers() {
 
@@ -229,7 +231,6 @@ public class RegistrationWindow {
         parkingLot.setVehicles(new ArrayList<Vehicle>());
 
     }
-
 
     private static Space[] configureSpaces(Space[] spaces, int numberOfSpacesWithDisabilityAdaptation) {
 
@@ -261,9 +262,6 @@ public class RegistrationWindow {
 
         return spaces;
     }
-
-
-
 
     private static VehicleType configureVehicleTypeOfSpaces(int position, boolean disabilityPresented) {
 
@@ -303,11 +301,8 @@ public class RegistrationWindow {
 
         } while (parkingLot == null);
 
-
-
         return parkingLot;
     }
-
 
     private static void showCustomersInParkingLot() {
         StringBuilder report = new StringBuilder(" CLIENTES CON VEHÍCULOS EN PARQUEO \n\n");
@@ -350,5 +345,4 @@ public class RegistrationWindow {
         JOptionPane.showMessageDialog(null, report.toString());
     }
 
-      
 }
