@@ -1,16 +1,20 @@
+package controller;
 
-import java.util.ArrayList;
 import model.data.AdministratorData;
+import model.entities.Administrator;
 import model.entities.Customer;
 import model.entities.User;
 import model.entities.UserOperations;
+import java.util.ArrayList;
 
 public class AdministratorController implements UserOperations {
-    
-    AdministratorData administratorData = new AdministratorData();
+  
+    private AdministratorData administratorData = new AdministratorData();
+
 
     @Override
     public User searchUser(String identification) {
+        // Busca en la lista cargada desde el archivo txt
         for (Administrator admin : administratorData.getAllAdministrators()) {
             if (admin.getId().equalsIgnoreCase(identification)) {
                 return admin;
@@ -29,23 +33,49 @@ public class AdministratorController implements UserOperations {
         }
         return null;
     }
-    
-    // Agrega métodos CRUD para ser usados por la interfaz
-    public String addAdministrator(Administrator admin) {
+
+    public String insertAdministrator(Administrator admin) {
         if (searchUser(admin.getId()) == null) {
             administratorData.insertAdministrator(admin);
-            return "Administrador creado.";
+            return "Administrador registrado exitosamente.";
+        } else {
+            return "Error: Ya existe un administrador con esa identificación.";
         }
-        return "El administrador ya existe.";
     }
 
+
+    public String updateAdministrator(Administrator updatedAdmin) {
+        if (searchUser(updatedAdmin.getId()) != null) {
+            administratorData.updateAdministrator(updatedAdmin);
+            return "Administrador actualizado correctamente.";
+        } else {
+            return "Error: No se encontró el administrador para actualizar.";
+        }
+    }
+
+
+    public String deleteAdministrator(String id) {
+        if (searchUser(id) != null) {
+            administratorData.deleteAdministrator(id);
+            return "Administrador eliminado con éxito.";
+        } else {
+            return "Error: El administrador no existe.";
+        }
+    }
+
+    public ArrayList<Administrator> getAllAdministrators() {
+        return administratorData.getAllAdministrators();
+    }
+
+ 
     @Override
     public ArrayList<User> sortUsers(Customer[] allUsers) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // Aquí podrías implementar lógica de ordenamiento (ej. por nombre)
+        throw new UnsupportedOperationException("Ordenamiento no implementado aún.");
     }
 
     @Override
     public ArrayList<User> sortUsers(String identification, User[] allUsers) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Ordenamiento no implementado aún.");
     }
 }
