@@ -1,15 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model.entities;
 
-
 /**
- *
  * @author Lab07 Guiselle López
  */
-public class Clerk extends User implements Employee{
+public class Clerk extends User implements Employee {
     
     private int employeeCode;
     private String schedule;
@@ -17,6 +11,7 @@ public class Clerk extends User implements Employee{
     private ParkingLot parkingLot;
 
     public Clerk() {
+        super();
     }
 
     public Clerk(int employeeCode, String schedule, int age, ParkingLot parkingLot) {
@@ -42,7 +37,6 @@ public class Clerk extends User implements Employee{
         this.parkingLot = parkingLot;
     }
 
-  
     public int getEmployeeCode() {
         return employeeCode;
     }
@@ -77,23 +71,24 @@ public class Clerk extends User implements Employee{
 
     @Override
     public String toString() {
-        return "Clerk{" + "employeeCode=" + employeeCode + ", schedule=" + schedule + ", age=" + age + ", parkingLot=" + parkingLot + '}';
+        return "Clerk{" + "id=" + getId() + ", name=" + getName() + ", employeeCode=" + employeeCode + ", schedule=" + schedule + ", age=" + age + '}';
     }
 
     @Override
     public boolean verifyUserLogin(String[] loginDetails) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // Lógica para verificar login (ejemplo básico)
+        return this.getUsername().equals(loginDetails[0]) && this.getPassword().equals(loginDetails[1]);
     }
 
     @Override
     public float calculateSalary(float dailySalary) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // Ejemplo de cálculo: salario diario por 30 días
+        return dailySalary * 30;
     }
 
     @Override
     public ParkingLot assignWorkplace(int parkingLotId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // Aquí iría la lógica para buscar el objeto ParkingLot por ID y asignarlo
+        return this.parkingLot;
     }
-    
-    
 }
