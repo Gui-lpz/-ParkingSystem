@@ -94,8 +94,10 @@ public class Vehicle {
                 "Placa='" + plate + '\'' +
                 ", Marca='" + brand + '\'' +
                 ", Clientes=" + customers + '\''+
-                ", Tipo=" + vehicleType.getDescription()+'\'' +
+                ", Tipo=" + vehicleType.getType()+'\'' +
+                ", Descripción=" + vehicleType.getDescription()+'\'' +
                 " Posición asignada: " + (assignedSpace != null ? assignedSpace.getId() : "N/A");
+        
     }
 
 

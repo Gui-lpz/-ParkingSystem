@@ -171,7 +171,7 @@ public class RegistrationWindow {
         }
 
         Customer customerVehicle = vehicleCustomers.get(0);
-        VehicleType type = configureVehicleTypeOfSpaces(0, customerVehicle.isDisabilityPresented());
+        VehicleType type = configureVehicleTypeOfSpacesforVehicles(0, customerVehicle.isDisabilityPresented());
 
         Vehicle vehicle = new Vehicle(plate, color, brand, model, vehicleCustomers, type);
         vehicleController.insertVehicle(vehicle);
@@ -219,8 +219,29 @@ public class RegistrationWindow {
     }
 
     static void showAllCustomers() {
-        JOptionPane.showMessageDialog(null, customerController.getAllCustomers().toString());
+    ArrayList<Customer> customers = customerController.getAllCustomers();
+    
+    StringBuilder report = new StringBuilder();
+    report.append("======= LISTADO GENERAL DE CLIENTES =======\n\n");
+
+    if (customers.isEmpty()) {
+        report.append("  >> No hay clientes registrados en el sistema actual.\n");
+    } else {
+        for (Customer c : customers) {
+            report.append("🆔 Cédula:       ").append(c.getId()).append("\n");
+            report.append("👤 Nombre:       ").append(c.getName()).append("\n");
+            
+            String disabilityStatus = c.isDisabilityPresented() ? "SÍ presenta" : "NO presenta";
+            report.append("♿ Discapacidad: ").append(disabilityStatus).append("\n");
+            
+            report.append("--------------------------------------------------\n");
+        }
     }
+
+    report.append("\nTotal de registros: ").append(customers.size());
+
+    JOptionPane.showMessageDialog(null, report.toString());
+}
 
     static void showAllVehicles() {
         JOptionPane.showMessageDialog(null, vehicleController.getAllVehicles().toString());
@@ -270,8 +291,24 @@ public class RegistrationWindow {
 
         VehicleType vehicleType = new VehicleType();
         vehicleType.setId(typeNumber);
-        vehicleType.setDescription(types[typeNumber]);
+        vehicleType.setType(types[typeNumber]);
         vehicleType.setNumberOfTires(tires[typeNumber]);
+        return vehicleType;
+    }
+    
+    private static VehicleType configureVehicleTypeOfSpacesforVehicles(int position, boolean disability) {
+        String[] types = {"Tipos de vehículo", "1)moto", "2)liviano", "3)pesado", "4)bicicleta", "5)otro"};
+        byte[] tires = {0, 2, 4, 8, 12, -1};
+
+        String allTypes = String.join("\n", types);
+        byte typeNumber = Byte.parseByte(JOptionPane.showInputDialog(allTypes + "\nIngrese número para espacio #" + position));
+        String descriptionVehicle = JOptionPane.showInputDialog("Detalles del vehiculo");
+
+        VehicleType vehicleType = new VehicleType();
+        vehicleType.setId(typeNumber);
+        vehicleType.setType(types[typeNumber]);
+        vehicleType.setNumberOfTires(tires[typeNumber]);
+        vehicleType.setDescription(descriptionVehicle);
         return vehicleType;
     }
 
