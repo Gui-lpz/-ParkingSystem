@@ -21,7 +21,7 @@ public class RegistrationWindow {
 
         showMainMenu();
     }
-//view actualizada
+
 
     static void showMainMenu() {
         int choice = 1;
@@ -343,5 +343,7 @@ public class RegistrationWindow {
 
         JOptionPane.showMessageDialog(null, report.toString());
     }
+    
+    /////////////////////////////////////////******
 
 }
