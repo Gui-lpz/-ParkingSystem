@@ -23,7 +23,6 @@ public class AdministratorData {
             String line;
             while ((line = br.readLine()) != null) {
                 StringTokenizer st = new StringTokenizer(line, ";");
-                // Estructura: id;name;user;pass;adminNumber
                 if (st.countTokens() >= 5) {
                     String id = st.nextToken();
                     String name = st.nextToken();
@@ -31,7 +30,6 @@ public class AdministratorData {
                     String pass = st.nextToken();
                     int adminNumber = Integer.parseInt(st.nextToken());
 
-                    // Nota: parkingLot se inicializa en null al cargar desde texto
                     Administrator admin = new Administrator(adminNumber, null);
                     admin.setId(id);
                     admin.setName(name);

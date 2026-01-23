@@ -76,19 +76,16 @@ public class Clerk extends User implements Employee {
 
     @Override
     public boolean verifyUserLogin(String[] loginDetails) {
-        // Lógica para verificar login (ejemplo básico)
         return this.getUsername().equals(loginDetails[0]) && this.getPassword().equals(loginDetails[1]);
     }
 
     @Override
     public float calculateSalary(float dailySalary) {
-        // Ejemplo de cálculo: salario diario por 30 días
         return dailySalary * 30;
     }
 
     @Override
     public ParkingLot assignWorkplace(int parkingLotId) {
-        // Aquí iría la lógica para buscar el objeto ParkingLot por ID y asignarlo
         return this.parkingLot;
     }
 }

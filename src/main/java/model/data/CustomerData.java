@@ -16,7 +16,7 @@ public class CustomerData {
 
     public CustomerData() {
         this.customers = new ArrayList<>();
-        loadFromFile(); // Carga los datos apenas se instancia la clase
+        loadFromFile();
     }
 
 

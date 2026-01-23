@@ -33,8 +33,6 @@ public class ParkingLotData {
         Space[] spaces = parkingLot.getSpaces();
         int spaceId = 0;
 
-        // 1. DETERMINAR SI EL VEHÍCULO REQUIERE ESPACIO DE DISCAPACIDAD
-        // Revisamos la lista de clientes; si uno solo tiene discapacidad, el vehículo califica.
         boolean needsDisabilitySpace = false;
         for (Customer c : vehicle.getCustomers()) {
             if (c.isDisabilityPresented()) {
@@ -43,20 +41,13 @@ public class ParkingLotData {
             }
         }
 
-        // 2. RECORRER LOS ESPACIOS PARA ENCONTRAR UNO APTO
+      
         for (Space space : spaces) {
-            // ¿El espacio está libre?
             if (!space.isSpaceTaken()) {
-
-                // ¿El espacio coincide con la necesidad de discapacidad del vehículo?
                 if (space.isDisabilityAdaptation() == needsDisabilitySpace) {
-
-                    // ¿El tipo de vehículo del espacio coincide con el del vehículo?
                     if (space.getVehicleType().getId() == vehicle.getVehicleType().getId()) {
-
-                        // VINCULACIÓN DOBLE:
                         space.setSpaceTaken(true);          // El espacio queda ocupado
-                        vehicle.setAssignedSpace(space);    // El vehículo guarda su espacio
+                        vehicle.setAssignedSpace(space);    // guarda el espacio
 
                         vehiclesInParkingLot.add(vehicle);
                         return space.getId();
@@ -68,7 +59,7 @@ public class ParkingLotData {
         parkingLot.setSpaces(spaces);
         parkingLot.setVehicles(vehiclesInParkingLot);
 
-        return spaceId; // Retornará 0 si no encontró espacio disponible
+        return spaceId; // Retorna 0 si no encontró espacio disponible
     }
     public void removeVehicleFromParkingLot(Vehicle vehicle, ParkingLot parkingLot) {
         if (vehicle.getAssignedSpace() != null) {

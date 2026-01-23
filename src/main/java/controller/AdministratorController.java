@@ -14,7 +14,6 @@ public class AdministratorController implements UserOperations {
 
     @Override
     public User searchUser(String identification) {
-        // Busca en la lista cargada desde el archivo txt
         for (Administrator admin : administratorData.getAllAdministrators()) {
             if (admin.getId().equalsIgnoreCase(identification)) {
                 return admin;
@@ -70,7 +69,6 @@ public class AdministratorController implements UserOperations {
  
     @Override
     public ArrayList<User> sortUsers(Customer[] allUsers) {
-        // Aquí podrías implementar lógica de ordenamiento (ej. por nombre)
         throw new UnsupportedOperationException("Ordenamiento no implementado aún.");
     }
 
