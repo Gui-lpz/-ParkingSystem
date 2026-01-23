@@ -149,6 +149,6 @@ public class LoginWindow extends JFrame implements ActionListener {
                                                                                 //haya ingresado todos sus datos
             dispose();
             new LoginWindow().setVisible(true); //Creamos una nueva ventana de login para que se refresquen los datos en el txt y no se caiga el programa
-        }
+        }//
     }
 }
