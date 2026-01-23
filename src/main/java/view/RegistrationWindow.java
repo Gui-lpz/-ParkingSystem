@@ -6,9 +6,13 @@ import javax.swing.JOptionPane;
 import model.entities.*;
 
 public class RegistrationWindow {
+
+    // Controladores existentes
     static CustomerController customerController = new CustomerController();
     static VehicleController vehicleController = new VehicleController();
     static ParkingLotController parkingLotController = new ParkingLotController();
+    
+    // NUEVOS CONTROLADORES PARA ARCHIVOS DE TEXTO
     static AdministratorController adminController = new AdministratorController();
     static ClerkController clerkController = new ClerkController();
 
@@ -60,7 +64,7 @@ public class RegistrationWindow {
                 case 9 -> updateCustomer();
                 case 10 -> deleteCustomer();
                 
-              
+                // Casos nuevos para persistencia en archivos
                 case 11 -> insertAdministrator();
                 case 12 -> showAllAdministrators();
                 case 13 -> insertClerk();
@@ -72,6 +76,7 @@ public class RegistrationWindow {
         }
     }
 
+    // --- MÉTODOS DE PERSISTENCIA PARA ADMINISTRADORES ---
 
     private static void insertAdministrator() {
         String id = JOptionPane.showInputDialog("Cédula:");
@@ -80,6 +85,7 @@ public class RegistrationWindow {
         String pass = JOptionPane.showInputDialog("Contraseña:");
         int adminNum = Integer.parseInt(JOptionPane.showInputDialog("Número de Administrador:"));
 
+        // Se crea el objeto (la clase Data se encarga de guardarlo en el txt)
         Administrator admin = new Administrator(adminNum, null, id, name, user, pass);
         JOptionPane.showMessageDialog(null, adminController.insertAdministrator(admin));
     }
@@ -92,6 +98,8 @@ public class RegistrationWindow {
             JOptionPane.showMessageDialog(null, list.toString());
         }
     }
+
+    // --- MÉTODOS DE PERSISTENCIA PARA CLERKS (DEPENDIENTES) ---
 
     private static void insertClerk() {
         int code = Integer.parseInt(JOptionPane.showInputDialog("Código de Empleado:"));
@@ -120,6 +128,7 @@ public class RegistrationWindow {
         JOptionPane.showMessageDialog(null, clerkController.deleteClerk(code));
     }
 
+    // --- MÉTODOS EXISTENTES (Mantener como están) ---
 
     private static Customer insertCustomer() {
         String id = JOptionPane.showInputDialog("Ingrese el número de cédula del cliente");
@@ -156,10 +165,10 @@ public class RegistrationWindow {
         String color = JOptionPane.showInputDialog("Ingrese el color");
 
         ArrayList<Customer> vehicleCustomers = new ArrayList<>();
-        int numOwners = Integer.parseInt(JOptionPane.showInputDialog("Cantidad de propietarios"));
+        int numOwners = Integer.parseInt(JOptionPane.showInputDialog("¿Cuántos dueños tiene este vehículo?"));
 
         for (int i = 0; i < numOwners; i++) {
-            JOptionPane.showMessageDialog(null, "Datos del propietario del vehículo " + (i + 1));
+            JOptionPane.showMessageDialog(null, "Datos del dueño #" + (i + 1));
             vehicleCustomers.add(insertCustomer());
         }
 
@@ -182,12 +191,12 @@ public class RegistrationWindow {
 
     private static void updateVehicle() {
         String plate = JOptionPane.showInputDialog("Ingrese placa a actualizar:");
-        String brand = JOptionPane.showInputDialog("Ingrese la marca:");
-        String model = JOptionPane.showInputDialog("Ingrese el modelo:");
-        String color = JOptionPane.showInputDialog("Ingrese el  color:");
+        String brand = JOptionPane.showInputDialog("Nueva marca:");
+        String model = JOptionPane.showInputDialog("Nuevo modelo:");
+        String color = JOptionPane.showInputDialog("Nuevo color:");
 
         ArrayList<Customer> vehicleCustomers = new ArrayList<>();
-        int numOwners = Integer.parseInt(JOptionPane.showInputDialog("Cantidad de propietarios del Vehículo"));
+        int numOwners = Integer.parseInt(JOptionPane.showInputDialog("¿Cuántos dueños tiene ahora?"));
 
         for (int i = 0; i < numOwners; i++) {
             vehicleCustomers.add(insertCustomerToUpdateCar());

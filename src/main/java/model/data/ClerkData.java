@@ -24,6 +24,7 @@ public class ClerkData {
             while ((line = br.readLine()) != null) {
                 StringTokenizer st = new StringTokenizer(line, ";");
                 if (st.countTokens() >= 8) {
+                    // Orden en el txt: code;schedule;age;id;name;username;password;parkingLotId
                     int code = Integer.parseInt(st.nextToken());
                     String schedule = st.nextToken();
                     int age = Integer.parseInt(st.nextToken());
@@ -31,6 +32,7 @@ public class ClerkData {
                     String name = st.nextToken();
                     String user = st.nextToken();
                     String pass = st.nextToken();
+                    // Por ahora cargamos parkingLot como null o podrías buscarlo por ID
                     st.nextToken(); 
 
                     clerks.add(new Clerk(code, schedule, age, null, id, name, user, pass));
@@ -44,6 +46,7 @@ public class ClerkData {
     private void saveToFile() {
         try (PrintWriter pw = new PrintWriter(new FileWriter(fileName))) {
             for (Clerk c : clerks) {
+                // Guardamos todos los atributos heredados de User y propios de Clerk
                 pw.println(c.getEmployeeCode() + ";" +
                            c.getSchedule() + ";" +
                            c.getAge() + ";" +
@@ -82,4 +85,3 @@ public class ClerkData {
         saveToFile();
     }
 }
-
