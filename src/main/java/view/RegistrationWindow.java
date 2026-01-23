@@ -42,7 +42,9 @@ public class RegistrationWindow {
 
             try {
                 String input = JOptionPane.showInputDialog(menu);
-                if (input == null) break;
+                if (input == null) {
+                    break;
+                }
                 choice = Integer.parseInt(input);
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Por favor ingrese un número válido.");
@@ -50,33 +52,47 @@ public class RegistrationWindow {
             }
 
             switch (choice) {
-                case 0 -> JOptionPane.showMessageDialog(null, "¡Hasta pronto!");
-                case 1 -> insertCustomer();
-                case 2 -> showAllCustomers();
-                case 3 -> insertVehicle();
-                case 4 -> showAllVehicles();
-                case 5 -> insertParkingLot();
-                case 6 -> showCustomersInParkingLot();
-                case 7 -> deleteVehicle();
-                case 8 -> updateVehicle();
-                case 9 -> updateCustomer();
-                case 10 -> deleteCustomer();
-                
-               
-                case 11 -> insertAdministrator();
-                case 12 -> showAllAdministrators();
-                case 13 -> insertClerk();
-                case 14 -> showAllClerks();
-                case 15 -> deleteClerk();
+                case 0 ->
+                    JOptionPane.showMessageDialog(null, "¡Hasta pronto!");
+                case 1 ->
+                    insertCustomer();
+                case 2 ->
+                    showAllCustomers();
+                case 3 ->
+                    insertVehicle();
+                case 4 ->
+                    showAllVehicles();
+                case 5 ->
+                    insertParkingLot();
+                case 6 ->
+                    showCustomersInParkingLot();
+                case 7 ->
+                    deleteVehicle();
+                case 8 ->
+                    updateVehicle();
+                case 9 ->
+                    updateCustomer();
+                case 10 ->
+                    deleteCustomer();
 
-                default -> JOptionPane.showMessageDialog(null, "Opción no válida.");
+                case 11 ->
+                    insertAdministrator();
+                case 12 ->
+                    showAllAdministrators();
+                case 13 ->
+                    insertClerk();
+                case 14 ->
+                    showAllClerks();
+                case 15 ->
+                    deleteClerk();
+
+                default ->
+                    JOptionPane.showMessageDialog(null, "Opción no válida.");
             }
         }
     }
 
-   
-
-    private static void insertAdministrator() {
+    public static void insertAdministrator() {
         String id = JOptionPane.showInputDialog("Cédula:");
         String name = JOptionPane.showInputDialog("Nombre:");
         String user = JOptionPane.showInputDialog("Usuario:");
@@ -86,6 +102,7 @@ public class RegistrationWindow {
         // Se crea el objeto (la clase Data se encarga de guardarlo en el txt)
         Administrator admin = new Administrator(adminNum, null, id, name, user, pass);
         JOptionPane.showMessageDialog(null, adminController.insertAdministrator(admin));
+        
     }
 
     private static void showAllAdministrators() {
@@ -96,8 +113,6 @@ public class RegistrationWindow {
             JOptionPane.showMessageDialog(null, list.toString());
         }
     }
-
- 
 
     private static void insertClerk() {
         int code = Integer.parseInt(JOptionPane.showInputDialog("Código de Empleado:"));
@@ -125,8 +140,6 @@ public class RegistrationWindow {
         int code = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el Código de Empleado a eliminar:"));
         JOptionPane.showMessageDialog(null, clerkController.deleteClerk(code));
     }
-
-    
 
     private static Customer insertCustomer() {
         String id = JOptionPane.showInputDialog("Ingrese el número de cédula del cliente");
@@ -277,10 +290,14 @@ public class RegistrationWindow {
 
     private static ParkingLot selectParkingLot() {
         ArrayList<ParkingLot> list = parkingLotController.getAllParkingLots();
-        if (list.isEmpty()) return null;
+        if (list.isEmpty()) {
+            return null;
+        }
 
         String info = "Parqueos disponibles:\n";
-        for (ParkingLot pl : list) info += pl.getId() + " - " + pl.getName() + "\n";
+        for (ParkingLot pl : list) {
+            info += pl.getId() + " - " + pl.getName() + "\n";
+        }
 
         ParkingLot found = null;
         do {
@@ -299,7 +316,9 @@ public class RegistrationWindow {
             report.append("Parqueo: ").append(lot.getName()).append("\n");
             for (Vehicle v : lot.getVehicles()) {
                 report.append("  > Placa: ").append(v.getPlate()).append(" Owners: ");
-                for (Customer c : v.getCustomers()) report.append(c.getName()).append(" ");
+                for (Customer c : v.getCustomers()) {
+                    report.append(c.getName()).append(" ");
+                }
                 report.append("\n");
             }
             report.append("--------------------------------------\n");

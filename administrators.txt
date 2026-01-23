@@ -1,0 +1,7 @@
+305600109;Adriel Marín;Adriel;1234;2
+12345;Sebas;Sebas;12345;2
+456;Daniel;Daniel;234;1
+098;Ramiro;Ramiro;456;54
+82654;Esteban;Est;1234;43
+34523245;Tadeo;Tda;234;7
+2143124;Wagner;Wga;123;9
