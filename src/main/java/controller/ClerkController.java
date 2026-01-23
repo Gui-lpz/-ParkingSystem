@@ -39,7 +39,6 @@ public class ClerkController implements UserOperations {
   
 
     public String insertClerk(Clerk clerk) {
-        // Validar si ya existe por ID o por Código de Empleado
         if (searchUser(clerk.getId()) == null) {
             clerkData.insertClerk(clerk);
             return "Dependiente registrado con éxito en el archivo.";
@@ -48,7 +47,6 @@ public class ClerkController implements UserOperations {
     }
 
     public String updateClerk(Clerk clerk) {
-        // Se busca por código de empleado para actualizar sus datos
         boolean exists = false;
         for (Clerk c : clerkData.getAllClerks()) {
             if (c.getEmployeeCode() == clerk.getEmployeeCode()) {
