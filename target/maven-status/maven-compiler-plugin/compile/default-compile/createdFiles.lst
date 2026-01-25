@@ -15,6 +15,7 @@ model\entities\ParkingLot.class
 model\data\CustomerData.class
 controller\VehicleController.class
 model\entities\VehicleType.class
+view\LoginWindow.class
 model\entities\Vehicle.class
 controller\ClerkController.class
 model\entities\Administrator.class

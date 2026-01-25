@@ -1,9 +1,5 @@
 package model.entities;
 
-/**
- *
- * @author Lab07 Guiselle López
- */
 public class Administrator extends User implements Employee { 
     
     private int adminNumber;

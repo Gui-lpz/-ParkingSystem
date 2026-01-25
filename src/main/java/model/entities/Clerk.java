@@ -1,8 +1,6 @@
 package model.entities;
 
-/**
- * @author Lab07 Guiselle López
- */
+
 public class Clerk extends User implements Employee {
     
     private int employeeCode;

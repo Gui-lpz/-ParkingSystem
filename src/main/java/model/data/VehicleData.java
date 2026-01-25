@@ -4,18 +4,16 @@ import java.util.ArrayList;
 import model.entities.Customer;
 import model.entities.Vehicle;
 
-
 public class VehicleData {
 
     ArrayList<Vehicle> vehicles= new ArrayList();
     ArrayList<Customer> customers;
-
-
+   
     public void insertVehicle(Vehicle vehicle){
-
 
         vehicles.add(vehicle);
     }
+    
 
     public void insertCustomer(Customer customer){
 
