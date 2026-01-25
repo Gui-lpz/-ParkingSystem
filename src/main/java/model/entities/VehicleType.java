@@ -5,7 +5,8 @@ public class VehicleType {
     private String description;
     private byte numberOfTires;
     private float fee;
-    private String type; 
+    private String type; //nuevo atributo
+
     public VehicleType() {
     }
 
@@ -16,6 +17,7 @@ public class VehicleType {
         this.fee = fee;
         this.type = type;
     }
+    
 
     public int getId() {
         return id;
@@ -23,6 +25,14 @@ public class VehicleType {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getDescription() {
@@ -47,14 +57,6 @@ public class VehicleType {
 
     public void setFee(float fee) {
         this.fee = fee;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     @Override
