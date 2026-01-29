@@ -40,7 +40,6 @@ public class LoginWindow extends JFrame implements ActionListener {
         lblTitle.setFont(new Font("Arial", Font.BOLD, 22));
         lblTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
 
-        // Formulario
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
 
@@ -58,7 +57,6 @@ public class LoginWindow extends JFrame implements ActionListener {
         formPanel.add(Box.createVerticalStrut(15));
         formPanel.add(passwordPanel);
 
-        // Panel de botones
         JPanel buttonPanel = new JPanel();
         btnSignIn = new JButton("Sign In");
         btnRegister = new JButton("Register");
@@ -101,7 +99,6 @@ public class LoginWindow extends JFrame implements ActionListener {
 
                 this.dispose(); 
                 
-                // Abre la ventana principal
                 MainWindow mainApp = new MainWindow();
                 mainApp.setVisible(true); 
 
