@@ -1,22 +1,28 @@
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\controller\AdministratorController.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\controller\ClerkController.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\controller\CustomerController.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\controller\ParkingLotController.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\controller\VehicleController.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\model\data\AdministratorData.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\model\data\ClerkData.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\model\data\CustomerData.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\model\data\ParkingLotData.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\model\data\VehicleData.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\model\entities\Administrator.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\model\entities\Clerk.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\model\entities\Customer.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\model\entities\Employee.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\model\entities\ParkingLot.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\model\entities\Space.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\model\entities\User.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\model\entities\UserOperations.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\model\entities\Vehicle.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\model\entities\VehicleType.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\view\LoginWindow.java
-C:\Users\ROGER DARIO\Documents\Desarrollo Soft 2\PROYECTO DS2\GIT\-ParkingSystem\src\main\java\view\RegistrationWindow.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\controller\AdministratorController.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\controller\ClerkController.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\controller\CustomerController.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\controller\ParkingLotController.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\controller\VehicleController.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\GUI\ClerkManagement.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\model\data\AdministratorData.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\model\data\ClerkData.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\model\data\CustomerData.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\model\data\ParkingLotData.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\model\data\VehicleData.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\model\entities\Administrator.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\model\entities\Clerk.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\model\entities\Customer.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\model\entities\Employee.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\model\entities\ParkingLot.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\model\entities\Space.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\model\entities\User.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\model\entities\UserOperations.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\model\entities\Vehicle.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\model\entities\VehicleType.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\view\AdministratorManagement.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\view\AdministratorWindow.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\view\ClerkWindow.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\view\CustomerManagement.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\view\CustomerWindow.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\view\LoginWindow.java
+D:\UCR-DSII\-ParkingSystem\src\main\java\view\MainWindow.java
