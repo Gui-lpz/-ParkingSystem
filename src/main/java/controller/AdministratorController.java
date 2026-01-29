@@ -13,7 +13,7 @@ public class AdministratorController implements UserOperations {
 
     @Override
     public User searchUser(String identification) {
-        // Al buscar por ID, también aplicamos trim() por seguridad
+
         for (Administrator admin : administratorData.getAllAdministrators()) {
             if (admin.getId().trim().equalsIgnoreCase(identification.trim())) {
                 return admin;
@@ -24,21 +24,17 @@ public class AdministratorController implements UserOperations {
 
     @Override
     public User searchUser(User user) {
-        // Validamos que el objeto no sea nulo
+
         if (user == null || user.getUsername() == null || user.getPassword() == null) {
             return null;
         }
 
         for (Administrator admin : administratorData.getAllAdministrators()) {
-            // Extraemos y limpiamos los datos del archivo
             String storedUser = admin.getUsername().trim();
             String storedPass = admin.getPassword().trim();
             
-            // Extraemos y limpiamos los datos que escribió el usuario en la interfaz
             String inputUser = user.getUsername().trim();
             String inputPass = user.getPassword().trim();
-
-            // Comparación exacta ignorando espacios accidentales
             if (storedUser.equals(inputUser) && storedPass.equals(inputPass)) {
                 return admin;
             }
