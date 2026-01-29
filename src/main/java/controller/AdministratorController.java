@@ -14,7 +14,7 @@ public class AdministratorController implements UserOperations {
     @Override
     public User searchUser(String identification) {
         for (Administrator admin : administratorData.getAllAdministrators()) {
-            if (admin.getId().equalsIgnoreCase(identification)) {
+            if (admin.getId().trim().equalsIgnoreCase(identification.trim())) {
                 return admin;
             }
         }
@@ -23,9 +23,20 @@ public class AdministratorController implements UserOperations {
 
     @Override
     public User searchUser(User user) {
+        // Validamos que el objeto no sea nulo
+        if (user == null || user.getUsername() == null || user.getPassword() == null) {
+            return null;
+        }
+
         for (Administrator admin : administratorData.getAllAdministrators()) {
-            if (admin.getUsername().equals(user.getUsername()) && 
-                admin.getPassword().equals(user.getPassword())) {
+            String storedUser = admin.getUsername().trim();
+            String storedPass = admin.getPassword().trim();
+          
+            String inputUser = user.getUsername().trim();
+            String inputPass = user.getPassword().trim();
+
+           
+            if (storedUser.equals(inputUser) && storedPass.equals(inputPass)) {
                 return admin;
             }
         }
@@ -42,7 +53,6 @@ public class AdministratorController implements UserOperations {
     }
 
     public String updateAdministrator(Administrator updatedAdmin) {
-     
         if (searchUser(updatedAdmin.getId()) != null) {
             administratorData.updateAdministrator(updatedAdmin);
             return "Administrador actualizado correctamente.";
@@ -67,7 +77,6 @@ public class AdministratorController implements UserOperations {
         return "Error: No se encontró el administrador con ese número.";
     }
 
-   
     public ArrayList<Administrator> getAllAdministrators() {
         return administratorData.getAllAdministrators();
     }
