@@ -6,10 +6,6 @@ import model.data.ParkingLotData;
 import model.entities.Space;
 import model.entities.Vehicle;
 
-/**
- *
- * @author Lenovo
- */
 public class ParkingLotController {
 
     private ParkingLotData parkingLotData = new ParkingLotData();

@@ -65,7 +65,6 @@ public class CustomerManagement extends JInternalFrame {
             }
         });
 
-        // BOTÓN EDITAR
         buttonEdit = new JButton("Editar");
         buttonEdit.setBounds(360, 375, 100, 25);
         panelCustomers.add(buttonEdit);

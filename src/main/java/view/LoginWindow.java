@@ -101,7 +101,6 @@ public class LoginWindow extends JFrame implements ActionListener {
 
                 this.dispose(); 
                 
-                // Abre la ventana principal
                 MainWindow mainApp = new MainWindow();
                 mainApp.setVisible(true); 
 

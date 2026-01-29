@@ -1,6 +1,4 @@
-
 package view;
-
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainWindow extends JFrame {
+
     private JDesktopPane desktopPane;
 
     public MainWindow() {
@@ -21,7 +20,6 @@ public class MainWindow extends JFrame {
         desktopPane.setBackground(new Color(45, 52, 54)); // Un gris oscuro moderno
         add(desktopPane, BorderLayout.CENTER);
 
-      
         setJMenuBar(createMenuBar());
     }
 
@@ -37,7 +35,6 @@ public class MainWindow extends JFrame {
         JMenuItem itemVehicles = new JMenuItem("Gestión de Vehículos");
         JMenuItem itemLots = new JMenuItem("Configurar Parqueos");
 
-        
         itemCustomers.addActionListener(e -> {
             CustomerManagement win = new CustomerManagement();
             openInternalFrame(win);
@@ -53,7 +50,6 @@ public class MainWindow extends JFrame {
             openInternalFrame(win);
         });
 
-    
         menuUsers.add(itemCustomers);
         menuUsers.add(itemAdmins);
         menuUsers.add(itemClerks);
