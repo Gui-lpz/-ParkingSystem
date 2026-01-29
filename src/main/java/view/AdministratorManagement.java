@@ -3,7 +3,6 @@ package view;
 import controller.AdministratorController;
 import model.entities.Administrator;
 import java.awt.Color;
-import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -49,8 +48,9 @@ public class AdministratorManagement extends JInternalFrame {
                 if (confirm == 0) {
                     removeAdmin();
                     createTable();
-                    JOptionPane.showMessageDialog(null, "Eliminado con éxito");
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "Debe seleccionar un administrador de la tabla.");
             }
         });
 
@@ -74,8 +74,10 @@ public class AdministratorManagement extends JInternalFrame {
 
     public void removeAdmin() {
         int row = tableAdmins.getSelectedRow();
-        String id = tableAdmins.getValueAt(row, 0).toString();
-        adminController.deleteAdministrator(id);
+        // El error anterior era pasar el ID como String. Ahora pasamos el adminNumber como int.
+        int adminNum = Integer.parseInt(tableAdmins.getValueAt(row, 3).toString());
+        String result = adminController.deleteAdministrator(adminNum);
+        JOptionPane.showMessageDialog(null, result);
     }
 
     public void fillAdminFormToModify() {

@@ -11,7 +11,6 @@ public class AdministratorController implements UserOperations {
   
     private AdministratorData administratorData = new AdministratorData();
 
-
     @Override
     public User searchUser(String identification) {
         for (Administrator admin : administratorData.getAllAdministrators()) {
@@ -42,8 +41,8 @@ public class AdministratorController implements UserOperations {
         }
     }
 
-
     public String updateAdministrator(Administrator updatedAdmin) {
+     
         if (searchUser(updatedAdmin.getId()) != null) {
             administratorData.updateAdministrator(updatedAdmin);
             return "Administrador actualizado correctamente.";
@@ -52,21 +51,27 @@ public class AdministratorController implements UserOperations {
         }
     }
 
-
-    public String deleteAdministrator(String id) {
-        if (searchUser(id) != null) {
-            administratorData.deleteAdministrator(id);
-            return "Administrador eliminado con éxito.";
-        } else {
-            return "Error: El administrador no existe.";
+    public String deleteAdministrator(int adminNum) { 
+        boolean found = false;
+        for (Administrator admin : administratorData.getAllAdministrators()) {
+            if (admin.getAdminNumber() == adminNum) {
+                found = true;
+                break;
+            }
         }
+
+        if (found) {
+            administratorData.deleteAdministrator(String.valueOf(adminNum)); 
+            return "Administrador eliminado con éxito.";
+        }
+        return "Error: No se encontró el administrador con ese número.";
     }
 
+   
     public ArrayList<Administrator> getAllAdministrators() {
         return administratorData.getAllAdministrators();
     }
 
- 
     @Override
     public ArrayList<User> sortUsers(Customer[] allUsers) {
         throw new UnsupportedOperationException("Ordenamiento no implementado aún.");

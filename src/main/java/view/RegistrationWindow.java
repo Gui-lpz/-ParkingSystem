@@ -13,7 +13,6 @@ public class RegistrationWindow {
     static AdministratorController adminController = new AdministratorController();
     static ClerkController clerkController = new ClerkController();
 
-
     public static Customer insertCustomer() {
         String id = JOptionPane.showInputDialog("Ingrese el número de cédula del cliente");
         if (id == null) return null;
@@ -35,8 +34,8 @@ public class RegistrationWindow {
             report.append("  >> No hay clientes registrados en el sistema actual.\n");
         } else {
             for (Customer c : customers) {
-                report.append("🆔 Cédula:        ").append(c.getId()).append("\n");
-                report.append("👤 Nombre:        ").append(c.getName()).append("\n");
+                report.append("🆔 Cédula:         ").append(c.getId()).append("\n");
+                report.append("👤 Nombre:         ").append(c.getName()).append("\n");
                 String disabilityStatus = c.isDisabilityPresented() ? "SÍ presenta" : "NO presenta";
                 report.append("♿ Discapacidad: ").append(disabilityStatus).append("\n");
                 report.append("--------------------------------------------------\n");
@@ -62,7 +61,6 @@ public class RegistrationWindow {
         customerDelete.setId(id);
         JOptionPane.showMessageDialog(null, customerController.deleteCustomer(customerDelete));
     }
-
 
     public static void insertVehicle() {
         try {
@@ -124,8 +122,6 @@ public class RegistrationWindow {
         JOptionPane.showMessageDialog(null, vehicleController.deleteVehicle(plate));
     }
 
-
-
     public static void insertAdministrator() {
         try {
             String id = JOptionPane.showInputDialog("Cédula:");
@@ -151,8 +147,8 @@ public class RegistrationWindow {
         } else {
             for (Administrator a : admins) {
                 report.append("🆔 Admin ID:       ").append(a.getAdminNumber()).append("\n");
-                report.append("👤 Nombre:         ").append(a.getName()).append("\n");
-                report.append("🔑 Usuario:        ").append(a.getUsername()).append("\n");
+                report.append("👤 Nombre:          ").append(a.getName()).append("\n");
+                report.append("🔑 Usuario:         ").append(a.getUsername()).append("\n");
                 report.append("--------------------------------------------------\n");
             }
         }
@@ -244,7 +240,6 @@ public class RegistrationWindow {
         }
     }
 
-
     public static void insertParkingLot() {
         try {
             String name = JOptionPane.showInputDialog("Nombre del parqueo:");
@@ -293,7 +288,7 @@ public class RegistrationWindow {
         for (ParkingLot lot : allLots) {
             report.append("🏢 Parqueo: ").append(lot.getName()).append("\n");
             if (lot.getVehicles().isEmpty()) {
-                report.append("   (Vacío)\n");
+                report.append("    (Vacío)\n");
             } else {
                 for (Vehicle v : lot.getVehicles()) {
                     report.append("  > 🚗 Placa: ").append(v.getPlate()).append(" | Dueños: ");
@@ -312,16 +307,16 @@ public class RegistrationWindow {
         if (disabilityCount <= spaces.length) {
             for (int i = 0; i < disabilityCount; i++) {
                 Space space = new Space();
-                space.setId(i);
+                space.setId(i + 1); // ID de espacio correlativo
                 space.setDisabilityAdaptation(true);
-                space.setVehicleType(configureVehicleTypeOfSpaces(i, true));
+                space.setVehicleType(configureVehicleTypeOfSpaces(i + 1, true));
                 spaces[i] = space;
             }
             for (int i = disabilityCount; i < spaces.length; i++) {
                 Space space = new Space();
-                space.setId(i);
+                space.setId(i + 1);
                 space.setDisabilityAdaptation(false);
-                space.setVehicleType(configureVehicleTypeOfSpaces(i, false));
+                space.setVehicleType(configureVehicleTypeOfSpaces(i + 1, false));
                 spaces[i] = space;
             }
         } else {
@@ -372,8 +367,11 @@ public class RegistrationWindow {
 
         ParkingLot found = null;
         try {
-            int id = Integer.parseInt(JOptionPane.showInputDialog(info + "\nSeleccione ID:"));
-            found = parkingLotController.findParkingLotById(id);
+            String input = JOptionPane.showInputDialog(info + "\nSeleccione ID:");
+            if (input != null) {
+                int id = Integer.parseInt(input);
+                found = parkingLotController.findParkingLotById(id);
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Selección inválida.");
         }

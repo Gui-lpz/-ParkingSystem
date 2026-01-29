@@ -5,6 +5,7 @@ model\data\ClerkData.class
 model\entities\Space.class
 model\entities\User.class
 view\CustomerManagement$2.class
+view\MainWindow.class
 model\entities\Employee.class
 model\entities\Clerk.class
 model\entities\UserOperations.class
@@ -13,6 +14,7 @@ view\AdministratorManagement.class
 model\entities\VehicleType.class
 controller\ClerkController.class
 view\AdministratorWindow.class
+view\RegistrationWindow.class
 controller\AdministratorController.class
 controller\CustomerController.class
 view\ClerkWindow.class
@@ -23,6 +25,7 @@ view\CustomerWindow.class
 model\data\ParkingLotData.class
 model\entities\ParkingLot.class
 model\data\CustomerData.class
+view\LoginWindow.class
 model\entities\Vehicle.class
 view\CustomerManagement$1.class
 model\entities\Administrator.class

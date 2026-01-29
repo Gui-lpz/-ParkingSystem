@@ -1,12 +1,8 @@
-
 package view;
-
 
 import controller.AdministratorController;
 import model.entities.Administrator;
 import model.entities.User;
-import view.MainWindow; 
-import view.RegistrationWindow;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,7 +36,6 @@ public class LoginWindow extends JFrame implements ActionListener {
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
-  
         JLabel lblTitle = new JLabel("Welcome", SwingConstants.CENTER);
         lblTitle.setFont(new Font("Arial", Font.BOLD, 22));
         lblTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
@@ -63,7 +58,7 @@ public class LoginWindow extends JFrame implements ActionListener {
         formPanel.add(Box.createVerticalStrut(15));
         formPanel.add(passwordPanel);
 
- 
+        // Panel de botones
         JPanel buttonPanel = new JPanel();
         btnSignIn = new JButton("Sign In");
         btnRegister = new JButton("Register");
@@ -92,10 +87,12 @@ public class LoginWindow extends JFrame implements ActionListener {
                 return;
             }
 
+           
             User tempUser = new Administrator();
             tempUser.setUsername(username);
             tempUser.setPassword(password);
 
+            
             User loggedUser = administratorController.searchUser(tempUser);
 
             if (loggedUser != null) {
@@ -104,6 +101,7 @@ public class LoginWindow extends JFrame implements ActionListener {
 
                 this.dispose(); 
                 
+                // Abre la ventana principal
                 MainWindow mainApp = new MainWindow();
                 mainApp.setVisible(true); 
 
@@ -112,12 +110,9 @@ public class LoginWindow extends JFrame implements ActionListener {
             }
         }
 
-      
         if (e.getSource() == btnRegister) {
-          
             RegistrationWindow.insertAdministrator(); 
             
-           
             txtUsername.setText("");
             txtPassword.setText("");
         }

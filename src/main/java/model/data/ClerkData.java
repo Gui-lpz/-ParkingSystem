@@ -68,7 +68,7 @@ public class ClerkData {
         return clerks;
     }
 
-    public void updateClerk(Clerk updatedClerk) {
+   public void updateClerk(Clerk updatedClerk) {
         for (int i = 0; i < clerks.size(); i++) {
             if (clerks.get(i).getEmployeeCode() == updatedClerk.getEmployeeCode()) {
                 clerks.set(i, updatedClerk);

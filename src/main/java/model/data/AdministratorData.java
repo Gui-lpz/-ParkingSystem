@@ -21,6 +21,7 @@ public class AdministratorData {
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
+            administrators.clear(); // Limpiar lista antes de cargar
             while ((line = br.readLine()) != null) {
                 StringTokenizer st = new StringTokenizer(line, ";");
                 if (st.countTokens() >= 5) {
@@ -69,7 +70,7 @@ public class AdministratorData {
 
     public void updateAdministrator(Administrator updatedAdmin) {
         for (int i = 0; i < administrators.size(); i++) {
-            if (administrators.get(i).getId().equals(updatedAdmin.getId())) {
+            if (administrators.get(i).getAdminNumber() == updatedAdmin.getAdminNumber()) {
                 administrators.set(i, updatedAdmin);
                 saveToFile();
                 return;
@@ -77,8 +78,10 @@ public class AdministratorData {
         }
     }
 
-    public void deleteAdministrator(String id) {
-        administrators.removeIf(a -> a.getId().equals(id));
+    public void deleteAdministrator(String identifier) {
+        
+        administrators.removeIf(a -> a.getId().equals(identifier) || 
+                                     String.valueOf(a.getAdminNumber()).equals(identifier));
         saveToFile();
     }
 }

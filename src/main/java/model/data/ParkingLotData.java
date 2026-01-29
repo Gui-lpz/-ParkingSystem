@@ -91,5 +91,9 @@ public class ParkingLotData {
         return parkingLots;
 
     }
+    
+    public void deleteParkingLot(int id) {
+        parkingLots.removeIf(p -> p.getId() == id);
+    }
 
 }

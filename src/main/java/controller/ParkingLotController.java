@@ -38,4 +38,22 @@ public class ParkingLotController {
     public ArrayList<ParkingLot> getAllParkingLots() {
         return parkingLotData.getAllParkingLots();
     }
+
+    public String deleteParkingLot(int id) {
+        if (parkingLotData.findParkingLotById(id) != null) {
+            parkingLotData.deleteParkingLot(id); // Asegúrate que ParkingLotData tenga este método
+            return "Parqueo eliminado exitosamente.";
+        }
+        return "Error: El parqueo no existe.";
+    }
+
+    public String updateParkingLotName(int id, String newName) {
+        ParkingLot pl = parkingLotData.findParkingLotById(id);
+        if (pl != null) {
+            pl.setName(newName);
+            // Suponiendo que tienes un método de actualización en Data
+            return "Nombre del parqueo actualizado.";
+        }
+        return "Error: Parqueo no encontrado.";
+    }
 }
