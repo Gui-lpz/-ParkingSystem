@@ -1,10 +1,6 @@
 package model.entities;
 import java.util.ArrayList;
 
-/**
- *
- * @author Lab07 Guiselle López 
- */
 public interface UserOperations {
 
     public User searchUser(String identification);

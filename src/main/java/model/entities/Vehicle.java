@@ -4,7 +4,6 @@ package model.entities;
 import java.util.ArrayList;
 
 public class Vehicle {
-    // CAMBIO: Ahora es una lista de clientes
     private ArrayList<Customer> customers;
     private String plate;
     private String color;
@@ -29,7 +28,6 @@ public class Vehicle {
         return assignedSpace;
     }
 
-    // Método para obtener el primer cliente (para compatibilidad con tu lógica de discapacidad)
     public Customer getPrimaryCustomer() {
         return (customers != null && !customers.isEmpty()) ? customers.get(0) : null;
     }

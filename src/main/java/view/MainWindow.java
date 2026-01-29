@@ -1,27 +1,22 @@
-
 package view;
-
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class MainWindow extends JFrame {
+
     private JDesktopPane desktopPane;
 
     public MainWindow() {
-        // Configuración básica de la ventana principal
         setTitle("SISTEMA DE GESTIÓN DE PARQUEO - Panel Principal");
         setSize(1100, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
         desktopPane = new JDesktopPane();
-        desktopPane.setBackground(new Color(45, 52, 54)); // Un gris oscuro moderno
+        desktopPane.setBackground(new Color(45, 52, 54)); 
         add(desktopPane, BorderLayout.CENTER);
 
-      
         setJMenuBar(createMenuBar());
     }
 
@@ -33,33 +28,34 @@ public class MainWindow extends JFrame {
         JMenuItem itemAdmins = new JMenuItem("Gestión de Administradores");
         JMenuItem itemClerks = new JMenuItem("Gestión de Dependientes");
 
-        JMenu menuParking = new JMenu("Operaciones Parqueo");
-        JMenuItem itemVehicles = new JMenuItem("Gestión de Vehículos");
-        JMenuItem itemLots = new JMenuItem("Configurar Parqueos");
-
-        
         itemCustomers.addActionListener(e -> {
-            CustomerManagement win = new CustomerManagement();
-            openInternalFrame(win);
+            RegistrationWindow.showAllCustomers();
         });
 
         itemAdmins.addActionListener(e -> {
-            AdministratorManagement win = new AdministratorManagement();
-            openInternalFrame(win);
+            RegistrationWindow.showAllAdministrators();
         });
 
         itemClerks.addActionListener(e -> {
-            ClerkManagement win = new ClerkManagement();
-            openInternalFrame(win);
+            RegistrationWindow.showAllClerks();
         });
 
-    
         menuUsers.add(itemCustomers);
         menuUsers.add(itemAdmins);
         menuUsers.add(itemClerks);
 
+        JMenu menuParking = new JMenu("Operaciones Parqueo");
+        JMenuItem itemVehicles = new JMenuItem("Gestión de Vehículos");
+        JMenuItem itemLots = new JMenuItem("Configurar Parqueos");
+        JMenuItem itemOcupacion = new JMenuItem("Ver Ocupación");
+
+        itemVehicles.addActionListener(e -> RegistrationWindow.insertVehicle());
+        itemLots.addActionListener(e -> RegistrationWindow.insertParkingLot());
+        itemOcupacion.addActionListener(e -> RegistrationWindow.showCustomersInParkingLot());
+
         menuParking.add(itemVehicles);
         menuParking.add(itemLots);
+        menuParking.add(itemOcupacion);
 
         menuBar.add(menuUsers);
         menuBar.add(menuParking);
@@ -67,10 +63,11 @@ public class MainWindow extends JFrame {
         return menuBar;
     }
 
-    private void openInternalFrame(JInternalFrame frame) {
+    public void openInternalFrame(JInternalFrame frame) {
         desktopPane.add(frame);
         try {
             frame.setSelected(true);
+            frame.setVisible(true);
         } catch (java.beans.PropertyVetoException e) {
             e.printStackTrace();
         }
