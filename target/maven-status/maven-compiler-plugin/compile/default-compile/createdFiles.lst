@@ -12,9 +12,11 @@ model\entities\UserOperations.class
 controller\VehicleController.class
 view\AdministratorManagement.class
 model\entities\VehicleType.class
+view\ParkingLotWindow.class
 controller\ClerkController.class
 view\AdministratorWindow.class
 view\RegistrationWindow.class
+view\ParkingLotManagement.class
 controller\AdministratorController.class
 controller\CustomerController.class
 view\ClerkWindow.class

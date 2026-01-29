@@ -7,9 +7,6 @@ import model.entities.Customer;
 import model.entities.User;
 import model.entities.UserOperations;
 
-/**
- * @author Lab07 Guiselle López 
- */
 public class ClerkController implements UserOperations {
     
     private ClerkData clerkData = new ClerkData();

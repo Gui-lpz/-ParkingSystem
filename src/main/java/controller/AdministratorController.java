@@ -23,7 +23,6 @@ public class AdministratorController implements UserOperations {
 
     @Override
     public User searchUser(User user) {
-        // Validamos que el objeto no sea nulo
         if (user == null || user.getUsername() == null || user.getPassword() == null) {
             return null;
         }

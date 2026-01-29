@@ -24,7 +24,6 @@ public class ClerkData {
             while ((line = br.readLine()) != null) {
                 StringTokenizer st = new StringTokenizer(line, ";");
                 if (st.countTokens() >= 8) {
-                    // Orden en el txt: code;schedule;age;id;name;username;password;parkingLotId
                     int code = Integer.parseInt(st.nextToken());
                     String schedule = st.nextToken();
                     int age = Integer.parseInt(st.nextToken());

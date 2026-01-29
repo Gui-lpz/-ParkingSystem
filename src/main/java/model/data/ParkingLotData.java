@@ -1,99 +1,126 @@
 package model.data;
 
+import java.io.*;
 import java.util.ArrayList;
-import model.entities.Customer;
+import java.util.StringTokenizer;
 import model.entities.ParkingLot;
 import model.entities.Space;
 import model.entities.Vehicle;
+import model.entities.Customer;
 
 public class ParkingLotData {
 
-    public ArrayList<ParkingLot> parkingLots;
-    static int parkingLotId = 0;
+    private final String fileName = "parking_lots.txt";
+    private ArrayList<ParkingLot> parkingLots;
+    private static int lastId = 0;
 
     public ParkingLotData() {
-        parkingLots = new ArrayList<>();
+        this.parkingLots = new ArrayList<>();
+        loadFromFile();
     }
 
-    public ParkingLot registerParkingLot(String name, Space spaces[]) {
+    private void loadFromFile() {
+        File file = new File(fileName);
+        if (!file.exists()) return;
 
-        ParkingLot parkingLot = new ParkingLot();
-        parkingLotId++;
-        parkingLot.setId(parkingLotId);
-        parkingLot.setName(name);
-        parkingLot.setSpaces(spaces);
-        parkingLots.add(parkingLot);
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                StringTokenizer st = new StringTokenizer(line, ";");
+                if (st.countTokens() >= 3) {
+                    int id = Integer.parseInt(st.nextToken());
+                    String name = st.nextToken();
+                    int numSpaces = Integer.parseInt(st.nextToken());
 
-        return parkingLot;
+                    ParkingLot pl = new ParkingLot();
+                    pl.setId(id);
+                    pl.setName(name);
+                    pl.setNumberOfSpaces(numSpaces);
+                    pl.setVehicles(new ArrayList<>());
+                    pl.setSpaces(new Space[numSpaces]); 
 
+                    parkingLots.add(pl);
+                    if (id > lastId) lastId = id;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error al leer archivo: " + e.getMessage());
+        }
+    }
+
+    private void saveToFile() {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(fileName))) {
+            for (ParkingLot pl : parkingLots) {
+                pw.println(pl.getId() + ";" + pl.getName() + ";" + pl.getNumberOfSpaces());
+            }
+        } catch (IOException e) {
+            System.err.println("Error al escribir archivo: " + e.getMessage());
+        }
+    }
+
+    public ParkingLot registerParkingLot(String name, Space[] spaces) {
+        lastId++;
+        ParkingLot pl = new ParkingLot();
+        pl.setId(lastId);
+        pl.setName(name);
+        pl.setSpaces(spaces);
+        pl.setNumberOfSpaces(spaces.length);
+        pl.setVehicles(new ArrayList<>());
+
+        parkingLots.add(pl);
+        saveToFile();
+        return pl;
     }
 
     public int registerVehicleInParkingLot(Vehicle vehicle, ParkingLot parkingLot) {
-        ArrayList<Vehicle> vehiclesInParkingLot = parkingLot.getVehicles();
         Space[] spaces = parkingLot.getSpaces();
-        int spaceId = 0;
-
-        boolean needsDisabilitySpace = false;
+        boolean needsDisability = false;
+        
         for (Customer c : vehicle.getCustomers()) {
             if (c.isDisabilityPresented()) {
-                needsDisabilitySpace = true;
+                needsDisability = true;
                 break;
             }
         }
 
-      
         for (Space space : spaces) {
-            if (!space.isSpaceTaken()) {
-                if (space.isDisabilityAdaptation() == needsDisabilitySpace) {
+            if (space != null && !space.isSpaceTaken()) {
+                if (space.isDisabilityAdaptation() == needsDisability) {
                     if (space.getVehicleType().getId() == vehicle.getVehicleType().getId()) {
-                        space.setSpaceTaken(true);          // El espacio queda ocupado
-                        vehicle.setAssignedSpace(space);    // guarda el espacio
-
-                        vehiclesInParkingLot.add(vehicle);
+                        space.setSpaceTaken(true);
+                        vehicle.setAssignedSpace(space);
+                        parkingLot.getVehicles().add(vehicle);
+                        saveToFile(); 
                         return space.getId();
                     }
                 }
             }
         }
-
-        parkingLot.setSpaces(spaces);
-        parkingLot.setVehicles(vehiclesInParkingLot);
-
-        return spaceId; // Retorna 0 si no encontró espacio disponible
+        return 0;
     }
+
     public void removeVehicleFromParkingLot(Vehicle vehicle, ParkingLot parkingLot) {
         if (vehicle.getAssignedSpace() != null) {
             vehicle.getAssignedSpace().setSpaceTaken(false);
-
             parkingLot.getVehicles().remove(vehicle);
-
             vehicle.setAssignedSpace(null);
+            saveToFile();
         }
     }
 
     public ParkingLot findParkingLotById(int id) {
-
-        ParkingLot parkingLotToBeReturned = null;
-
-        for (ParkingLot parkingLot : parkingLots) {
-
-            if (parkingLot.getId() == id) {
-
-                parkingLotToBeReturned = parkingLot;
-                break;
-            }
+        for (ParkingLot pl : parkingLots) {
+            if (pl.getId() == id) return pl;
         }
-        return parkingLotToBeReturned;
+        return null;
     }
 
     public ArrayList<ParkingLot> getAllParkingLots() {
-
         return parkingLots;
-
     }
-    
+
     public void deleteParkingLot(int id) {
         parkingLots.removeIf(p -> p.getId() == id);
+        saveToFile();
     }
-
 }
