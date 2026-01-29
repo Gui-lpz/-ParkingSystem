@@ -1,12 +1,10 @@
 package controller;
 
 import java.util.ArrayList;
-import model.entities.Customer;
 import model.entities.Vehicle;
 import model.data.VehicleData;
 
 public class VehicleController {
-
     private VehicleData vehicleData = new VehicleData();
 
     public void insertVehicle(Vehicle vehicle) {
@@ -17,23 +15,23 @@ public class VehicleController {
         return vehicleData.getAllVehicles();
     }
 
+    public Vehicle findVehicleByPlate(String plate) {
+        return vehicleData.findVehicleByPlate(plate);
+    }
+
     public String deleteVehicle(String plate) {
-        if (vehicleData.findVehicleByPlate(plate) != null) {
+        if (findVehicleByPlate(plate) != null) {
             vehicleData.deleteVehicle(plate);
-            return "Vehiculo eliminado exitosamente";
-
-        } else {
-            return "El vehiculo marcado no existe";
+            return "Vehículo eliminado exitosamente.";
         }
-
+        return "El vehículo marcado no existe.";
     }
 
     public String updateVehicle(String plate, Vehicle vehicle) {
-        if (vehicleData.findVehicleByPlate(plate) != null) {
+        if (findVehicleByPlate(plate) != null) {
             vehicleData.updateVehicle(vehicle);
             return "Vehículo actualizado con éxito.";
-        } else {
-            return "Error: El vehículo no existe, no se puede actualizar."; // Corregido el mensaje
         }
+        return "Error: El vehículo no existe.";
     }
 }

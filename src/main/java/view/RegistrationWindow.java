@@ -13,6 +13,21 @@ public class RegistrationWindow {
     static AdministratorController adminController = new AdministratorController();
     static ClerkController clerkController = new ClerkController();
 
+    public static void searchCustomerByName() {
+        String query = JOptionPane.showInputDialog("Ingrese el nombre o cédula del cliente a buscar:");
+        if (query != null) {
+            Customer found = customerController.searchCustomer(query);
+            if (found != null) {
+                String info = "🆔 Cédula: " + found.getId() + "\n" +
+                             "👤 Nombre: " + found.getName() + "\n" +
+                             "♿ Discapacidad: " + (found.isDisabilityPresented() ? "SÍ" : "NO");
+                JOptionPane.showMessageDialog(null, info, "Cliente Encontrado", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontró ningún cliente con ese criterio.");
+            }
+        }
+    }
+
     public static Customer insertCustomer() {
         String id = JOptionPane.showInputDialog("Ingrese el número de cédula del cliente");
         if (id == null) return null;
@@ -307,7 +322,7 @@ public class RegistrationWindow {
         if (disabilityCount <= spaces.length) {
             for (int i = 0; i < disabilityCount; i++) {
                 Space space = new Space();
-                space.setId(i + 1); // ID de espacio correlativo
+                space.setId(i + 1); 
                 space.setDisabilityAdaptation(true);
                 space.setVehicleType(configureVehicleTypeOfSpaces(i + 1, true));
                 spaces[i] = space;

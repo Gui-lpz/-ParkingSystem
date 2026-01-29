@@ -1,7 +1,9 @@
 package view;
 
 import controller.AdministratorController;
+import controller.ClerkController;
 import model.entities.Administrator;
+import model.entities.Clerk;
 import model.entities.User;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,9 +17,11 @@ public class LoginWindow extends JFrame implements ActionListener {
     private JButton btnSignIn;
     private JButton btnRegister;
     private AdministratorController administratorController;
+    private ClerkController clerkController;
 
     public LoginWindow() {
         administratorController = new AdministratorController();
+        clerkController = new ClerkController();
 
         setTitle("Acceso al Sistema");
         setSize(380, 260);
@@ -40,7 +44,6 @@ public class LoginWindow extends JFrame implements ActionListener {
         lblTitle.setFont(new Font("Arial", Font.BOLD, 22));
         lblTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
 
-        // Formulario
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
 
@@ -58,7 +61,6 @@ public class LoginWindow extends JFrame implements ActionListener {
         formPanel.add(Box.createVerticalStrut(15));
         formPanel.add(passwordPanel);
 
-        // Panel de botones
         JPanel buttonPanel = new JPanel();
         btnSignIn = new JButton("Sign In");
         btnRegister = new JButton("Register");
@@ -87,23 +89,21 @@ public class LoginWindow extends JFrame implements ActionListener {
                 return;
             }
 
-           
-            User tempUser = new Administrator();
+            User tempUser = new Administrator(); 
             tempUser.setUsername(username);
             tempUser.setPassword(password);
 
-            
             User loggedUser = administratorController.searchUser(tempUser);
+            
+            if (loggedUser == null) {
+                loggedUser = clerkController.searchUser(tempUser);
+            }
 
             if (loggedUser != null) {
-                Administrator admin = (Administrator) loggedUser;
-                JOptionPane.showMessageDialog(this, "Bienvenido " + admin.getName(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
+                JOptionPane.showMessageDialog(this, "Bienvenido " + loggedUser.getName(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 this.dispose(); 
-                
                 MainWindow mainApp = new MainWindow();
                 mainApp.setVisible(true); 
-
             } else {
                 JOptionPane.showMessageDialog(this, "Usuario o contraseña inválidos", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -111,7 +111,6 @@ public class LoginWindow extends JFrame implements ActionListener {
 
         if (e.getSource() == btnRegister) {
             RegistrationWindow.insertAdministrator(); 
-            
             txtUsername.setText("");
             txtPassword.setText("");
         }
