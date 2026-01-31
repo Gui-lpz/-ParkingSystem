@@ -7,7 +7,13 @@ public class Administrator extends User implements Employee {
 
     public Administrator() {
     }
-    ////para pruebas archivo txt
+    
+    public Administrator(String id, String name, String username, String password, int adminNumber) {
+    super(id, name, username, password);
+    this.adminNumber = adminNumber;
+    this.parkingLot = null;
+}
+    
     public Administrator(int adminNumber, ParkingLot parkingLot, String id, String name, String username, String password) {
     super(id, name, username, password);
     this.adminNumber = adminNumber;

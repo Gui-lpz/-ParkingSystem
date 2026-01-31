@@ -9,7 +9,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class AdministratorManagement extends JInternalFrame {
 
-    JButton buttonDelete, buttonEdit, buttonAdd; // Añadido buttonAdd
+    JButton buttonDelete, buttonEdit, buttonAdd;
     JPanel panelAdmins;
     JTable tableAdmins;
     DefaultTableModel modelDataTable;
@@ -38,13 +38,15 @@ public class AdministratorManagement extends JInternalFrame {
         panelAdmins.add(scrollBar);
 
         createTable();
-        
+
+        // AGREGAR
         buttonAdd = new JButton("Agregar");
         buttonAdd.setBounds(80, 375, 100, 25);
         panelAdmins.add(buttonAdd);
         buttonAdd.addActionListener(e -> {
             JDesktopPane desktopPane = this.getDesktopPane();
             this.dispose();
+
             adminWindow.setTitle("Insertar Administrador");
             adminWindow.txtId.setEditable(true);
             adminWindow.txtId.setText("");
@@ -53,39 +55,36 @@ public class AdministratorManagement extends JInternalFrame {
             adminWindow.txtPass.setText("");
             adminWindow.txtAdminNum.setText("");
             adminWindow.btnSave.setText("Insertar");
+
             adminWindow.setVisible(true);
             desktopPane.add(adminWindow);
         });
 
-        // BOTÓN BORRAR
+        // BORRAR
         buttonDelete = new JButton("Borrar");
         buttonDelete.setBounds(270, 375, 100, 25);
         panelAdmins.add(buttonDelete);
         buttonDelete.addActionListener(e -> {
-            int selectedRow = tableAdmins.getSelectedRow();
-            if (selectedRow == -1) {
-                JOptionPane.showMessageDialog(null, "Seleccione un administrador de la tabla");
+            int row = tableAdmins.getSelectedRow();
+            if (row == -1) {
+                JOptionPane.showMessageDialog(null, "Seleccione un administrador");
                 return;
             }
 
-            int confirm = JOptionPane.showConfirmDialog(null, "¿Está seguro de borrar este administrador?", "Confirmar", JOptionPane.YES_NO_OPTION);
-            if (confirm == 0) {
-                removeAdmin();
+            int op = JOptionPane.showConfirmDialog(null, "¿Desea borrar este administrador?", "Confirmar", JOptionPane.YES_NO_OPTION);
+
+            if (op == 0) {
+                int adminNum = Integer.parseInt(tableAdmins.getValueAt(row, 3).toString());
+                adminController.deleteAdministrator(adminNum);
                 createTable();
             }
         });
 
-        // BOTÓN EDITAR
+        // EDITAR
         buttonEdit = new JButton("Editar");
         buttonEdit.setBounds(460, 375, 100, 25);
         panelAdmins.add(buttonEdit);
-        buttonEdit.addActionListener(e -> {
-            if (tableAdmins.getSelectedRow() != -1) {
-                fillAdminFormToModify();
-            } else {
-                JOptionPane.showMessageDialog(null, "Seleccione un administrador para editar");
-            }
-        });
+        buttonEdit.addActionListener(e -> fillAdminFormToModify());
 
         this.setVisible(true);
     }
@@ -93,6 +92,7 @@ public class AdministratorManagement extends JInternalFrame {
     public void createTable() {
         ArrayList<Administrator> list = adminController.getAllAdministrators();
         modelDataTable = new DefaultTableModel(headings, 0);
+
         for (Administrator a : list) {
             Object[] row = {a.getId(), a.getName(), a.getUsername(), a.getAdminNumber()};
             modelDataTable.addRow(row);
@@ -100,33 +100,26 @@ public class AdministratorManagement extends JInternalFrame {
         tableAdmins.setModel(modelDataTable);
     }
 
-    public void removeAdmin() {
-        int row = tableAdmins.getSelectedRow();
-        int adminNum = Integer.parseInt(tableAdmins.getValueAt(row, 3).toString());
-        String result = adminController.deleteAdministrator(adminNum);
-        JOptionPane.showMessageDialog(null, result);
-    }
+    private void fillAdminFormToModify() {
 
-    public void fillAdminFormToModify() {
+        int row = tableAdmins.getSelectedRow();
+        if (row == -1) return;
+
         JDesktopPane desktopPane = this.getDesktopPane();
-        int row = tableAdmins.getSelectedRow();
-        
-        String id = tableAdmins.getValueAt(row, 0).toString();
-        String name = tableAdmins.getValueAt(row, 1).toString();
-        String user = tableAdmins.getValueAt(row, 2).toString();
-        String adminNum = tableAdmins.getValueAt(row, 3).toString();
-
         this.dispose();
 
         adminWindow.setTitle("Modificar Administrador");
-        adminWindow.txtId.setText(id);
-        adminWindow.txtId.setEditable(false); 
-        adminWindow.txtName.setText(name);
-        adminWindow.txtUser.setText(user);
-        adminWindow.txtAdminNum.setText(adminNum);
+
+        adminWindow.txtId.setText(tableAdmins.getValueAt(row, 0).toString());
+        adminWindow.txtId.setEditable(false);
+
+        adminWindow.txtName.setText(tableAdmins.getValueAt(row, 1).toString());
+        adminWindow.txtUser.setText(tableAdmins.getValueAt(row, 2).toString());
+        adminWindow.txtAdminNum.setText(tableAdmins.getValueAt(row, 3).toString());
         adminWindow.txtAdminNum.setEditable(false);
+
         adminWindow.btnSave.setText("Modificar");
-        
+
         adminWindow.setVisible(true);
         desktopPane.add(adminWindow);
     }

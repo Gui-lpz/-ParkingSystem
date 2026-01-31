@@ -68,43 +68,36 @@ public class AdministratorWindow extends JInternalFrame implements ActionListene
 
         btnCancel = new JButton("Cancelar");
         btnCancel.setBounds(220, 320, 100, 30);
-        btnCancel.addActionListener(e -> {
-            int op = JOptionPane.showConfirmDialog(this, "¿Desea salir sin guardar?", "Confirmar", JOptionPane.YES_NO_OPTION);
-            if(op == 0) dispose();
-        });
+        btnCancel.addActionListener(e -> dispose());
         panel.add(btnCancel);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btnSave) {
-            try {
-                int adminNum = Integer.parseInt(txtAdminNum.getText());
-                String pass = new String(txtPass.getPassword());
 
-                Administrator admin = new Administrator(adminNum, null, txtId.getText(), txtName.getText(), txtUser.getText(), pass);
-                
-                String resp;
-                if (btnSave.getText().equalsIgnoreCase("Modificar")) {
-                    resp = adminController.updateAdministrator(admin);
-                } else {
-                    resp = adminController.insertAdministrator(admin);
-                }
+        String id = txtId.getText();
+        String name = txtName.getText();
+        String user = txtUser.getText();
+        String password = new String(txtPass.getPassword());
+        int adminNum = Integer.parseInt(txtAdminNum.getText());
 
-                JOptionPane.showMessageDialog(this, resp);
+        Administrator admin = new Administrator(id, name, user, password, adminNum);
 
-                if (resp.toLowerCase().contains("éxito")) {
-                    // Regresar a la tabla de gestión
-                    JDesktopPane desktop = this.getDesktopPane();
-                    this.dispose();
-                    AdministratorManagement m = new AdministratorManagement();
-                    desktop.add(m);
-                }
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "El Número de Admin debe ser numérico.");
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error al procesar: " + ex.getMessage());
-            }
+        String resp;
+
+        if (btnSave.getText().equalsIgnoreCase("Modificar")) {
+            resp = adminController.updateAdministrator(admin);
+        } else {
+            resp = adminController.insertAdministrator(admin);
+        }
+
+        JOptionPane.showMessageDialog(this, resp);
+
+        if (resp.toLowerCase().contains("éxito")) {
+            JDesktopPane desktop = this.getDesktopPane();
+            this.dispose();
+            AdministratorManagement m = new AdministratorManagement();
+            desktop.add(m);
         }
     }
 }

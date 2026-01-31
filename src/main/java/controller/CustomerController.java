@@ -3,6 +3,7 @@ package controller;
 import java.util.ArrayList;
 import model.entities.Customer;
 import model.data.CustomerData;
+import model.entities.Clerk;
 
 public class CustomerController {
     private CustomerData customerData = new CustomerData();
@@ -43,4 +44,7 @@ public class CustomerController {
     public ArrayList<Customer> getAllCustomers() {
         return customerData.getAllCustomers();
     }
+    
+ 
+
 }
