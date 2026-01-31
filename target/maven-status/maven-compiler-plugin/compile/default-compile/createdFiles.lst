@@ -17,7 +17,6 @@ view\AdministratorWindow.class
 view\RegistrationWindow.class
 view\ParkingLotManagement.class
 view\VehicleManagement.class
-view\VehicleWindow$1.class
 controller\AdministratorController.class
 controller\CustomerController.class
 view\ClerkWindow.class

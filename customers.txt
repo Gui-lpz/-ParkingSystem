@@ -9,3 +9,6 @@ Mario;Mario;false
 66266300;Saga Linna;false
 777888;Luis López Villegas;false
 444000;Robnel ;true
+666666;Veronica;false
+4440011;Guiselle;false
+555198;Jonna Lina;false

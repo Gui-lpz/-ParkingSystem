@@ -159,8 +159,22 @@ public class ParkingLotData {
         return parkingLots;
     }
 
+    public String updateParkingLot(int id, String name, Space[] spaces) {
+        for (ParkingLot pl : parkingLots) {
+            if (pl.getId() == id) {
+                pl.setName(name);
+                pl.setSpaces(spaces);
+                pl.setNumberOfSpaces(spaces.length);
+                saveToFile();
+                return "Parqueo actualizado correctamente en el archivo.";
+            }
+        }
+        return "Error: Parqueo no encontrado.";
+    }
+
     public void deleteParkingLot(int id) {
         parkingLots.removeIf(p -> p.getId() == id);
         saveToFile();
     }
+
 }

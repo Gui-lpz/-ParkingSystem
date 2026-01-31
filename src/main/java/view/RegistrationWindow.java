@@ -27,12 +27,12 @@ public class RegistrationWindow {
     public static void exitVehicle() {
         String plate = JOptionPane.showInputDialog("Ingrese la placa del vehículo que sale:");
         if (plate == null) return;
-       
         JOptionPane.showMessageDialog(null, "Procesando salida para: " + plate);
     }
+
     public static void showAllAdministrators() {
         ArrayList<Administrator> admins = adminController.getAllAdministrators();
-        StringBuilder sb = new StringBuilder("LISTA DE ADMINISTRADORES\n");
+        StringBuilder sb = new StringBuilder(" ADMINISTRADORES\n");
         for(Administrator a : admins) {
             sb.append(a.getName()).append(" (").append(a.getUsername()).append(")\n");
         }
@@ -113,9 +113,14 @@ public class RegistrationWindow {
                 owners.add(insertCustomer());
             }
 
-            VehicleType type = configureVehicleTypeOfSpacesforVehicles(0, owners.get(0).isDisabilityPresented());
+            String[] options = {"1) Moto", "2) Liviano", "3) Pesado", "4) Bicicleta", "5) Otro"};
+            String op = JOptionPane.showInputDialog(String.join("\n", options));
+
+            VehicleType type = new VehicleType();
+            type.setId(Integer.parseInt(op));
+
             Vehicle vehicle = new Vehicle(plate, color, brand, model, owners, type);
-            
+
             ParkingLot lot = selectParkingLot();
             if (lot != null) {
                 int space = parkingLotController.registerVehicleInParkingLot(vehicle, lot);
@@ -126,21 +131,19 @@ public class RegistrationWindow {
                     JOptionPane.showMessageDialog(null, "No hay espacios disponibles para este tipo/condición.");
                 }
             }
-        } catch (Exception e) { JOptionPane.showMessageDialog(null, "Error en datos."); }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error en datos.");
+        }
     }
 
     public static void showAllVehicles() {
         ArrayList<Vehicle> vehicles = vehicleController.getAllVehicles();
-        StringBuilder report = new StringBuilder("    VEHÍCULOS REGISTRADOS\n\n");
-        if (vehicles.isEmpty()) {
-            report.append("No hay vehículos.\n");
-        } else {
-            for (Vehicle v : vehicles) {
-                report.append("🚗 Placa: ").append(v.getPlate()).append("\n");
-                report.append("🔖 Marca: ").append(v.getBrand()).append(" | ").append(v.getModel()).append("\n");
-                report.append("🎨 Color: ").append(v.getColor()).append("\n");
-                report.append("--------------------------------------------------\n");
-            }
+        StringBuilder report = new StringBuilder("    VEHÍCULOS  \n\n");
+        for (Vehicle v : vehicles) {
+            report.append("🚗 Placa: ").append(v.getPlate()).append("\n");
+            report.append("🔖 Marca: ").append(v.getBrand()).append(" | ").append(v.getModel()).append("\n");
+            report.append("🎨 Color: ").append(v.getColor()).append("\n");
+            report.append("--------------------------------------------------\n");
         }
         JOptionPane.showMessageDialog(null, report.toString());
     }
@@ -148,13 +151,9 @@ public class RegistrationWindow {
     public static void showAllParkingLots() {
         ArrayList<ParkingLot> lots = parkingLotController.getAllParkingLots();
         StringBuilder report = new StringBuilder("    PARQUEOS     \n\n");
-        if (lots.isEmpty()) {
-            report.append("No hay parqueos registrados.");
-        } else {
-            for (ParkingLot p : lots) {
-                report.append("🆔 ID: ").append(p.getId()).append(" | 🏢: ").append(p.getName())
-                      .append(" | 🚗 Capacidad: ").append(p.getNumberOfSpaces()).append("\n");
-            }
+        for (ParkingLot p : lots) {
+            report.append("🆔 ID: ").append(p.getId()).append(" | 🏢: ").append(p.getName())
+                  .append(" | 🚗 Capacidad: ").append(p.getNumberOfSpaces()).append("\n");
         }
         JOptionPane.showMessageDialog(null, report.toString());
     }
@@ -165,59 +164,24 @@ public class RegistrationWindow {
 
         for (ParkingLot lot : allLots) {
             report.append("🏢 Parqueo: ").append(lot.getName()).append("\n");
-            if (lot.getVehicles() == null || lot.getVehicles().isEmpty()) {
-                report.append("    (Vacío)\n");
-            } else {
-                for (Vehicle v : lot.getVehicles()) {
-                    report.append("  > 🚗 Placa: ").append(v.getPlate()).append(" | Dueños: ");
-                    for (Customer c : v.getCustomers()) {
-                        report.append(c.getName()).append(", ");
-                    }
-                    report.append("\n");
-                }
+            for (Vehicle v : lot.getVehicles()) {
+                report.append("  > 🚗 Placa: ").append(v.getPlate()).append("\n");
             }
             report.append("--------------------------------------------------\n");
         }
         JOptionPane.showMessageDialog(null, report.toString());
     }
 
-    private static Space[] configureSpaces(Space[] spaces, int disabilityCount) {
-        for (int i = 0; i < spaces.length; i++) {
-            Space space = new Space();
-            space.setId(i + 1);
-            boolean isDis = (i < disabilityCount);
-            space.setDisabilityAdaptation(isDis);
-            space.setVehicleType(configureVehicleTypeOfSpaces(i + 1, isDis));
-            spaces[i] = space;
-        }
-        return spaces;
-    }
-
-    private static VehicleType configureVehicleTypeOfSpaces(int pos, boolean dis) {
-        String[] types = {"Tipos", "1)moto", "2)liviano", "3)pesado", "4)bicicleta", "5)otro"};
-        String choice = JOptionPane.showInputDialog(String.join("\n", types) + "\nTipo para espacio #" + pos + (dis?" [DISC]":""));
-        float fee = Float.parseFloat(JOptionPane.showInputDialog("Tarifa por hora:"));
-        
-        VehicleType vt = new VehicleType();
-        int idx = Integer.parseInt(choice);
-        vt.setId(idx);
-        vt.setType(types[idx].split("\\)")[1]);
-        vt.setFee(fee);
-        return vt;
-    }
-
-    private static VehicleType configureVehicleTypeOfSpacesforVehicles(int pos, boolean dis) {
-        VehicleType vt = configureVehicleTypeOfSpaces(pos, dis);
-        vt.setDescription(JOptionPane.showInputDialog("Detalles adicionales del vehículo:"));
-        return vt;
-    }
-
     private static ParkingLot selectParkingLot() {
         ArrayList<ParkingLot> list = parkingLotController.getAllParkingLots();
         if (list.isEmpty()) return null;
         StringBuilder info = new StringBuilder("Seleccione Parqueo:\n");
-        for (ParkingLot pl : list) info.append(pl.getId()).append(" - ").append(pl.getName()).append("\n");
+        for (ParkingLot pl : list)
+            info.append(pl.getId()).append(" - ").append(pl.getName()).append("\n");
+
         String input = JOptionPane.showInputDialog(info.toString());
-        return (input != null) ? parkingLotController.findParkingLotById(Integer.parseInt(input)) : null;
+        return (input != null)
+                ? parkingLotController.findParkingLotById(Integer.parseInt(input))
+                : null;
     }
 }

@@ -3,7 +3,6 @@ package view;
 import controller.VehicleController;
 import model.entities.Vehicle;
 import java.awt.Color;
-import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -14,26 +13,22 @@ public class VehicleManagement extends JInternalFrame {
     JPanel panelVehicles;
     JTable tableVehicles;
     DefaultTableModel modelDataTable;
-    
 
     final String[] headings = {"Placa", "Marca", "Modelo", "Color", "Tipo", "Entrada"};
 
     VehicleController vehicleController;
-    VehicleWindow vehicleWindow;
 
     public VehicleManagement() {
         super("Gestión de Vehículos", false, true, false, true);
         this.setSize(700, 500);
         this.setLocation(50, 50);
-        
+
         vehicleController = new VehicleController();
-        vehicleWindow = new VehicleWindow();
 
         panelVehicles = new JPanel();
         panelVehicles.setLayout(null);
         panelVehicles.setBackground(Color.WHITE);
         this.add(panelVehicles);
-
 
         tableVehicles = new JTable();
         JScrollPane scrollBar = new JScrollPane(tableVehicles);
@@ -42,27 +37,51 @@ public class VehicleManagement extends JInternalFrame {
 
         createTable();
 
-        // Botón Agregar
+        // NUEVO
         buttonAdd = new JButton("Nuevo");
         buttonAdd.setBounds(100, 350, 100, 30);
         panelVehicles.add(buttonAdd);
         buttonAdd.addActionListener(e -> {
-            JDesktopPane desktop = getDesktopPane();
-            vehicleWindow = new VehicleWindow(); 
-            desktop.add(vehicleWindow);
-            vehicleWindow.toFront();
+            VehicleWindow vw = new VehicleWindow(this);
+            getDesktopPane().add(vw);
+            vw.setVisible(true);
+            vw.toFront();
         });
 
-   
+        // EDITAR
+        buttonEdit = new JButton("Editar");
+        buttonEdit.setBounds(250, 350, 100, 30);
+        panelVehicles.add(buttonEdit);
+
+        buttonEdit.addActionListener(e -> {
+            int row = tableVehicles.getSelectedRow();
+
+            if (row != -1) {
+                String plate = tableVehicles.getValueAt(row, 0).toString();
+
+                Vehicle selected = vehicleController.findVehicleByPlate(plate);
+
+                if (selected != null) {
+                    VehicleWindow vw = new VehicleWindow(this);
+                    vw.loadVehicle(selected);
+
+                    getDesktopPane().add(vw);
+                    vw.setVisible(true);
+                    vw.moveToFront();
+                }
+            }
+        });
+
+        // BORRAR
         buttonDelete = new JButton("Borrar");
-        buttonDelete.setBounds(250, 350, 100, 30);
+        buttonDelete.setBounds(400, 350, 100, 30);
         panelVehicles.add(buttonDelete);
         buttonDelete.addActionListener(e -> {
             int row = tableVehicles.getSelectedRow();
-            if(row != -1) {
+            if (row != -1) {
                 String plate = tableVehicles.getValueAt(row, 0).toString();
                 int confirm = JOptionPane.showConfirmDialog(null, "¿Borrar vehículo " + plate + "?");
-                if(confirm == JOptionPane.YES_OPTION) {
+                if (confirm == JOptionPane.YES_OPTION) {
                     vehicleController.deleteVehicle(plate);
                     createTable();
                 }
@@ -73,7 +92,7 @@ public class VehicleManagement extends JInternalFrame {
     public void createTable() {
         ArrayList<Vehicle> list = vehicleController.getAllVehicles();
         String[][] matrix = new String[list.size()][6];
-        
+
         for (int i = 0; i < list.size(); i++) {
             Vehicle v = list.get(i);
             matrix[i][0] = v.getPlate();

@@ -14,21 +14,12 @@ public class ParkingLotController {
         return parkingLotData.registerParkingLot(name, spaces);
     }
 
-    public int registerVehicleInParkingLot(Vehicle vehicle, ParkingLot parkingLot) {
-        int index = parkingLotData.registerVehicleInParkingLot(vehicle, parkingLot);
-        
-        if (index != -1) {
-            float feeFromSpace = parkingLot.getSpaces()[index].getVehicleType().getFee();
-            vehicle.getVehicleType().setFee(feeFromSpace);
-
-            int typeIdFromSpace = parkingLot.getSpaces()[index].getVehicleType().getId();
-            vehicle.getVehicleType().setId(typeIdFromSpace);
-        }
-        return index;
+    public String updateParkingLot(int id, String name, Space spaces[]) {
+        return parkingLotData.updateParkingLot(id, name, spaces);
     }
 
-    public float removeVehicleFromParkingLot(Vehicle vehicle, ParkingLot parkingLot) {
-        return parkingLotData.removeVehicleFromParkingLot(vehicle, parkingLot);
+    public ParkingLot getParkingLotById(int id) {
+        return parkingLotData.findParkingLotById(id);
     }
 
     public ParkingLot findParkingLotById(int id) {
@@ -45,5 +36,36 @@ public class ParkingLotController {
             return "Parqueo eliminado exitosamente.";
         }
         return "Error: El parqueo no existe.";
+    }
+
+
+    public int registerVehicleInParkingLot(Vehicle vehicle, ParkingLot lot) {
+
+        for (Space s : lot.getSpaces()) {
+
+            if (s != null && !s.isSpaceTaken()) {
+              if (vehicle.getVehicleType().getId() == s.getVehicleType().getId()) {
+
+                    boolean hasDisability = vehicle.getCustomers().get(0).isDisabilityPresented();
+
+                    if ((hasDisability && s.isDisabilityAdaptation()) || !hasDisability) {
+
+                        s.setSpaceTaken(true);
+
+                        if (lot.getVehicles() == null) {
+                            lot.setVehicles(new ArrayList<>());
+                        }
+
+                        lot.getVehicles().add(vehicle);
+
+                        parkingLotData.updateParkingLot(lot.getId(), lot.getName(), lot.getSpaces());
+
+                        return s.getId();
+                    }
+                }
+            }
+        }
+
+        return -1;
     }
 }

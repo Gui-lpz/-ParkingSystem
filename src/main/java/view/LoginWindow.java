@@ -85,15 +85,11 @@ public class LoginWindow extends JFrame implements ActionListener {
                 return;
             }
 
-            // 1. Buscamos si el usuario existe en los registros
-            // Importante: Asegúrate de que el controlador tenga este método
             Administrator foundAdmin = administratorController.searchAdministratorByUsername(username);
 
             if (foundAdmin != null) {
-                // 2. Usamos el método polimórfico de tu clase User para validar
                 String[] loginDetails = {username, password};
-                
-                // Usamos el método verifyUserLogin(String[], int) que tienes en User
+
                 if (foundAdmin.verifyUserLogin(loginDetails, 0)) {
                     JOptionPane.showMessageDialog(this, "Bienvenido " + foundAdmin.getName(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
                     this.dispose(); 

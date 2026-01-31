@@ -47,10 +47,10 @@ public class MainWindow extends JFrame {
         JMenuItem itemExit = new JMenuItem("Registrar Salida (Cobro)");
         itemExit.addActionListener(e -> RegistrationWindow.exitVehicle());
 
-        JMenuItem itemVehicles = new JMenuItem("Listado de Vehículos");
+        JMenuItem itemVehicles = new JMenuItem("Gestión de Vehículos");
         itemVehicles.addActionListener(e -> openInternalFrame(new VehicleManagement()));
 
-        JMenuItem itemLots = new JMenuItem("Configurar Parqueos");
+        JMenuItem itemLots = new JMenuItem("Gestión de Parqueos");
         itemLots.addActionListener(e -> openInternalFrame(new ParkingLotManagement()));
 
         JMenuItem itemOcupacion = new JMenuItem("Ver Ocupación Actual");

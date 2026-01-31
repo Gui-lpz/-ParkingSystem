@@ -8,11 +8,14 @@ import model.entities.Vehicle;
 import model.entities.VehicleType;
 
 public class VehicleData {
+
     private final String fileName = "vehicles.txt";
-    private ArrayList<Vehicle> vehicles = new ArrayList<>();
+    private static ArrayList<Vehicle> vehicles = new ArrayList<>();
 
     public VehicleData() {
-        loadFromFile();
+        if (vehicles.isEmpty()) {
+            loadFromFile();
+        }
     }
 
     private void loadFromFile() {
@@ -23,27 +26,28 @@ public class VehicleData {
             String line;
             while ((line = br.readLine()) != null) {
                 StringTokenizer st = new StringTokenizer(line, ";");
-                if (st.countTokens() >= 6) {
-                    Vehicle v = new Vehicle();
-                    v.setPlate(st.nextToken());
-                    v.setBrand(st.nextToken());
-                    v.setModel(st.nextToken());
-                    v.setColor(st.nextToken());
 
-                    VehicleType vt = new VehicleType();
-                    vt.setId(Integer.parseInt(st.nextToken()));
-                    vt.setFee(Float.parseFloat(st.nextToken())); 
-                    v.setVehicleType(vt);
+                Vehicle v = new Vehicle();
+                v.setPlate(st.nextToken());
+                v.setBrand(st.nextToken());
+                v.setModel(st.nextToken());
+                v.setColor(st.nextToken());
 
-                    if (st.hasMoreTokens()) {
-                        String timeStr = st.nextToken();
-                        if (!timeStr.equals("null")) {
-                            v.setEntryTime(LocalDateTime.parse(timeStr));
-                        }
+                VehicleType vt = new VehicleType();
+                vt.setId(Integer.parseInt(st.nextToken()));
+                vt.setFee(Float.parseFloat(st.nextToken()));
+                v.setVehicleType(vt);
+
+                if (st.hasMoreTokens()) {
+                    String timeStr = st.nextToken();
+                    if (!timeStr.equals("null")) {
+                        v.setEntryTime(LocalDateTime.parse(timeStr));
                     }
-                    vehicles.add(v);
                 }
+
+                vehicles.add(v);
             }
+
         } catch (IOException e) {
             System.err.println("Error al cargar vehículos: " + e.getMessage());
         }
@@ -52,10 +56,19 @@ public class VehicleData {
     private void saveToFile() {
         try (PrintWriter pw = new PrintWriter(new FileWriter(fileName))) {
             for (Vehicle v : vehicles) {
-                String entry = (v.getEntryTime() != null) ? v.getEntryTime().toString() : "null";
-                pw.println(v.getPlate() + ";" + v.getBrand() + ";" + v.getModel() + ";"
-                        + v.getColor() + ";" + v.getVehicleType().getId() + ";"
-                        + v.getVehicleType().getFee() + ";" + entry);
+                String entry = (v.getEntryTime() != null)
+                        ? v.getEntryTime().toString()
+                        : "null";
+
+                pw.println(
+                        v.getPlate() + ";" +
+                        v.getBrand() + ";" +
+                        v.getModel() + ";" +
+                        v.getColor() + ";" +
+                        v.getVehicleType().getId() + ";" +
+                        v.getVehicleType().getFee() + ";" +
+                        entry
+                );
             }
         } catch (IOException e) {
             System.err.println("Error al guardar: " + e.getMessage());
@@ -68,11 +81,17 @@ public class VehicleData {
     }
 
     public void updateVehicle(Vehicle v) {
+        for (int i = 0; i < vehicles.size(); i++) {
+            if (vehicles.get(i).getPlate().equals(v.getPlate())) {
+                vehicles.set(i, v);
+                break;
+            }
+        }
         saveToFile();
     }
 
     public void deleteVehicle(String plate) {
-        vehicles.removeIf(v -> v.getPlate().equals(plate));
+        vehicles.removeIf(v -> v.getPlate().equalsIgnoreCase(plate));
         saveToFile();
     }
 
@@ -82,7 +101,9 @@ public class VehicleData {
 
     public Vehicle findVehicleByPlate(String plate) {
         for (Vehicle v : vehicles) {
-            if (v.getPlate().equalsIgnoreCase(plate)) return v;
+            if (v.getPlate().equalsIgnoreCase(plate)) {
+                return v;
+            }
         }
         return null;
     }

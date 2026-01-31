@@ -1,2 +1,3 @@
-CL333 ;Audi;2026;Rojo;2;0.0;null
-222333;Ford;2026;Rojo;2;1000.0;null
+CL333 ;Audi;2026;Rojo;0;0.0;null
+CL555;RAM;2026;Rojo;0;0.0;null
+Sky333;Ford Raptor;2026;Rojo;0;0.0;null
