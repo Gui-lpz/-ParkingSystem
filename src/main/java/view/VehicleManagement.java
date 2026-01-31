@@ -92,7 +92,7 @@ public class VehicleManagement extends JInternalFrame {
         String[][] matrix = new String[list.size()][6];
 
         for (int i = 0; i < list.size(); i++) {
-            Vehicle v = list.get(i); // ← CORREGIDO
+            Vehicle v = list.get(i); 
 
             matrix[i][0] = v.getPlate();
             matrix[i][1] = v.getBrand();

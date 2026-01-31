@@ -108,7 +108,6 @@ public class VehicleWindow extends JInternalFrame {
         if (mode.equals("EXIT")) {
             Vehicle v = controller.findVehicleByPlate(plate);
             if (v != null) {
-                // Llamamos al proceso de salida que calcula el monto y elimina el vehículo
                 float monto = controller.processExit(v); 
                 JOptionPane.showMessageDialog(this, "SALIDA REGISTRADA\nVehículo: " + plate + "\nTotal Cobrado: ₡" + monto);
             } else {
