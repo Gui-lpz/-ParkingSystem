@@ -8,7 +8,6 @@ import model.entities.Vehicle;
 import model.entities.VehicleType;
 
 public class VehicleData {
-
     private final String fileName = "vehicles.txt";
     private static ArrayList<Vehicle> vehicles = new ArrayList<>();
 
@@ -21,11 +20,13 @@ public class VehicleData {
     private void loadFromFile() {
         File file = new File(fileName);
         if (!file.exists()) return;
+        vehicles.clear(); 
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
                 StringTokenizer st = new StringTokenizer(line, ";");
+                if (st.countTokens() < 6) continue;
 
                 Vehicle v = new Vehicle();
                 v.setPlate(st.nextToken());
@@ -40,35 +41,22 @@ public class VehicleData {
 
                 if (st.hasMoreTokens()) {
                     String timeStr = st.nextToken();
-                    if (!timeStr.equals("null")) {
-                        v.setEntryTime(LocalDateTime.parse(timeStr));
-                    }
+                    v.setEntryTime(timeStr.equals("null") ? null : LocalDateTime.parse(timeStr));
                 }
-
                 vehicles.add(v);
             }
-
         } catch (IOException e) {
-            System.err.println("Error al cargar vehículos: " + e.getMessage());
+            System.err.println("Error al cargar: " + e.getMessage());
         }
     }
 
-    private void saveToFile() {
+    public void saveToFile() {
         try (PrintWriter pw = new PrintWriter(new FileWriter(fileName))) {
             for (Vehicle v : vehicles) {
-                String entry = (v.getEntryTime() != null)
-                        ? v.getEntryTime().toString()
-                        : "null";
-
-                pw.println(
-                        v.getPlate() + ";" +
-                        v.getBrand() + ";" +
-                        v.getModel() + ";" +
-                        v.getColor() + ";" +
-                        v.getVehicleType().getId() + ";" +
-                        v.getVehicleType().getFee() + ";" +
-                        entry
-                );
+                String entry = (v.getEntryTime() != null) ? v.getEntryTime().toString() : "null";
+                pw.println(v.getPlate() + ";" + v.getBrand() + ";" + v.getModel() + ";" + 
+                           v.getColor() + ";" + v.getVehicleType().getId() + ";" + 
+                           v.getVehicleType().getFee() + ";" + entry);
             }
         } catch (IOException e) {
             System.err.println("Error al guardar: " + e.getMessage());
@@ -80,9 +68,9 @@ public class VehicleData {
         saveToFile();
     }
 
-    public void updateVehicle(Vehicle v) {
+    public void updateVehicle(String originalPlate, Vehicle v) {
         for (int i = 0; i < vehicles.size(); i++) {
-            if (vehicles.get(i).getPlate().equals(v.getPlate())) {
+            if (vehicles.get(i).getPlate().equalsIgnoreCase(originalPlate)) {
                 vehicles.set(i, v);
                 break;
             }
@@ -95,15 +83,11 @@ public class VehicleData {
         saveToFile();
     }
 
-    public ArrayList<Vehicle> getAllVehicles() {
-        return vehicles;
-    }
+    public ArrayList<Vehicle> getAllVehicles() { return vehicles; }
 
     public Vehicle findVehicleByPlate(String plate) {
         for (Vehicle v : vehicles) {
-            if (v.getPlate().equalsIgnoreCase(plate)) {
-                return v;
-            }
+            if (v.getPlate().equalsIgnoreCase(plate)) return v;
         }
         return null;
     }

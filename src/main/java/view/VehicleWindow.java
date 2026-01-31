@@ -4,115 +4,170 @@ import controller.VehicleController;
 import model.entities.Vehicle;
 import model.entities.VehicleType;
 import javax.swing.*;
-import java.awt.Color;
+import java.awt.*;
+import java.time.LocalDateTime;
 
 public class VehicleWindow extends JInternalFrame {
 
     JPanel panel;
-    public JTextField txtPlate, txtBrand, txtModel, txtColor;
-    public JComboBox<String> cmbType;
+    JTextField txtPlate, txtBrand, txtModel, txtColor;
+    JComboBox<String> cmbType;
     JButton btnSave;
 
     VehicleController controller;
+    VehicleManagement parent;
 
-    private boolean isEdit = false;
-    private String originalPlate = null;
-    private VehicleManagement parent;
+    private String mode;
+    private String originalPlate;
 
-    public VehicleWindow(VehicleManagement parent) {
+    public VehicleWindow(VehicleManagement parent, String mode) {
         super("Formulario de Vehículo", false, true, false, true);
-        this.parent = parent;
 
-        this.setSize(400, 420);
+        this.parent = parent;
+        this.mode = mode;
+
+        setSize(400, 420);
+        setLocation(150, 50);
         controller = new VehicleController();
 
-        panel = new JPanel();
-        panel.setLayout(null);
+        panel = new JPanel(null);
         panel.setBackground(Color.WHITE);
-        this.add(panel);
+        add(panel);
 
-        JLabel l1 = new JLabel("Placa:");
-        l1.setBounds(30, 20, 80, 25);
-        panel.add(l1);
+        addLabel("Placa:", 20);
+        txtPlate = addText(20);
 
-        txtPlate = new JTextField();
-        txtPlate.setBounds(120, 20, 200, 25);
-        panel.add(txtPlate);
+        addLabel("Marca:", 60);
+        txtBrand = addText(60);
 
-        JLabel l2 = new JLabel("Marca:");
-        l2.setBounds(30, 60, 80, 25);
-        panel.add(l2);
+        addLabel("Modelo:", 100);
+        txtModel = addText(100);
 
-        txtBrand = new JTextField();
-        txtBrand.setBounds(120, 60, 200, 25);
-        panel.add(txtBrand);
+        addLabel("Color:", 140);
+        txtColor = addText(140);
 
-        JLabel l3 = new JLabel("Modelo:");
-        l3.setBounds(30, 100, 80, 25);
-        panel.add(l3);
-
-        txtModel = new JTextField();
-        txtModel.setBounds(120, 100, 200, 25);
-        panel.add(txtModel);
-
-        JLabel l4 = new JLabel("Color:");
-        l4.setBounds(30, 140, 80, 25);
-        panel.add(l4);
-
-        txtColor = new JTextField();
-        txtColor.setBounds(120, 140, 200, 25);
-        panel.add(txtColor);
-
-        JLabel l5 = new JLabel("Tipo:");
-        l5.setBounds(30, 180, 80, 25);
-        panel.add(l5);
-
+        addLabel("Tipo:", 180);
         cmbType = new JComboBox<>(new String[]{
-            "Liviano", "Pesado", "Moto", "Bicicleta", "Otros"
+                "Liviano", "Pesado", "Moto", "Bicicleta", "Otros"
         });
         cmbType.setBounds(120, 180, 200, 25);
         panel.add(cmbType);
 
-        btnSave = new JButton("Guardar");
-        btnSave.setBounds(120, 250, 120, 30);
+        btnSave = new JButton();
+        btnSave.setBounds(120, 250, 150, 30);
         panel.add(btnSave);
 
+        configureByMode();
         btnSave.addActionListener(e -> saveVehicle());
     }
 
+    private void configureByMode() {
+        switch (mode) {
+            case "NEW":
+                btnSave.setText("Guardar Vehículo");
+                break;
+            case "EDIT":
+                btnSave.setText("Modificar Vehículo");
+                txtPlate.setEditable(false);
+                break;
+            case "ENTRY":
+                btnSave.setText("Registrar Entrada");
+                break;
+            case "EXIT":
+                btnSave.setText("Registrar Salida");
+
+                txtPlate.setEditable(false);
+                txtBrand.setEditable(false);
+                txtModel.setEditable(false);
+                txtColor.setEditable(false);
+                cmbType.setEnabled(false);
+                break;
+        }
+    }
+
     public void loadVehicle(Vehicle v) {
+        if (v == null) return;
         txtPlate.setText(v.getPlate());
         txtBrand.setText(v.getBrand());
         txtModel.setText(v.getModel());
         txtColor.setText(v.getColor());
-        cmbType.setSelectedItem(v.getVehicleType().getType());
 
+        if (v.getVehicleType() != null) {
+            cmbType.setSelectedIndex(Math.max(0, v.getVehicleType().getId() - 1));
+        }
         originalPlate = v.getPlate();
-        txtPlate.setEditable(false);
-        isEdit = true;
     }
 
     private void saveVehicle() {
+        String plate = txtPlate.getText().trim();
+        if (plate.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La placa es obligatoria");
+            return;
+        }
+
+        if (mode.equals("EXIT")) {
+            Vehicle v = controller.findVehicleByPlate(plate);
+            if (v != null) {
+                // Llamamos al proceso de salida que calcula el monto y elimina el vehículo
+                float monto = controller.processExit(v); 
+                JOptionPane.showMessageDialog(this, "SALIDA REGISTRADA\nVehículo: " + plate + "\nTotal Cobrado: ₡" + monto);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error: El vehículo no existe en el registro.");
+            }
+            
+            if (parent != null) {
+                parent.createTable();
+            }
+            dispose();
+            return;
+        }
 
         Vehicle v = new Vehicle();
-        v.setPlate(txtPlate.getText());
+        v.setPlate(plate);
         v.setBrand(txtBrand.getText());
         v.setModel(txtModel.getText());
         v.setColor(txtColor.getText());
 
         VehicleType vt = new VehicleType();
+        vt.setId(cmbType.getSelectedIndex() + 1);
         vt.setType(cmbType.getSelectedItem().toString());
+
+        float[] tarifas = {1000f, 2000f, 500f, 200f, 800f};
+        vt.setFee(tarifas[cmbType.getSelectedIndex()]);
         v.setVehicleType(vt);
 
-        if (isEdit) {
-            controller.updateVehicle(originalPlate, v);
-            JOptionPane.showMessageDialog(this, "Vehículo Modificado");
-        } else {
-            controller.insertVehicle(v);
-            JOptionPane.showMessageDialog(this, "Vehículo Guardado");
-        }
+        try {
+            if (mode.equals("EDIT")) {
+                controller.updateVehicle(originalPlate, v);
+                JOptionPane.showMessageDialog(this, "Vehículo Actualizado");
+            } else if (mode.equals("ENTRY")) {
+                v.setEntryTime(LocalDateTime.now());
+                controller.insertVehicle(v);
+                JOptionPane.showMessageDialog(this, "Entrada registrada exitosamente.");
+            } else {
+                controller.insertVehicle(v);
+                JOptionPane.showMessageDialog(this, "Vehículo Guardado");
+            }
 
-        parent.createTable(); 
-        dispose();
+            if (parent != null) {
+                parent.createTable();
+            }
+            dispose();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al procesar: " + ex.getMessage());
+        }
+    }
+
+    private void addLabel(String text, int y) {
+        JLabel l = new JLabel(text);
+        l.setBounds(30, y, 80, 25);
+        panel.add(l);
+    }
+
+    private JTextField addText(int y) {
+        JTextField t = new JTextField();
+        t.setBounds(120, y, 200, 25);
+        panel.add(t);
+        return t;
     }
 }

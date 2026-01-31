@@ -1,3 +1,5 @@
 CL333 ;Audi;2026;Rojo;0;0.0;null
 CL555;RAM;2026;Rojo;0;0.0;null
 Sky333;Ford Raptor;2026;Rojo;0;0.0;null
+CL222;Toyota;2026;Rojo;1;0.0;null
+CL111;Audi;2025;Rojo;1;1000.0;2026-01-31T12:36:12.098115900

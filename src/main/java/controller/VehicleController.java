@@ -3,10 +3,12 @@ package controller;
 import java.util.ArrayList;
 import model.entities.Vehicle;
 import model.data.VehicleData;
+import model.data.ParkingLotData;
 
 public class VehicleController {
 
     private VehicleData vehicleData = new VehicleData();
+    private ParkingLotData parkingData = new ParkingLotData(); 
 
     public void insertVehicle(Vehicle vehicle) {
         if (findVehicleByPlate(vehicle.getPlate()) == null) {
@@ -33,11 +35,18 @@ public class VehicleController {
 
     public String updateVehicle(String plateOriginal, Vehicle vehicleActualizado) {
         Vehicle existente = findVehicleByPlate(plateOriginal);
-
         if (existente != null) {
-            vehicleData.updateVehicle(vehicleActualizado);
+            vehicleData.updateVehicle(plateOriginal, vehicleActualizado);
             return "Vehículo actualizado con éxito.";
         }
         return "Error: El vehículo con placa " + plateOriginal + " no existe.";
+    }
+
+    public float processExit(Vehicle v) {
+        float monto = parkingData.calculateFee(v);
+        
+        vehicleData.deleteVehicle(v.getPlate());
+        
+        return monto;
     }
 }

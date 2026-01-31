@@ -1,3 +1,4 @@
 1;Norte;10
 2;Sur;22
 3;Este;40
+4;Oeste;45
