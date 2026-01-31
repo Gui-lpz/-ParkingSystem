@@ -1,9 +1,10 @@
-
 package model.entities;
 
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 public class Vehicle {
+
     private ArrayList<Customer> customers;
     private String plate;
     private String color;
@@ -11,6 +12,7 @@ public class Vehicle {
     private String model;
     private VehicleType vehicleType;
     private Space assignedSpace;
+    private LocalDateTime entryTime;
 
     public Vehicle(String plate, String color, String brand, String model, ArrayList<Customer> customers, VehicleType vehicleType) {
         this.customers = customers;
@@ -19,17 +21,27 @@ public class Vehicle {
         this.brand = brand;
         this.model = model;
         this.vehicleType = vehicleType;
+        this.entryTime = null;
     }
 
     public Vehicle() {
-        this.customers = new ArrayList<>(); // Inicializar para evitar NullPointerException
+        this.customers = new ArrayList<>();
     }
+
+    public LocalDateTime getEntryTime() {
+        return entryTime;
+    }
+
+    public void setEntryTime(LocalDateTime entryTime) {
+        this.entryTime = entryTime;
+    }
+
     public Space getAssignedSpace() {
         return assignedSpace;
     }
 
-    public Customer getPrimaryCustomer() {
-        return (customers != null && !customers.isEmpty()) ? customers.get(0) : null;
+    public void setAssignedSpace(Space assignedSpace) {
+        this.assignedSpace = assignedSpace;
     }
 
     public ArrayList<Customer> getCustomers() {
@@ -39,7 +51,6 @@ public class Vehicle {
     public void setCustomers(ArrayList<Customer> customers) {
         this.customers = customers;
     }
-
 
     public String getPlate() {
         return plate;
@@ -73,8 +84,6 @@ public class Vehicle {
         this.model = model;
     }
 
-
-
     public VehicleType getVehicleType() {
         return vehicleType;
     }
@@ -82,21 +91,9 @@ public class Vehicle {
     public void setVehicleType(VehicleType vehicleType) {
         this.vehicleType = vehicleType;
     }
-    public void setAssignedSpace(Space assignedSpace) {
-        this.assignedSpace = assignedSpace;
-    }
 
     @Override
     public String toString() {
-        return "Vehicle{" +
-                "Placa='" + plate + '\'' +
-                ", Marca='" + brand + '\'' +
-                ", Clientes=" + customers + '\''+
-                ", Tipo=" + vehicleType.getType()+'\'' +
-                ", Descripción=" + vehicleType.getDescription()+'\'' +
-                " Posición asignada: " + (assignedSpace != null ? assignedSpace.getId() : "N/A");
-        
+        return "🚗 Vehículo [" + plate + "] - " + brand + " (" + (vehicleType != null ? vehicleType.getType() : "N/A") + ")";
     }
-
-
 }

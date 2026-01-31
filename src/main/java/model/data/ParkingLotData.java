@@ -1,6 +1,8 @@
 package model.data;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import model.entities.ParkingLot;
@@ -21,7 +23,9 @@ public class ParkingLotData {
 
     private void loadFromFile() {
         File file = new File(fileName);
-        if (!file.exists()) return;
+        if (!file.exists()) {
+            return;
+        }
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
@@ -37,10 +41,12 @@ public class ParkingLotData {
                     pl.setName(name);
                     pl.setNumberOfSpaces(numSpaces);
                     pl.setVehicles(new ArrayList<>());
-                    pl.setSpaces(new Space[numSpaces]); 
+                    pl.setSpaces(new Space[numSpaces]);
 
                     parkingLots.add(pl);
-                    if (id > lastId) lastId = id;
+                    if (id > lastId) {
+                        lastId = id;
+                    }
                 }
             }
         } catch (IOException e) {
@@ -66,7 +72,6 @@ public class ParkingLotData {
         pl.setSpaces(spaces);
         pl.setNumberOfSpaces(spaces.length);
         pl.setVehicles(new ArrayList<>());
-
         parkingLots.add(pl);
         saveToFile();
         return pl;
@@ -74,43 +79,78 @@ public class ParkingLotData {
 
     public int registerVehicleInParkingLot(Vehicle vehicle, ParkingLot parkingLot) {
         Space[] spaces = parkingLot.getSpaces();
-        boolean needsDisability = false;
-        
+        boolean needsPreferential = false;
+
         for (Customer c : vehicle.getCustomers()) {
             if (c.isDisabilityPresented()) {
-                needsDisability = true;
+                needsPreferential = true;
                 break;
             }
         }
 
         for (Space space : spaces) {
             if (space != null && !space.isSpaceTaken()) {
-                if (space.isDisabilityAdaptation() == needsDisability) {
+                if (space.isDisabilityAdaptation() == needsPreferential) {
                     if (space.getVehicleType().getId() == vehicle.getVehicleType().getId()) {
                         space.setSpaceTaken(true);
                         vehicle.setAssignedSpace(space);
+                        vehicle.setEntryTime(LocalDateTime.now());
                         parkingLot.getVehicles().add(vehicle);
-                        saveToFile(); 
                         return space.getId();
                     }
                 }
             }
         }
-        return 0;
+        return -1;
     }
 
-    public void removeVehicleFromParkingLot(Vehicle vehicle, ParkingLot parkingLot) {
+    public float calculateFee(Vehicle vehicle) {
+        if (vehicle.getEntryTime() == null) {
+            return 0f;
+        }
+
+        LocalDateTime exitTime = LocalDateTime.now();
+        Duration duration = Duration.between(vehicle.getEntryTime(), exitTime);
+
+        long hours = duration.toHours();
+
+        // analizar si cambiar esta regla de negocio***
+        if (duration.toMinutes() % 60 > 0) {
+            hours++;
+        }
+
+        // Mínimo 1 hora
+        if (hours == 0) {
+            hours = 1;
+        }
+
+        float total = hours * vehicle.getVehicleType().getFee();
+
+        // REGLA TARIFA MÍNIMA ¢500 
+        if (total < 500) {
+            total = 500;
+        }
+
+        return total;
+    }
+
+    public float removeVehicleFromParkingLot(Vehicle vehicle, ParkingLot parkingLot) {
+        float amountToPay = calculateFee(vehicle); // Calcula antes de limpiar los datos
+
         if (vehicle.getAssignedSpace() != null) {
             vehicle.getAssignedSpace().setSpaceTaken(false);
             parkingLot.getVehicles().remove(vehicle);
             vehicle.setAssignedSpace(null);
-            saveToFile();
+            vehicle.setEntryTime(null);
         }
+        return amountToPay;
     }
 
     public ParkingLot findParkingLotById(int id) {
         for (ParkingLot pl : parkingLots) {
-            if (pl.getId() == id) return pl;
+            if (pl.getId() == id) {
+                return pl;
+            }
         }
         return null;
     }

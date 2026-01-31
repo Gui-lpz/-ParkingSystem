@@ -8,7 +8,9 @@ public class VehicleController {
     private VehicleData vehicleData = new VehicleData();
 
     public void insertVehicle(Vehicle vehicle) {
-        vehicleData.insertVehicle(vehicle);
+        if (findVehicleByPlate(vehicle.getPlate()) == null) {
+            vehicleData.insertVehicle(vehicle);
+        }
     }
 
     public ArrayList<Vehicle> getAllVehicles() {
@@ -16,6 +18,7 @@ public class VehicleController {
     }
 
     public Vehicle findVehicleByPlate(String plate) {
+        if (plate == null) return null;
         return vehicleData.findVehicleByPlate(plate);
     }
 
@@ -27,11 +30,19 @@ public class VehicleController {
         return "El vehículo marcado no existe.";
     }
 
-    public String updateVehicle(String plate, Vehicle vehicle) {
-        if (findVehicleByPlate(plate) != null) {
-            vehicleData.updateVehicle(vehicle);
+    public String updateVehicle(String plateOriginal, Vehicle vehicleActualizado) {
+        Vehicle existente = findVehicleByPlate(plateOriginal);
+        
+        if (existente != null) {
+            ArrayList<Vehicle> lista = vehicleData.getAllVehicles();
+            int index = lista.indexOf(existente);
+            
+           
+            lista.set(index, vehicleActualizado);
+            
+            vehicleData.updateVehicle(vehicleActualizado); 
             return "Vehículo actualizado con éxito.";
         }
-        return "Error: El vehículo no existe.";
+        return "Error: El vehículo con placa " + plateOriginal + " no existe.";
     }
 }

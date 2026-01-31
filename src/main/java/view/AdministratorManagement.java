@@ -9,7 +9,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class AdministratorManagement extends JInternalFrame {
 
-    JButton buttonDelete, buttonEdit;
+    JButton buttonDelete, buttonEdit, buttonAdd; // Añadido buttonAdd
     JPanel panelAdmins;
     JTable tableAdmins;
     DefaultTableModel modelDataTable;
@@ -21,9 +21,9 @@ public class AdministratorManagement extends JInternalFrame {
 
     public AdministratorManagement() {
         super("Gestión de Administradores", false, true, false, true);
-        this.setVisible(true);
         this.setSize(650, 500);
         this.setLocation(230, 50);
+        this.setResizable(false);
 
         adminController = new AdministratorController();
         adminWindow = new AdministratorWindow();
@@ -38,28 +38,56 @@ public class AdministratorManagement extends JInternalFrame {
         panelAdmins.add(scrollBar);
 
         createTable();
+        
+        buttonAdd = new JButton("Agregar");
+        buttonAdd.setBounds(80, 375, 100, 25);
+        panelAdmins.add(buttonAdd);
+        buttonAdd.addActionListener(e -> {
+            JDesktopPane desktopPane = this.getDesktopPane();
+            this.dispose();
+            adminWindow.setTitle("Insertar Administrador");
+            adminWindow.txtId.setEditable(true);
+            adminWindow.txtId.setText("");
+            adminWindow.txtName.setText("");
+            adminWindow.txtUser.setText("");
+            adminWindow.txtPass.setText("");
+            adminWindow.txtAdminNum.setText("");
+            adminWindow.btnSave.setText("Insertar");
+            adminWindow.setVisible(true);
+            desktopPane.add(adminWindow);
+        });
 
+        // BOTÓN BORRAR
         buttonDelete = new JButton("Borrar");
-        buttonDelete.setBounds(140, 375, 100, 25);
+        buttonDelete.setBounds(270, 375, 100, 25);
         panelAdmins.add(buttonDelete);
         buttonDelete.addActionListener(e -> {
-            if (tableAdmins.getSelectedRow() != -1) {
-                int confirm = JOptionPane.showConfirmDialog(null, "¿Borrar administrador?", "Confirmar", JOptionPane.YES_NO_OPTION);
-                if (confirm == 0) {
-                    removeAdmin();
-                    createTable();
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Debe seleccionar un administrador de la tabla.");
+            int selectedRow = tableAdmins.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(null, "Seleccione un administrador de la tabla");
+                return;
+            }
+
+            int confirm = JOptionPane.showConfirmDialog(null, "¿Está seguro de borrar este administrador?", "Confirmar", JOptionPane.YES_NO_OPTION);
+            if (confirm == 0) {
+                removeAdmin();
+                createTable();
             }
         });
 
+        // BOTÓN EDITAR
         buttonEdit = new JButton("Editar");
-        buttonEdit.setBounds(360, 375, 100, 25);
+        buttonEdit.setBounds(460, 375, 100, 25);
         panelAdmins.add(buttonEdit);
         buttonEdit.addActionListener(e -> {
-            if (tableAdmins.getSelectedRow() != -1) fillAdminFormToModify();
+            if (tableAdmins.getSelectedRow() != -1) {
+                fillAdminFormToModify();
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione un administrador para editar");
+            }
         });
+
+        this.setVisible(true);
     }
 
     public void createTable() {
@@ -74,7 +102,6 @@ public class AdministratorManagement extends JInternalFrame {
 
     public void removeAdmin() {
         int row = tableAdmins.getSelectedRow();
-        // El error anterior era pasar el ID como String. Ahora pasamos el adminNumber como int.
         int adminNum = Integer.parseInt(tableAdmins.getValueAt(row, 3).toString());
         String result = adminController.deleteAdministrator(adminNum);
         JOptionPane.showMessageDialog(null, result);
@@ -84,13 +111,22 @@ public class AdministratorManagement extends JInternalFrame {
         JDesktopPane desktopPane = this.getDesktopPane();
         int row = tableAdmins.getSelectedRow();
         
-        adminWindow.txtId.setText(tableAdmins.getValueAt(row, 0).toString());
-        adminWindow.txtName.setText(tableAdmins.getValueAt(row, 1).toString());
-        adminWindow.txtUser.setText(tableAdmins.getValueAt(row, 2).toString());
-        adminWindow.txtAdminNum.setText(tableAdmins.getValueAt(row, 3).toString());
-        
+        String id = tableAdmins.getValueAt(row, 0).toString();
+        String name = tableAdmins.getValueAt(row, 1).toString();
+        String user = tableAdmins.getValueAt(row, 2).toString();
+        String adminNum = tableAdmins.getValueAt(row, 3).toString();
+
         this.dispose();
+
+        adminWindow.setTitle("Modificar Administrador");
+        adminWindow.txtId.setText(id);
+        adminWindow.txtId.setEditable(false); 
+        adminWindow.txtName.setText(name);
+        adminWindow.txtUser.setText(user);
+        adminWindow.txtAdminNum.setText(adminNum);
+        adminWindow.txtAdminNum.setEditable(false);
         adminWindow.btnSave.setText("Modificar");
+        
         adminWindow.setVisible(true);
         desktopPane.add(adminWindow);
     }

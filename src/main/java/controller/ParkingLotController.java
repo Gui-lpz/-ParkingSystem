@@ -15,11 +15,20 @@ public class ParkingLotController {
     }
 
     public int registerVehicleInParkingLot(Vehicle vehicle, ParkingLot parkingLot) {
-        return parkingLotData.registerVehicleInParkingLot(vehicle, parkingLot);
+        int index = parkingLotData.registerVehicleInParkingLot(vehicle, parkingLot);
+        
+        if (index != -1) {
+            float feeFromSpace = parkingLot.getSpaces()[index].getVehicleType().getFee();
+            vehicle.getVehicleType().setFee(feeFromSpace);
+
+            int typeIdFromSpace = parkingLot.getSpaces()[index].getVehicleType().getId();
+            vehicle.getVehicleType().setId(typeIdFromSpace);
+        }
+        return index;
     }
 
-    public void removeVehicleFromParkingLot(Vehicle vehicle, ParkingLot parkingLot) {
-        parkingLotData.removeVehicleFromParkingLot(vehicle, parkingLot);
+    public float removeVehicleFromParkingLot(Vehicle vehicle, ParkingLot parkingLot) {
+        return parkingLotData.removeVehicleFromParkingLot(vehicle, parkingLot);
     }
 
     public ParkingLot findParkingLotById(int id) {
@@ -36,15 +45,5 @@ public class ParkingLotController {
             return "Parqueo eliminado exitosamente.";
         }
         return "Error: El parqueo no existe.";
-    }
-
-    public String updateParkingLotName(int id, String newName) {
-        ParkingLot pl = parkingLotData.findParkingLotById(id);
-        if (pl != null) {
-            pl.setName(newName);
-            // Al actualizar el objeto en el ArrayList y llamar saveToFile en Data se persiste
-            return "Nombre del parqueo actualizado.";
-        }
-        return "Error: Parqueo no encontrado.";
     }
 }

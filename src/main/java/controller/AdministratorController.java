@@ -11,6 +11,16 @@ public class AdministratorController implements UserOperations {
   
     private AdministratorData administratorData = new AdministratorData();
 
+    public Administrator searchAdministratorByUsername(String username) {
+        if (username == null) return null;
+        for (Administrator admin : administratorData.getAllAdministrators()) {
+            if (admin.getUsername().trim().equalsIgnoreCase(username.trim())) {
+                return admin;
+            }
+        }
+        return null;
+    }
+
     @Override
     public User searchUser(String identification) {
         for (Administrator admin : administratorData.getAllAdministrators()) {
@@ -34,7 +44,6 @@ public class AdministratorController implements UserOperations {
             String inputUser = user.getUsername().trim();
             String inputPass = user.getPassword().trim();
 
-           
             if (storedUser.equals(inputUser) && storedPass.equals(inputPass)) {
                 return admin;
             }

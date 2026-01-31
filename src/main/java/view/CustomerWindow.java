@@ -1,64 +1,75 @@
 package view;
 
-import model.entities.Customer;
 import controller.CustomerController;
-import java.awt.*;
-import java.awt.event.*;
+import model.entities.Customer;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class CustomerWindow extends JInternalFrame implements ActionListener {
-    private JPanel panel;
-    private JLabel lblId, lblName, lblDisability;
+
+    JPanel panel;
+    JLabel labelId, labelName, labelDisability;
+
     public JTextField txtId, txtName;
-    private JCheckBox chkDisability;
+    public JCheckBox chkDisability; 
     public JButton btnSave, btnCancel;
-    private CustomerController customerController;
+    
+    CustomerController customerController;
 
     public CustomerWindow() {
         super("Insertar Cliente", false, true, false, true);
-        customerController = new CustomerController();
-        initComponents();
-    }
+        this.setSize(420, 350);
+        this.setLocation(215, 50);
+        this.customerController = new CustomerController();
 
-    private void initComponents() {
-        setSize(400, 300);
-        setLocation(50, 50);
         panel = new JPanel(null);
         panel.setBackground(Color.WHITE);
+        this.add(panel);
 
-        lblId = new JLabel("Cédula:");
-        lblId.setBounds(30, 30, 80, 25);
-        lblId.setForeground(Color.BLUE);
+        labelId = new JLabel("Cédula:");
+        labelId.setBounds(50, 30, 100, 30);
+        labelId.setForeground(Color.BLUE);
+        panel.add(labelId);
+
         txtId = new JTextField();
-        txtId.setBounds(120, 30, 200, 25);
+        txtId.setBounds(150, 30, 200, 25);
+        panel.add(txtId);
 
-        lblName = new JLabel("Nombre:");
-        lblName.setBounds(30, 80, 80, 25);
-        lblName.setForeground(Color.BLUE);
+        labelName = new JLabel("Nombre:");
+        labelName.setBounds(50, 80, 100, 30);
+        labelName.setForeground(Color.BLUE);
+        panel.add(labelName);
+
         txtName = new JTextField();
-        txtName.setBounds(120, 80, 200, 25);
+        txtName.setBounds(150, 80, 200, 25);
+        panel.add(txtName);
 
-        lblDisability = new JLabel("Discapacidad:");
-        lblDisability.setBounds(30, 130, 100, 25);
-        lblDisability.setForeground(Color.BLUE);
+        labelDisability = new JLabel("Discapacidad:");
+        labelDisability.setBounds(50, 130, 100, 30);
+        labelDisability.setForeground(Color.BLUE);
+        panel.add(labelDisability);
+
         chkDisability = new JCheckBox("Presenta");
-        chkDisability.setBounds(120, 130, 100, 25);
+        chkDisability.setBounds(150, 130, 100, 25);
         chkDisability.setBackground(Color.WHITE);
+        panel.add(chkDisability);
 
         btnSave = new JButton("Insertar");
-        btnSave.setBounds(80, 200, 100, 30);
+        btnSave.setBounds(80, 220, 100, 30);
         btnSave.addActionListener(this);
+        panel.add(btnSave);
 
         btnCancel = new JButton("Cancelar");
-        btnCancel.setBounds(200, 200, 100, 30);
-        btnCancel.addActionListener(e -> dispose());
+        btnCancel.setBounds(220, 220, 100, 30);
+        btnCancel.addActionListener(e -> {
+             int op = JOptionPane.showConfirmDialog(this, "¿Desea cerrar?", "Confirmar", JOptionPane.YES_NO_OPTION);
+             if(op == 0) dispose();
+        });
+        panel.add(btnCancel);
 
-        panel.add(lblId); panel.add(txtId);
-        panel.add(lblName); panel.add(txtName);
-        panel.add(lblDisability); panel.add(chkDisability);
-        panel.add(btnSave); panel.add(btnCancel);
-        
-        add(panel);
+        this.setVisible(true);
     }
 
     @Override
@@ -70,13 +81,29 @@ public class CustomerWindow extends JInternalFrame implements ActionListener {
 
             if (id.isEmpty() || name.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Complete todos los campos");
-                return;
-            }
+            } else {
+                Customer c = new Customer(id, name, dis);
+                String resp;
 
-            Customer c = new Customer(id, name, dis);
-            String msg = customerController.insertCustomer(c);
-            JOptionPane.showMessageDialog(this, msg);
-            if (msg.contains("éxito")) dispose();
+                if (btnSave.getText().equalsIgnoreCase("Modificar")) {
+                    resp = customerController.updateCustomer(c);
+                } else {
+                    resp = customerController.insertCustomer(c);
+                }
+
+                JOptionPane.showMessageDialog(this, resp);
+                
+                if(resp.toLowerCase().contains("éxito")) {
+                    if (btnSave.getText().equalsIgnoreCase("Modificar")) {
+                        JDesktopPane desktop = this.getDesktopPane();
+                        this.dispose();
+                        CustomerManagement m = new CustomerManagement();
+                        desktop.add(m);
+                    } else {
+                        dispose();
+                    }
+                }
+            }
         }
     }
 }

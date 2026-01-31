@@ -13,46 +13,68 @@ public class RegistrationWindow {
     static AdministratorController adminController = new AdministratorController();
     static ClerkController clerkController = new ClerkController();
 
+    public static void insertAdministrator() {
+        String id = JOptionPane.showInputDialog("Cédula:");
+        String name = JOptionPane.showInputDialog("Nombre:");
+        String user = JOptionPane.showInputDialog("Username:");
+        String pass = JOptionPane.showInputDialog("Password:");
+        int num = Integer.parseInt(JOptionPane.showInputDialog("Número de empleado:"));
+
+        Administrator admin = new Administrator(num, null, id, name, user, pass);
+        JOptionPane.showMessageDialog(null, adminController.insertAdministrator(admin));
+    }
+
+    public static void exitVehicle() {
+        String plate = JOptionPane.showInputDialog("Ingrese la placa del vehículo que sale:");
+        if (plate == null) return;
+       
+        JOptionPane.showMessageDialog(null, "Procesando salida para: " + plate);
+    }
+    public static void showAllAdministrators() {
+        ArrayList<Administrator> admins = adminController.getAllAdministrators();
+        StringBuilder sb = new StringBuilder("LISTA DE ADMINISTRADORES\n");
+        for(Administrator a : admins) {
+            sb.append(a.getName()).append(" (").append(a.getUsername()).append(")\n");
+        }
+        JOptionPane.showMessageDialog(null, sb.toString());
+    }
+
     public static void searchCustomerByName() {
         String query = JOptionPane.showInputDialog("Ingrese el nombre o cédula del cliente a buscar:");
-        if (query != null) {
-            Customer found = customerController.searchCustomer(query);
-            if (found != null) {
-                String info = "🆔 Cédula: " + found.getId() + "\n" +
-                             "👤 Nombre: " + found.getName() + "\n" +
-                             "♿ Discapacidad: " + (found.isDisabilityPresented() ? "SÍ" : "NO");
-                JOptionPane.showMessageDialog(null, info, "Cliente Encontrado", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(null, "No se encontró ningún cliente con ese criterio.");
-            }
+        if (query == null) return;
+        Customer found = customerController.searchCustomer(query);
+        if (found != null) {
+            String info = "🆔 Cédula: " + found.getId() + "\n" +
+                          "👤 Nombre: " + found.getName() + "\n" +
+                          "♿ Discapacidad: " + (found.isDisabilityPresented() ? "SÍ" : "NO");
+            JOptionPane.showMessageDialog(null, info, "Cliente Encontrado", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "No se encontró ningún cliente.");
         }
     }
 
     public static Customer insertCustomer() {
-        String id = JOptionPane.showInputDialog("Ingrese el número de cédula del cliente");
+        String id = JOptionPane.showInputDialog("Ingrese el número de cédula");
         if (id == null) return null;
-        String name = JOptionPane.showInputDialog("Ingrese el nombre del cliente");
-        String answerDisability = JOptionPane.showInputDialog("¿Cuenta o transporta alguna persona con discapacidad? si/no");
-        boolean disabilityPresented = answerDisability != null && answerDisability.equalsIgnoreCase("si");
+        String name = JOptionPane.showInputDialog("Ingrese el nombre");
+        String answer = JOptionPane.showInputDialog("¿Presenta discapacidad? si/no");
+        boolean disability = answer != null && answer.equalsIgnoreCase("si");
 
-        Customer customerToInsert = new Customer(id, name, disabilityPresented);
-        JOptionPane.showMessageDialog(null, customerController.insertCustomer(customerToInsert));
-        return customerToInsert;
+        Customer customer = new Customer(id, name, disability);
+        JOptionPane.showMessageDialog(null, customerController.insertCustomer(customer));
+        return customer;
     }
 
     public static void showAllCustomers() {
         ArrayList<Customer> customers = customerController.getAllCustomers();
-        StringBuilder report = new StringBuilder();
-        report.append("======= LISTADO GENERAL DE CLIENTES =======\n\n");
-
+        StringBuilder report = new StringBuilder("    CLIENTES\n\n");
         if (customers.isEmpty()) {
-            report.append("  >> No hay clientes registrados en el sistema actual.\n");
+            report.append("  >> No hay clientes registrados.\n");
         } else {
             for (Customer c : customers) {
-                report.append("🆔 Cédula:         ").append(c.getId()).append("\n");
-                report.append("👤 Nombre:         ").append(c.getName()).append("\n");
-                String disabilityStatus = c.isDisabilityPresented() ? "SÍ presenta" : "NO presenta";
-                report.append("♿ Discapacidad: ").append(disabilityStatus).append("\n");
+                report.append("🆔 Cédula:          ").append(c.getId()).append("\n");
+                report.append("👤 Nombre:          ").append(c.getName()).append("\n");
+                report.append("♿ Discapacidad:   ").append(c.isDisabilityPresented() ? "SÍ presenta" : "NO presenta").append("\n");
                 report.append("--------------------------------------------------\n");
             }
         }
@@ -61,221 +83,71 @@ public class RegistrationWindow {
     }
 
     public static void updateCustomer() {
-        String id = JOptionPane.showInputDialog("Ingrese la cédula del cliente a actualizar");
+        String id = JOptionPane.showInputDialog("Cédula del cliente a actualizar:");
+        if (id == null) return;
         String name = JOptionPane.showInputDialog("Nuevo nombre:");
-        String answerDisability = JOptionPane.showInputDialog("¿Discapacidad? si/no");
-        boolean disability = answerDisability != null && answerDisability.equalsIgnoreCase("si");
-
-        Customer updatedCustomer = new Customer(id, name, disability);
-        JOptionPane.showMessageDialog(null, customerController.updateCustomer(updatedCustomer));
+        String dis = JOptionPane.showInputDialog("¿Discapacidad? si/no");
+        Customer updated = new Customer(id, name, dis != null && dis.equalsIgnoreCase("si"));
+        JOptionPane.showMessageDialog(null, customerController.updateCustomer(updated));
     }
 
     public static void deleteCustomer() {
-        String id = JOptionPane.showInputDialog("Cédula del cliente a eliminar:");
-        Customer customerDelete = new Customer();
-        customerDelete.setId(id);
-        JOptionPane.showMessageDialog(null, customerController.deleteCustomer(customerDelete));
+        String id = JOptionPane.showInputDialog("Cédula a eliminar:");
+        if (id == null) return;
+        Customer c = new Customer();
+        c.setId(id);
+        JOptionPane.showMessageDialog(null, customerController.deleteCustomer(c));
     }
 
     public static void insertVehicle() {
         try {
-            String plate = JOptionPane.showInputDialog("Ingrese el número de placa");
-            String brand = JOptionPane.showInputDialog("Ingrese la marca");
-            String model = JOptionPane.showInputDialog("Ingrese el modelo");
-            String color = JOptionPane.showInputDialog("Ingrese el color");
+            String plate = JOptionPane.showInputDialog("Placa:");
+            String brand = JOptionPane.showInputDialog("Marca:");
+            String model = JOptionPane.showInputDialog("Modelo:");
+            String color = JOptionPane.showInputDialog("Color:");
 
-            ArrayList<Customer> vehicleCustomers = new ArrayList<>();
-            int numOwners = Integer.parseInt(JOptionPane.showInputDialog("¿Cuántos dueños tiene este vehículo?"));
-
-            for (int i = 0; i < numOwners; i++) {
-                JOptionPane.showMessageDialog(null, "Datos del dueño #" + (i + 1));
-                vehicleCustomers.add(insertCustomer());
+            ArrayList<Customer> owners = new ArrayList<>();
+            int num = Integer.parseInt(JOptionPane.showInputDialog("¿Cuántos dueños?"));
+            for (int i = 0; i < num; i++) {
+                JOptionPane.showMessageDialog(null, "Dueño #" + (i + 1));
+                owners.add(insertCustomer());
             }
 
-            Customer customerVehicle = vehicleCustomers.get(0);
-            VehicleType type = configureVehicleTypeOfSpacesforVehicles(0, customerVehicle.isDisabilityPresented());
-
-            Vehicle vehicle = new Vehicle(plate, color, brand, model, vehicleCustomers, type);
-            vehicleController.insertVehicle(vehicle);
-
-            ParkingLot parkingLot = selectParkingLot();
-            if (parkingLot != null) {
-                int spaceAssigned = parkingLotController.registerVehicleInParkingLot(vehicle, parkingLot);
-                JOptionPane.showMessageDialog(null, "El espacio asignado en el parqueo es: " + spaceAssigned);
+            VehicleType type = configureVehicleTypeOfSpacesforVehicles(0, owners.get(0).isDisabilityPresented());
+            Vehicle vehicle = new Vehicle(plate, color, brand, model, owners, type);
+            
+            ParkingLot lot = selectParkingLot();
+            if (lot != null) {
+                int space = parkingLotController.registerVehicleInParkingLot(vehicle, lot);
+                if (space > 0) {
+                    vehicleController.insertVehicle(vehicle);
+                    JOptionPane.showMessageDialog(null, "Vehículo registrado en espacio #" + space);
+                } else {
+                    JOptionPane.showMessageDialog(null, "No hay espacios disponibles para este tipo/condición.");
+                }
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al procesar los datos del vehículo.");
-        }
+        } catch (Exception e) { JOptionPane.showMessageDialog(null, "Error en datos."); }
     }
 
     public static void showAllVehicles() {
-        JOptionPane.showMessageDialog(null, vehicleController.getAllVehicles().toString());
-    }
-
-    public static void updateVehicle() {
-        String plate = JOptionPane.showInputDialog("Ingrese placa a actualizar:");
-        String brand = JOptionPane.showInputDialog("Nueva marca:");
-        String model = JOptionPane.showInputDialog("Nuevo modelo:");
-        String color = JOptionPane.showInputDialog("Nuevo color:");
-
-        ArrayList<Customer> vehicleCustomers = new ArrayList<>();
-        int numOwners = Integer.parseInt(JOptionPane.showInputDialog("¿Cuántos dueños tiene ahora?"));
-
-        for (int i = 0; i < numOwners; i++) {
-            vehicleCustomers.add(insertCustomer());
-        }
-
-        Customer mainOwner = vehicleCustomers.get(0);
-        VehicleType type = configureVehicleTypeOfSpaces(0, mainOwner.isDisabilityPresented());
-
-        Vehicle updatedVehicle = new Vehicle(plate, color, brand, model, vehicleCustomers, type);
-        JOptionPane.showMessageDialog(null, vehicleController.updateVehicle(plate, updatedVehicle));
-    }
-
-    public static void deleteVehicle() {
-        String plate = JOptionPane.showInputDialog("Ingrese placa del vehículo a eliminar:");
-        JOptionPane.showMessageDialog(null, vehicleController.deleteVehicle(plate));
-    }
-
-    public static void insertAdministrator() {
-        try {
-            String id = JOptionPane.showInputDialog("Cédula:");
-            String name = JOptionPane.showInputDialog("Nombre:");
-            String user = JOptionPane.showInputDialog("Usuario:");
-            String pass = JOptionPane.showInputDialog("Contraseña:");
-            int adminNum = Integer.parseInt(JOptionPane.showInputDialog("Número de Administrador:"));
-
-            Administrator admin = new Administrator(adminNum, null, id, name, user, pass);
-            JOptionPane.showMessageDialog(null, adminController.insertAdministrator(admin));
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error: Datos inválidos.");
-        }
-    }
-
-    public static void showAllAdministrators() {
-        ArrayList<Administrator> admins = adminController.getAllAdministrators();
-        StringBuilder report = new StringBuilder();
-        report.append("======= LISTADO GENERAL DE ADMINISTRADORES =======\n\n");
-
-        if (admins.isEmpty()) {
-            report.append("  >> No hay admins registrados.\n");
+        ArrayList<Vehicle> vehicles = vehicleController.getAllVehicles();
+        StringBuilder report = new StringBuilder("    VEHÍCULOS REGISTRADOS\n\n");
+        if (vehicles.isEmpty()) {
+            report.append("No hay vehículos.\n");
         } else {
-            for (Administrator a : admins) {
-                report.append("🆔 Admin ID:       ").append(a.getAdminNumber()).append("\n");
-                report.append("👤 Nombre:          ").append(a.getName()).append("\n");
-                report.append("🔑 Usuario:         ").append(a.getUsername()).append("\n");
+            for (Vehicle v : vehicles) {
+                report.append("🚗 Placa: ").append(v.getPlate()).append("\n");
+                report.append("🔖 Marca: ").append(v.getBrand()).append(" | ").append(v.getModel()).append("\n");
+                report.append("🎨 Color: ").append(v.getColor()).append("\n");
                 report.append("--------------------------------------------------\n");
             }
         }
         JOptionPane.showMessageDialog(null, report.toString());
-    }
-
-    public static void updateAdministrator() {
-        try {
-            int adminNum = Integer.parseInt(JOptionPane.showInputDialog("Número de Admin a actualizar:"));
-            String id = JOptionPane.showInputDialog("Nueva Cédula:");
-            String name = JOptionPane.showInputDialog("Nuevo Nombre:");
-            String user = JOptionPane.showInputDialog("Nuevo Usuario:");
-            String pass = JOptionPane.showInputDialog("Nueva Contraseña:");
-
-            Administrator updatedAdmin = new Administrator(adminNum, null, id, name, user, pass);
-            JOptionPane.showMessageDialog(null, adminController.updateAdministrator(updatedAdmin));
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error en los datos.");
-        }
-    }
-
-    public static void deleteAdministrator() {
-        try {
-            int adminNum = Integer.parseInt(JOptionPane.showInputDialog("Número de Admin a eliminar:"));
-            JOptionPane.showMessageDialog(null, adminController.deleteAdministrator(adminNum));
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Número no válido.");
-        }
-    }
-
-    public static void insertClerk() {
-        try {
-            int code = Integer.parseInt(JOptionPane.showInputDialog("Código de Empleado:"));
-            String schedule = JOptionPane.showInputDialog("Horario:");
-            int age = Integer.parseInt(JOptionPane.showInputDialog("Edad:"));
-            String id = JOptionPane.showInputDialog("Cédula:");
-            String name = JOptionPane.showInputDialog("Nombre:");
-            String user = JOptionPane.showInputDialog("Usuario:");
-            String pass = JOptionPane.showInputDialog("Contraseña:");
-
-            Clerk clerk = new Clerk(code, schedule, age, null, id, name, user, pass);
-            JOptionPane.showMessageDialog(null, clerkController.insertClerk(clerk));
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error en el ingreso del dependiente.");
-        }
-    }
-
-    public static void showAllClerks() {
-        ArrayList<Clerk> clerks = clerkController.getAllClerks();
-        StringBuilder report = new StringBuilder();
-        report.append("======= LISTADO GENERAL DE CLERKS =======\n\n");
-
-        if (clerks.isEmpty()) {
-            report.append("  >> No hay clerks registrados.\n");
-        } else {
-            for (Clerk c : clerks) {
-                report.append("🆔 Código Emp:      ").append(c.getEmployeeCode()).append("\n");
-                report.append("👤 Nombre:          ").append(c.getName()).append("\n");
-                report.append("⏰ Horario:         ").append(c.getSchedule()).append("\n");
-                report.append("--------------------------------------------------\n");
-            }
-        }
-        JOptionPane.showMessageDialog(null, report.toString());
-    }
-
-    public static void updateClerk() {
-        try {
-            int code = Integer.parseInt(JOptionPane.showInputDialog("Código del Dependiente a actualizar:"));
-            String schedule = JOptionPane.showInputDialog("Nuevo Horario:");
-            int age = Integer.parseInt(JOptionPane.showInputDialog("Nueva Edad:"));
-            String id = JOptionPane.showInputDialog("Nueva Cédula:");
-            String name = JOptionPane.showInputDialog("Nuevo Nombre:");
-            String user = JOptionPane.showInputDialog("Nuevo Usuario:");
-            String pass = JOptionPane.showInputDialog("Nueva Contraseña:");
-
-            Clerk updatedClerk = new Clerk(code, schedule, age, null, id, name, user, pass);
-            JOptionPane.showMessageDialog(null, clerkController.updateClerk(updatedClerk));
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error en la actualización.");
-        }
-    }
-
-    public static void deleteClerk() {
-        try {
-            int code = Integer.parseInt(JOptionPane.showInputDialog("Código de Empleado a eliminar:"));
-            JOptionPane.showMessageDialog(null, clerkController.deleteClerk(code));
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Código no válido.");
-        }
-    }
-
-    public static void insertParkingLot() {
-        try {
-            String name = JOptionPane.showInputDialog("Nombre del parqueo:");
-            int numberOfSpaces = Integer.parseInt(JOptionPane.showInputDialog("Número total de espacios:"));
-            int numberOfDisabilitySpaces = Integer.parseInt(JOptionPane.showInputDialog("Espacios para discapacidad:"));
-
-            Space[] spaces = new Space[numberOfSpaces];
-            spaces = configureSpaces(spaces, numberOfDisabilitySpaces);
-
-            ParkingLot parkingLot = parkingLotController.registerParkingLot(name, spaces);
-            parkingLot.setNumberOfSpaces(numberOfSpaces);
-            parkingLot.setVehicles(new ArrayList<Vehicle>());
-            JOptionPane.showMessageDialog(null, "Parqueo '" + name + "' registrado exitosamente.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al configurar el parqueo.");
-        }
     }
 
     public static void showAllParkingLots() {
         ArrayList<ParkingLot> lots = parkingLotController.getAllParkingLots();
-        StringBuilder report = new StringBuilder("======= LISTADO DE PARQUEOS =======\n\n");
+        StringBuilder report = new StringBuilder("    PARQUEOS     \n\n");
         if (lots.isEmpty()) {
             report.append("No hay parqueos registrados.");
         } else {
@@ -287,22 +159,13 @@ public class RegistrationWindow {
         JOptionPane.showMessageDialog(null, report.toString());
     }
 
-    public static void deleteParkingLot() {
-        try {
-            int id = Integer.parseInt(JOptionPane.showInputDialog("ID del parqueo a eliminar:"));
-            JOptionPane.showMessageDialog(null, parkingLotController.deleteParkingLot(id));
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "ID inválido.");
-        }
-    }
-
     public static void showCustomersInParkingLot() {
-        StringBuilder report = new StringBuilder("======= REPORTE DE OCUPACIÓN =======\n\n");
+        StringBuilder report = new StringBuilder("        REPORTE DE OCUPACIÓN        \n\n");
         ArrayList<ParkingLot> allLots = parkingLotController.getAllParkingLots();
 
         for (ParkingLot lot : allLots) {
             report.append("🏢 Parqueo: ").append(lot.getName()).append("\n");
-            if (lot.getVehicles().isEmpty()) {
+            if (lot.getVehicles() == null || lot.getVehicles().isEmpty()) {
                 report.append("    (Vacío)\n");
             } else {
                 for (Vehicle v : lot.getVehicles()) {
@@ -319,77 +182,42 @@ public class RegistrationWindow {
     }
 
     private static Space[] configureSpaces(Space[] spaces, int disabilityCount) {
-        if (disabilityCount <= spaces.length) {
-            for (int i = 0; i < disabilityCount; i++) {
-                Space space = new Space();
-                space.setId(i + 1); 
-                space.setDisabilityAdaptation(true);
-                space.setVehicleType(configureVehicleTypeOfSpaces(i + 1, true));
-                spaces[i] = space;
-            }
-            for (int i = disabilityCount; i < spaces.length; i++) {
-                Space space = new Space();
-                space.setId(i + 1);
-                space.setDisabilityAdaptation(false);
-                space.setVehicleType(configureVehicleTypeOfSpaces(i + 1, false));
-                spaces[i] = space;
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Error: El número de espacios de discapacidad excede el total.");
+        for (int i = 0; i < spaces.length; i++) {
+            Space space = new Space();
+            space.setId(i + 1);
+            boolean isDis = (i < disabilityCount);
+            space.setDisabilityAdaptation(isDis);
+            space.setVehicleType(configureVehicleTypeOfSpaces(i + 1, isDis));
+            spaces[i] = space;
         }
         return spaces;
     }
 
-    private static VehicleType configureVehicleTypeOfSpaces(int position, boolean disability) {
-        String[] types = {"Tipos de vehículo", "1)moto", "2)liviano", "3)pesado", "4)bicicleta", "5)otro"};
-        byte[] tires = {0, 2, 4, 8, 12, -1};
-        String allTypes = String.join("\n", types);
-        byte typeNumber = Byte.parseByte(JOptionPane.showInputDialog(allTypes + "\nIngrese número para espacio #" + position));
-
-        VehicleType vehicleType = new VehicleType();
-        vehicleType.setId(typeNumber);
-        vehicleType.setType(types[typeNumber]);
-        vehicleType.setNumberOfTires(tires[typeNumber]);
-        return vehicleType;
+    private static VehicleType configureVehicleTypeOfSpaces(int pos, boolean dis) {
+        String[] types = {"Tipos", "1)moto", "2)liviano", "3)pesado", "4)bicicleta", "5)otro"};
+        String choice = JOptionPane.showInputDialog(String.join("\n", types) + "\nTipo para espacio #" + pos + (dis?" [DISC]":""));
+        float fee = Float.parseFloat(JOptionPane.showInputDialog("Tarifa por hora:"));
+        
+        VehicleType vt = new VehicleType();
+        int idx = Integer.parseInt(choice);
+        vt.setId(idx);
+        vt.setType(types[idx].split("\\)")[1]);
+        vt.setFee(fee);
+        return vt;
     }
 
-    private static VehicleType configureVehicleTypeOfSpacesforVehicles(int position, boolean disability) {
-        String[] types = {"Tipos de vehículo", "1)moto", "2)liviano", "3)pesado", "4)bicicleta", "5)otro"};
-        byte[] tires = {0, 2, 4, 8, 12, -1};
-        String allTypes = String.join("\n", types);
-        byte typeNumber = Byte.parseByte(JOptionPane.showInputDialog(allTypes + "\nIngrese número para el vehiculo"));
-        String descriptionVehicle = JOptionPane.showInputDialog("Detalles del vehiculo");
-
-        VehicleType vehicleType = new VehicleType();
-        vehicleType.setId(typeNumber);
-        vehicleType.setType(types[typeNumber]);
-        vehicleType.setNumberOfTires(tires[typeNumber]);
-        vehicleType.setDescription(descriptionVehicle);
-        return vehicleType;
+    private static VehicleType configureVehicleTypeOfSpacesforVehicles(int pos, boolean dis) {
+        VehicleType vt = configureVehicleTypeOfSpaces(pos, dis);
+        vt.setDescription(JOptionPane.showInputDialog("Detalles adicionales del vehículo:"));
+        return vt;
     }
 
     private static ParkingLot selectParkingLot() {
         ArrayList<ParkingLot> list = parkingLotController.getAllParkingLots();
-        if (list.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No hay parqueos registrados.");
-            return null;
-        }
-
-        StringBuilder info = new StringBuilder("Parqueos disponibles:\n");
-        for (ParkingLot pl : list) {
-            info.append(pl.getId()).append(" - ").append(pl.getName()).append("\n");
-        }
-
-        ParkingLot found = null;
-        try {
-            String input = JOptionPane.showInputDialog(info + "\nSeleccione ID:");
-            if (input != null) {
-                int id = Integer.parseInt(input);
-                found = parkingLotController.findParkingLotById(id);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Selección inválida.");
-        }
-        return found;
+        if (list.isEmpty()) return null;
+        StringBuilder info = new StringBuilder("Seleccione Parqueo:\n");
+        for (ParkingLot pl : list) info.append(pl.getId()).append(" - ").append(pl.getName()).append("\n");
+        String input = JOptionPane.showInputDialog(info.toString());
+        return (input != null) ? parkingLotController.findParkingLotById(Integer.parseInt(input)) : null;
     }
 }

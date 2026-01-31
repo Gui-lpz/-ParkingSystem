@@ -1,11 +1,12 @@
 package model.entities;
 
 public class VehicleType {
+
     private int id;
     private String description;
     private byte numberOfTires;
-    private float fee;
-    private String type; //nuevo atributo
+    private float fee; // Tarifa asignada por el admin
+    private String type;
 
     public VehicleType() {
     }
@@ -17,7 +18,6 @@ public class VehicleType {
         this.fee = fee;
         this.type = type;
     }
-    
 
     public int getId() {
         return id;
@@ -61,11 +61,6 @@ public class VehicleType {
 
     @Override
     public String toString() {
-        return "VehicleType{" + "id=" + id + ", description=" + description + ", numberOfTires=" + numberOfTires + ", fee=" + fee + ", type=" + type + '}';
+        return "VehicleType{" + "id=" + id + ", fee=" + fee + ", type=" + type + '}';
     }
-    
-
-
 }
-
-

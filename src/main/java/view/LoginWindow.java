@@ -85,31 +85,31 @@ public class LoginWindow extends JFrame implements ActionListener {
                 return;
             }
 
-           
-            User tempUser = new Administrator();
-            tempUser.setUsername(username);
-            tempUser.setPassword(password);
+            // 1. Buscamos si el usuario existe en los registros
+            // Importante: Asegúrate de que el controlador tenga este método
+            Administrator foundAdmin = administratorController.searchAdministratorByUsername(username);
 
-            
-            User loggedUser = administratorController.searchUser(tempUser);
-
-            if (loggedUser != null) {
-                Administrator admin = (Administrator) loggedUser;
-                JOptionPane.showMessageDialog(this, "Bienvenido " + admin.getName(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
-                this.dispose(); 
+            if (foundAdmin != null) {
+                // 2. Usamos el método polimórfico de tu clase User para validar
+                String[] loginDetails = {username, password};
                 
-                MainWindow mainApp = new MainWindow();
-                mainApp.setVisible(true); 
-
+                // Usamos el método verifyUserLogin(String[], int) que tienes en User
+                if (foundAdmin.verifyUserLogin(loginDetails, 0)) {
+                    JOptionPane.showMessageDialog(this, "Bienvenido " + foundAdmin.getName(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    this.dispose(); 
+                    
+                    MainWindow mainApp = new MainWindow();
+                    mainApp.setVisible(true); 
+                } else {
+                    JOptionPane.showMessageDialog(this, "Contraseña incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             } else {
-                JOptionPane.showMessageDialog(this, "Usuario o contraseña inválidos", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "El usuario no existe", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
 
         if (e.getSource() == btnRegister) {
             RegistrationWindow.insertAdministrator(); 
-            
             txtUsername.setText("");
             txtPassword.setText("");
         }

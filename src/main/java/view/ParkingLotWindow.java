@@ -9,7 +9,9 @@ import javax.swing.*;
 
 public class ParkingLotWindow extends JInternalFrame implements ActionListener {
     private JPanel panel;
-    public JTextField txtName, txtTotalSpaces, txtDisabilitySpaces, txtMotorcycleSpaces;
+    public JTextField txtName, txtRegSpaces, txtDisabilitySpaces, txtMotoSpaces, txtHeavySpaces, txtBikeSpaces, txtOtherSpaces;
+
+    public JTextField txtFeeLiviano, txtFeeMoto, txtFeeHeavy, txtFeeBike, txtFeeOther; 
     public JButton btnSave, btnCancel;
     private ParkingLotController parkingController;
 
@@ -20,85 +22,86 @@ public class ParkingLotWindow extends JInternalFrame implements ActionListener {
     }
 
     private void initComponents() {
-        setSize(450, 350);
+        setSize(500, 550);
         setLocation(50, 50);
+
         panel = new JPanel(null);
         panel.setBackground(Color.WHITE);
+        panel.setPreferredSize(new Dimension(450, 650)); 
 
-        JLabel lblName = new JLabel("Nombre:");
-        lblName.setBounds(30, 30, 150, 25);
-        txtName = new JTextField();
-        txtName.setBounds(200, 30, 180, 25);
+        addLabelAndField("Nombre Parqueo:", txtName = new JTextField(), 20);
+        
+        addLabelAndField("Espacios Regulares:", txtRegSpaces = new JTextField("10"), 60);
+        addLabelAndField("Espacios Discapacidad:", txtDisabilitySpaces = new JTextField("2"), 95);
+        addLabelAndField("Espacios Motos:", txtMotoSpaces = new JTextField("5"), 130);
+        addLabelAndField("Espacios Pesados:", txtHeavySpaces = new JTextField("2"), 165);
+        addLabelAndField("Espacios Bicicletas:", txtBikeSpaces = new JTextField("10"), 200);
+        addLabelAndField("Espacios Otros:", txtOtherSpaces = new JTextField("0"), 235);
 
-        JLabel lblTotal = new JLabel("Espacios Regulares:");
-        lblTotal.setBounds(30, 70, 150, 25);
-        txtTotalSpaces = new JTextField("10"); 
-        txtTotalSpaces.setBounds(200, 70, 180, 25);
-
-        JLabel lblDis = new JLabel("Espacios Discapacidad:");
-        lblDis.setBounds(30, 110, 150, 25);
-        txtDisabilitySpaces = new JTextField("2");
-        txtDisabilitySpaces.setBounds(200, 110, 180, 25);
-
-        JLabel lblMoto = new JLabel("Espacios Motos:");
-        lblMoto.setBounds(30, 150, 150, 25);
-        txtMotorcycleSpaces = new JTextField("5");
-        txtMotorcycleSpaces.setBounds(200, 150, 180, 25);
+        addLabelAndField("Tarifa Liviano ($):", txtFeeLiviano = new JTextField("1000"), 285);
+        addLabelAndField("Tarifa Moto ($):", txtFeeMoto = new JTextField("500"), 320);
+        addLabelAndField("Tarifa Pesado ($):", txtFeeHeavy = new JTextField("2500"), 355);
+        addLabelAndField("Tarifa Bicicleta ($):", txtFeeBike = new JTextField("200"), 390);
+        addLabelAndField("Tarifa Otros ($):", txtFeeOther = new JTextField("1000"), 425);
 
         btnSave = new JButton("Crear Parqueo");
-        btnSave.setBounds(80, 220, 130, 30);
+        btnSave.setBounds(80, 500, 140, 30);
         btnSave.addActionListener(this);
 
         btnCancel = new JButton("Cancelar");
-        btnCancel.setBounds(220, 220, 100, 30);
+        btnCancel.setBounds(240, 500, 100, 30);
         btnCancel.addActionListener(e -> dispose());
 
-        panel.add(lblName); panel.add(txtName);
-        panel.add(lblTotal); panel.add(txtTotalSpaces);
-        panel.add(lblDis); panel.add(txtDisabilitySpaces);
-        panel.add(lblMoto); panel.add(txtMotorcycleSpaces);
-        panel.add(btnSave); panel.add(btnCancel);
-        
-        add(panel);
+        panel.add(btnSave); 
+        panel.add(btnCancel);
+
+        JScrollPane scrollPane = new JScrollPane(panel);
+        scrollPane.setBorder(null);
+        this.getContentPane().add(scrollPane);
+    }
+
+    private void addLabelAndField(String labelText, JTextField textField, int y) {
+        JLabel lbl = new JLabel(labelText);
+        lbl.setBounds(30, y, 160, 25);
+        textField.setBounds(200, y, 180, 25);
+        panel.add(lbl);
+        panel.add(textField);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnSave) {
             try {
-                String name = txtName.getText();
-                int reg = Integer.parseInt(txtTotalSpaces.getText());
-                int dis = Integer.parseInt(txtDisabilitySpaces.getText());
-                int mot = Integer.parseInt(txtMotorcycleSpaces.getText());
+                VehicleType vLiviano = new VehicleType(1, "Liviano", (byte)4, Float.parseFloat(txtFeeLiviano.getText()), "L");
+                VehicleType vMoto    = new VehicleType(2, "Moto", (byte)2, Float.parseFloat(txtFeeMoto.getText()), "M");
+                VehicleType vPesado  = new VehicleType(3, "Pesado", (byte)6, Float.parseFloat(txtFeeHeavy.getText()), "P");
+                VehicleType vBici    = new VehicleType(4, "Bicicleta", (byte)2, Float.parseFloat(txtFeeBike.getText()), "B");
+                VehicleType vOther   = new VehicleType(5, "Otro", (byte)4, Float.parseFloat(txtFeeOther.getText()), "O");
 
-                int total = reg + dis + mot;
+                int cDis = Integer.parseInt(txtDisabilitySpaces.getText());
+                int cReg = Integer.parseInt(txtRegSpaces.getText());
+                int cMot = Integer.parseInt(txtMotoSpaces.getText());
+                int cPes = Integer.parseInt(txtHeavySpaces.getText());
+                int cBic = Integer.parseInt(txtBikeSpaces.getText());
+                int cOth = Integer.parseInt(txtOtherSpaces.getText());
+
+                int total = cDis + cReg + cMot + cPes + cBic + cOth;
                 Space[] spaces = new Space[total];
                 int count = 0;
 
-                VehicleType tipoLiviano = new VehicleType(1, "Liviano", (byte)0, 0.0f, "Std");
-                VehicleType tipoMoto = new VehicleType(3, "Moto", (byte)0, 0.0f, "Std");
+                for (int i = 0; i < cDis; i++) spaces[count++] = new Space(count + 1, true, false, vLiviano);
+                for (int i = 0; i < cMot; i++) spaces[count++] = new Space(count + 1, false, false, vMoto);
+                for (int i = 0; i < cPes; i++) spaces[count++] = new Space(count + 1, false, false, vPesado);
+                for (int i = 0; i < cBic; i++) spaces[count++] = new Space(count + 1, false, false, vBici);
+                for (int i = 0; i < cOth; i++) spaces[count++] = new Space(count + 1, false, false, vOther);
+                for (int i = 0; i < cReg; i++) spaces[count++] = new Space(count + 1, false, false, vLiviano);
 
-                
-                for (int i = 0; i < dis; i++) {
-                    spaces[count] = new Space(count + 1, true, false, tipoLiviano);
-                    count++;
-                }
-                
-                for (int i = 0; i < mot; i++) {
-                    spaces[count] = new Space(count + 1, false, false, tipoMoto);
-                    count++;
-                }
-                
-                for (int i = 0; i < reg; i++) {
-                    spaces[count] = new Space(count + 1, false, false, tipoLiviano);
-                    count++;
-                }
-
-                parkingController.registerParkingLot(name, spaces);
-                JOptionPane.showMessageDialog(this, "Parqueo '" + name + "' creado con éxito.");
+                parkingController.registerParkingLot(txtName.getText(), spaces);
+                JOptionPane.showMessageDialog(this, "Parqueo '" + txtName.getText() + "' creado con éxito.");
                 dispose();
+
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Error: Ingrese solo números en las cantidades.");
+                JOptionPane.showMessageDialog(this, "Error: Ingrese solo números en espacios y tarifas.");
             }
         }
     }
